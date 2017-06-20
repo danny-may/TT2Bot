@@ -6,8 +6,8 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TitanBotBase.Downloader;
-using TitanBotBase.Settings;
+using TitanBot.Downloader;
+using TitanBot.Settings;
 using TT2Bot.Models;
 using TT2Bot.Models.Settings;
 

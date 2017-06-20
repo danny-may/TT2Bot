@@ -1,5 +1,5 @@
 ﻿using System.Threading.Tasks;
-using TitanBotBase.Commands;
+using TitanBot.Commands;
 
 namespace TT2Bot.Commands
 {

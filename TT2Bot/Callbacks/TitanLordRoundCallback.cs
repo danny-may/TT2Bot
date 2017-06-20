@@ -6,9 +6,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TitanBotBase.Scheduler;
-using TitanBotBase.Settings;
-using TitanBotBase.Util;
+using TitanBot.Scheduler;
+using TitanBot.Settings;
+using TitanBot.Util;
 using TT2Bot.Models;
 
 namespace TT2Bot.Callbacks

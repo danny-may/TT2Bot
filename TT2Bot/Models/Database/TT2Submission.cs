@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TitanBotBase.Database;
+using TitanBot.Database;
 
 namespace TT2Bot.Models.Database
 {

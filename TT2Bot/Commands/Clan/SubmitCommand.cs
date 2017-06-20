@@ -4,8 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using TitanBotBase.Commands;
-using TitanBotBase.Util;
+using TitanBot.Commands;
+using TitanBot.Util;
 using TT2Bot.Models;
 using TT2Bot.Models.Database;
 

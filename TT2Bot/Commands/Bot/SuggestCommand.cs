@@ -1,8 +1,8 @@
 ﻿using Discord;
 using System;
 using System.Threading.Tasks;
-using TitanBotBase.Commands;
-using TitanBotBase.Util;
+using TitanBot.Commands;
+using TitanBot.Util;
 using TT2Bot.Models;
 
 namespace TT2Bot.Commands.Bot

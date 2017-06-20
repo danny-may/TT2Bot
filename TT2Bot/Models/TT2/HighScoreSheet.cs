@@ -1,7 +1,7 @@
 ﻿using Csv;
 using System.Collections.Generic;
 using System.Linq;
-using TitanBotBase.Settings;
+using TitanBot.Settings;
 using TT2Bot.Models.Settings;
 
 namespace TT2Bot.Models

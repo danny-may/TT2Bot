@@ -1,5 +1,5 @@
 ﻿using System;
-using TitanBotBase.Logger;
+using TitanBot.Logger;
 
 namespace TT2Bot
 {

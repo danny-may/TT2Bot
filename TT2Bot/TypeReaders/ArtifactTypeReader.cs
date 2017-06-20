@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
-using TitanBotBase.Commands;
-using TitanBotBase.TypeReaders;
+using TitanBot.Commands;
+using TitanBot.TypeReaders;
 using TT2Bot.Helpers;
 using TT2Bot.Models;
 

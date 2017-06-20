@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
-using TitanBotBase.Commands;
-using TitanBotBase.Util;
+using TitanBot.Commands;
+using TitanBot.Util;
 using TT2Bot.Helpers;
 
 namespace TT2Bot.Commands.Data
