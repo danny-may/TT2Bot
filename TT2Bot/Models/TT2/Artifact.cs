@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace TT2Bot.Models
 {
-    public class Artifact
+    class Artifact
     {
         public int Id => _staticData.Id;
         public int? MaxLevel { get; }

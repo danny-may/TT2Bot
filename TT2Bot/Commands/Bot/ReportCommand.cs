@@ -8,7 +8,7 @@ using TT2Bot.Models;
 namespace TT2Bot.Commands.Bot
 {
     [Description("Allows you to make suggestions and feature requests for me!")]
-    public class ReportCommand : Command
+    class ReportCommand : Command
     {
         [Call]
         [Usage("Sends a suggestion to my home guild.")]
@@ -28,7 +28,7 @@ namespace TT2Bot.Commands.Bot
                 Author = new EmbedAuthorBuilder
                 {
                     Name = $"{Author.Username}#{Author.Discriminator}",
-                    IconUrl = Author.GetAvatarUrl()
+                    IconUrl = AuthorAvatar
                 },
                 Timestamp = DateTime.Now,
                 Color = System.Drawing.Color.IndianRed.ToDiscord()

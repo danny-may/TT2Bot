@@ -1,4 +1,5 @@
-﻿using Discord;
+﻿using Conversion;
+using Discord;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,31 +7,45 @@ using System.Reflection;
 using System.Threading.Tasks;
 using TitanBot;
 using TitanBot.Dependencies;
+using TitanBot.Formatter;
+using TitanBot.Logging;
 using TT2Bot.Helpers;
 using TT2Bot.Models;
+using TT2Bot.Overrides;
 using TT2Bot.TypeReaders;
 
 namespace TT2Bot
 {
-    public class TT2BotClient
+    class TT2BotClient
     {
         BotClient Client;
 
         public Task UntilOffline => Client.UntilOffline;
 
-        public TT2BotClient(Action<IDependencyFactory> mapper)
+        public TT2BotClient()
         {
-            Client = new BotClient(mapper);
+            Client = new BotClient(MapDependencies);
             Client.Install(Assembly.GetExecutingAssembly());
+
+            Console.WriteLine("Do you want to convert from an old database? Press enter if not, or type in the location of the database if you do:");
+            var location = Console.ReadLine();
+            if (!string.IsNullOrWhiteSpace(location))
+                new Converter(location, Client).Convert();
 
             RegisterSettings();
             RegisterTypeReaders();
             PopulateMapper();
         }
 
+        private void MapDependencies(IDependencyFactory factory)
+        {
+            factory.Map<ILogger, ConsoleLogger>();
+            factory.Map<OutputFormatter, Formatter>();
+        }
+
         private void PopulateMapper()
         {
-            Client.DependencyFactory.ConstructAndStore<TT2DataService>();
+            Client.DependencyFactory.GetOrStore<TT2DataService>();
         }
 
         private void RegisterSettings()

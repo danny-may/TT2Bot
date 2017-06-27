@@ -8,7 +8,7 @@ namespace TT2Bot.Commands.Data
 {
     [Description("Shows data from the high score sheet, which can be found [here](https://docs.google.com/spreadsheets/d/13hsvWaYvp_QGFuQ0ukcgG-FlSAj2NyW8DOvPUG3YguY/pubhtml?gid=4642011cYS8TLGYU)\nAll credit to <@261814131282149377>, <@169180650203512832> and <@169915601496702977> for running the sheet!")]
     [Alias("HS")]
-    public class HighScoreCommand : Command
+    class HighScoreCommand : Command
     {
         private TT2DataService DataService { get; }
 

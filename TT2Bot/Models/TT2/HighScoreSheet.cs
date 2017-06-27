@@ -1,12 +1,10 @@
 ﻿using Csv;
 using System.Collections.Generic;
 using System.Linq;
-using TitanBot.Settings;
-using TT2Bot.Models.Settings;
 
 namespace TT2Bot.Models
 {
-    public class HighScoreSheet
+    class HighScoreSheet
     {
         public List<HighScoreUser> Users = new List<HighScoreUser>();
 

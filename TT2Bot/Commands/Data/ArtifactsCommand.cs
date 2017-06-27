@@ -31,14 +31,14 @@ namespace TT2Bot.Commands.Data
             {
                 Author = new EmbedAuthorBuilder
                 {
-                    IconUrl = BotUser.GetAvatarUrl(),
+                    IconUrl = BotAvatar,
                     Name = "Artifact listing"
                 },
                 Color = System.Drawing.Color.LightBlue.ToDiscord(),
                 Description = "All Artifacts",
                 Footer = new EmbedFooterBuilder
                 {
-                    IconUrl = BotUser.GetAvatarUrl(),
+                    IconUrl = BotAvatar,
                     Text = $"{BotUser.Username} Artifact tool"
                 },
                 Timestamp = DateTime.Now
@@ -59,12 +59,12 @@ namespace TT2Bot.Commands.Data
                 Author = new EmbedAuthorBuilder
                 {
                     Name = "Artifact data for " + artifact.Name,
-                    IconUrl = artifact.ImageUrl.AbsoluteUri,
+                    IconUrl = artifact.ImageUrl,
                 },
-                ThumbnailUrl = artifact.ImageUrl.AbsoluteUri,
+                ThumbnailUrl = artifact.ImageUrl,
                 Footer = new EmbedFooterBuilder
                 {
-                    IconUrl = BotUser.GetAvatarUrl(),
+                    IconUrl = BotAvatar,
                     Text = $"{BotUser.Username} Artifact tool | TT2 v{artifact.FileVersion}"
                 },
                 Timestamp = DateTime.Now,

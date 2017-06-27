@@ -6,7 +6,7 @@ using TT2Bot.Models;
 
 namespace TT2Bot.TypeReaders
 {
-    public class HelperTypeReader : TypeReader
+    class HelperTypeReader : TypeReader
     {
         public override async Task<TypeReaderResponse> Read(ICommandContext context, string value)
         {

@@ -33,14 +33,14 @@ namespace TT2Bot.Commands.Data
             {
                 Author = new EmbedAuthorBuilder
                 {
-                    IconUrl = BotUser.GetAvatarUrl(),
+                    IconUrl = BotAvatar,
                     Name = "Hero listing"
                 },
                 Color = System.Drawing.Color.LightBlue.ToDiscord(),
                 Description = "All Heros",
                 Footer = new EmbedFooterBuilder
                 {
-                    IconUrl = BotUser.GetAvatarUrl(),
+                    IconUrl = BotAvatar,
                     Text = $"{BotUser.Username} Hero tool"
                 },
                 Timestamp = DateTime.Now
@@ -70,12 +70,12 @@ namespace TT2Bot.Commands.Data
                 Author = new EmbedAuthorBuilder
                 {
                     Name = "Hero data for " + helper.Name,
-                    IconUrl = helper.ImageUrl.AbsoluteUri,
+                    IconUrl = helper.ImageUrl,
                 },
-                ThumbnailUrl = helper.ImageUrl.AbsoluteUri,
+                ThumbnailUrl = helper.ImageUrl,
                 Footer = new EmbedFooterBuilder
                 {
-                    IconUrl = BotUser.GetAvatarUrl(),
+                    IconUrl = BotAvatar,
                     Text = $"{BotUser.Username} Hero tool | TT2 v{helper.FileVersion}"
                 },
                 Timestamp = DateTime.Now,

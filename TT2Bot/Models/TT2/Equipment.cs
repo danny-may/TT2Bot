@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace TT2Bot.Models
 {
-    public class Equipment
+    class Equipment
     {
         public string Name => _staticData.Name;
         public string Id => _staticData.Id;

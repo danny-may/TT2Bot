@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 using TitanBot.Commands;
 using TitanBot.Util;
 using TT2Bot.Models;
-using TT2Bot.Models.Database;
 
 namespace TitanBot2.Commands.Clan
 {
@@ -39,11 +38,13 @@ namespace TitanBot2.Commands.Clan
             if (submission.Answerer != null)
                 replier = Client.GetUser(submission.Answerer.Value);
 
+            var submitavatar = replier.GetAvatarUrl() == null ? null : new Uri(replier.GetAvatarUrl());
+
             var builder = new EmbedBuilder
             {
                 Author = new EmbedAuthorBuilder
                 {
-                    IconUrl = submitter?.GetAvatarUrl(),
+                    IconUrl = submitavatar,
                     Name = $"{submitter?.ToString() ?? "Unknown User"} ({submission.Submitter})"
                 },
                 Color = color,
@@ -61,10 +62,12 @@ namespace TitanBot2.Commands.Clan
             else
                 builder.AddField("GH reply", submission.Response);
 
+            var replyavatar = replier.GetAvatarUrl() == null ? null : new Uri(replier.GetAvatarUrl());
+
             if (replier != null)
                 builder.WithFooter(new EmbedFooterBuilder
                 {
-                    IconUrl = replier.GetAvatarUrl(),
+                    IconUrl = replyavatar,
                     Text = $"{replier} | Replied {submission.ReplyTime}"
                 });
 

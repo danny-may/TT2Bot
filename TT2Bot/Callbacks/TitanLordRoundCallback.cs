@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TitanBot.Scheduler;
+using TitanBot.Scheduling;
 using TitanBot.Settings;
 using TitanBot.Util;
 using TT2Bot.Models;
@@ -50,7 +50,7 @@ namespace TT2Bot.Callbacks
             var user = timer.UserId;
             var remaining = 0;
             var completesAt = timer.StartTime;
-            var round = 1 + (eventTime - timer.StartTime).Seconds / timer.Interval.Seconds;
+            var round = 2 + (eventTime - timer.StartTime).Seconds / timer.Interval.Seconds;
 
             return message.Replace("%CQ%", CQ.ToString())
                           .Replace("%USER%", $"<@{user}>")

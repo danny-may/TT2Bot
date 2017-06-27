@@ -30,13 +30,13 @@ namespace TT2Bot.Commands.Data
             {
                 Author = new EmbedAuthorBuilder
                 {
-                    IconUrl = BotUser.GetAvatarUrl(),
+                    IconUrl = BotAvatar,
                     Name = "Equipment listing"
                 },
                 Color = System.Drawing.Color.LightBlue.ToDiscord(),
                 Footer = new EmbedFooterBuilder
                 {
-                    IconUrl = BotUser.GetAvatarUrl(),
+                    IconUrl = BotAvatar,
                     Text = $"{BotUser.Username} Equipment tool"
                 },
                 Timestamp = DateTime.Now
@@ -104,12 +104,12 @@ namespace TT2Bot.Commands.Data
                 Author = new EmbedAuthorBuilder
                 {
                     Name = "Equipment data for " + equipment.Name,
-                    IconUrl = equipment.ImageUrl.AbsoluteUri,
+                    IconUrl = equipment.ImageUrl,
                 },
-                ThumbnailUrl = equipment.ImageUrl.AbsoluteUri,
+                ThumbnailUrl = equipment.ImageUrl,
                 Footer = new EmbedFooterBuilder
                 {
-                    IconUrl = BotUser.GetAvatarUrl(),
+                    IconUrl = BotAvatar,
                     Text = $"{BotUser.Username} Equipment tool | TT2 v{equipment.FileVersion}"
                 },
                 Timestamp = DateTime.Now,

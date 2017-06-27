@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TitanBot.Commands;
-using TitanBot.Scheduler;
+using TitanBot.Scheduling;
 using TitanBot.Settings;
 using TitanBot.Util;
 using TT2Bot.Callbacks;
@@ -134,7 +134,7 @@ namespace TT2Bot.Commands.Clan
                     //IconUrl = Res.Emoji.Information_source,
                     Name = "Titan Lord data updated!"
                 },
-                ThumbnailUrl = "https://cdn.discordapp.com/attachments/275257967937454080/308047011289235456/emoji.png",
+                ThumbnailUrl = new Uri("https://cdn.discordapp.com/attachments/275257967937454080/308047011289235456/emoji.png"),
                 Color = System.Drawing.Color.DarkOrange.ToDiscord(),
                 Timestamp = DateTime.Now,
             }.AddField("New Clan Quest", TitanLordSettings.CQ)

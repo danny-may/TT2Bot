@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using TitanBot.Commands;
 using TitanBot.DiscordHandlers;
-using TitanBot.Logger;
+using TitanBot.Logging;
 
 namespace TT2Bot.Handlers
 {

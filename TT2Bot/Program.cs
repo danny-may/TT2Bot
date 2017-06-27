@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Threading.Tasks;
-using TitanBot.Logger;
 using TT2Bot;
 
 namespace TT2BotConsole
@@ -12,7 +11,7 @@ namespace TT2BotConsole
 
         public async Task Start()
         {
-            var client = new TT2BotClient(f => f.Map<ILogger, Logger>());
+            var client = new TT2BotClient();
             await client.StartAsync(current => 
             {
                 if (current != null)

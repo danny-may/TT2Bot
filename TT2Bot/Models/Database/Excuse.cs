@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TitanBot.Database;
+using TitanBot.Storage;
 
-namespace TT2Bot.Models.Database
+namespace TT2Bot.Models
 {
     class Excuse : IDbRecord
     {

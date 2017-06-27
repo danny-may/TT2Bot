@@ -124,7 +124,7 @@ namespace TT2Bot.Commands.Clan
             {
                 Author = new EmbedAuthorBuilder
                 {
-                    IconUrl = user.GetAvatarUrl(),
+                    IconUrl = AuthorAvatar,
                     Name = $"{user} ({user.Id})"
                 },
                 Color = System.Drawing.Color.SkyBlue.ToDiscord(),

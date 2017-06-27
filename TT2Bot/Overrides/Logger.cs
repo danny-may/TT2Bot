@@ -1,20 +1,16 @@
 ﻿using System;
-using TitanBot.Logger;
+using TitanBot.Logging;
 
 namespace TT2Bot
 {
-    class Logger : TitanBotLogger
+    class ConsoleLogger : Logger
     {
-        public Logger() { }
-
-        public Logger(LogSeverity logLevel, string logLocation) : base(logLevel, logLocation) { }
-
-        public override void Log(ILoggable entry)
+        protected override void WriteLog(ILoggable entry)
         {
             if (!ShouldLog(entry.Severity))
                 return;
             Console.Out.WriteLineAsync(entry.ToString());
-            base.Log(entry);
+            base.WriteLog(entry);
         }
     }
 }

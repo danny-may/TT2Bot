@@ -2,18 +2,16 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TitanBot.Downloader;
 using TitanBot.Settings;
 using TT2Bot.Models;
-using TT2Bot.Models.Settings;
 
 namespace TT2Bot.Helpers
 {
-    public class TT2DataService
+    class TT2DataService
     {
         private IDownloader WebClient { get; }
         private ISettingsManager Settings { get; }
@@ -135,7 +133,7 @@ namespace TT2Bot.Helpers
         public async Task<Artifact> GetArtifact(Artifact.ArtifactStatic artifactStatic)
         {
             var version = GlobalSettings.FileVersions.Artifact;
-            if (!string.IsNullOrWhiteSpace(version))
+            if (string.IsNullOrWhiteSpace(version))
                 version = GlobalSettings.DefaultVersion;
 
             var data = await WebClient.GetString(new Uri(GHStatic + version + ArtifactsPath));
@@ -156,7 +154,7 @@ namespace TT2Bot.Helpers
         {
 
             var version = GlobalSettings.FileVersions.Equipment;
-            if (!string.IsNullOrWhiteSpace(version))
+            if (string.IsNullOrWhiteSpace(version))
                 version = GlobalSettings.DefaultVersion;
 
             var data = await WebClient.GetString(new Uri(GHStatic + version + EquipmentPath));
@@ -177,7 +175,7 @@ namespace TT2Bot.Helpers
         {
 
             var version = GlobalSettings.FileVersions.Pet;
-            if (!string.IsNullOrWhiteSpace(version))
+            if (string.IsNullOrWhiteSpace(version))
                 version = GlobalSettings.DefaultVersion;
 
             var data = await WebClient.GetString(new Uri(GHStatic + version + PetsPath));
@@ -198,7 +196,7 @@ namespace TT2Bot.Helpers
         {
 
             var version = GlobalSettings.FileVersions.Helper;
-            if (!string.IsNullOrWhiteSpace(version))
+            if (string.IsNullOrWhiteSpace(version))
                 version = GlobalSettings.DefaultVersion;
 
             var data = await WebClient.GetString(new Uri(GHStatic + version + HelpersPath));
@@ -221,7 +219,7 @@ namespace TT2Bot.Helpers
         public async Task<List<Artifact>> GetAllArtifacts(bool skipImages = false)
         {
             var version = GlobalSettings.FileVersions.Artifact;
-            if (!string.IsNullOrWhiteSpace(version))
+            if (string.IsNullOrWhiteSpace(version))
                 version = GlobalSettings.DefaultVersion;
 
             var data = await WebClient.GetString(new Uri(GHStatic + version + ArtifactsPath));
@@ -256,7 +254,7 @@ namespace TT2Bot.Helpers
         public async Task<List<Equipment>> GetAllEquipment(bool skipImages = false)
         {
             var version = GlobalSettings.FileVersions.Equipment;
-            if (!string.IsNullOrWhiteSpace(version))
+            if (string.IsNullOrWhiteSpace(version))
                 version = GlobalSettings.DefaultVersion;
 
             var data = await WebClient.GetString(new Uri(GHStatic + version + EquipmentPath));
@@ -292,7 +290,7 @@ namespace TT2Bot.Helpers
         public async Task<List<Pet>> GetAllPets(bool skipImages = false)
         {
             var version = GlobalSettings.FileVersions.Pet;
-            if (!string.IsNullOrWhiteSpace(version))
+            if (string.IsNullOrWhiteSpace(version))
                 version = GlobalSettings.DefaultVersion;
 
             var data = await WebClient.GetString(new Uri(GHStatic + version + PetsPath));
@@ -328,7 +326,7 @@ namespace TT2Bot.Helpers
         public async Task<List<Helper>> GetAllHelpers(bool skipImages = false)
         {
             var version = GlobalSettings.FileVersions.Helper;
-            if (!string.IsNullOrWhiteSpace(version))
+            if (string.IsNullOrWhiteSpace(version))
                 version = GlobalSettings.DefaultVersion;
 
             var data = await WebClient.GetString(new Uri(GHStatic + version + HelpersPath));
@@ -366,7 +364,7 @@ namespace TT2Bot.Helpers
         public async Task<List<HelperSkill>> GetAllHelperSkills()
         {
             var version = GlobalSettings.FileVersions.HelperSkill;
-            if (!string.IsNullOrWhiteSpace(version))
+            if (string.IsNullOrWhiteSpace(version))
                 version = GlobalSettings.DefaultVersion;
 
             var data = await WebClient.GetString(new Uri(GHStatic + version + HelpersSkillPath));

@@ -1,15 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TitanBot.Storage;
+﻿using LiteDB;
+using System;
 
-namespace TT2Bot.Models
+namespace Conversion.OldModels
 {
-    class TT2Submission : IDbRecord
+    class TT2Submission
     {
-        public ulong Id { get; set; }
+        [BsonId]
+        public int Id { get; set; }
         public ulong Submitter { get; set; }
         public ulong? Answerer { get; set; }
         public SubmissionType Type { get; set; }

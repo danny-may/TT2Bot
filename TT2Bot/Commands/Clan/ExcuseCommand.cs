@@ -1,12 +1,10 @@
 ﻿using Discord;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using TitanBot.Commands;
 using TitanBot.Util;
-using TT2Bot.Models.Database;
+using TT2Bot.Models;
 
 namespace TT2Bot.Commands.Clan
 {
@@ -34,7 +32,7 @@ namespace TT2Bot.Commands.Clan
             {
                 Author = new EmbedAuthorBuilder
                 {
-                    IconUrl = user.GetAvatarUrl(),
+                    IconUrl = AuthorAvatar,
                     Name = $"{user.Username}#{user.Discriminator}"
                 },
                 Footer = new EmbedFooterBuilder

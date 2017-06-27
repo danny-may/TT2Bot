@@ -1,6 +1,6 @@
 ﻿namespace TT2Bot.Models
 {
-    public class HelperSkill
+    class HelperSkill
     {
         public int SkillId { get; }
         public int HelperId { get; }

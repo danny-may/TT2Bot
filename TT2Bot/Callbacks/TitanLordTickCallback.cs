@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TitanBot.Scheduler;
+using TitanBot.Scheduling;
 using TitanBot.Settings;
 using TitanBot.Util;
 using TT2Bot.Models;
@@ -43,7 +43,7 @@ namespace TT2Bot.Callbacks
             foreach (var ping in settings.PrePings)
             {
                 var delta = (record.EndTime - eventTime).Add(new TimeSpan(0, 0, -ping));
-                if (delta < record.Interval && delta > new TimeSpan())
+                if (delta < record.Interval && delta >= new TimeSpan())
                     messageChannel?.SendMessageSafeAsync(Contextualise(settings.InXText, settings, record, eventTime)).Wait();
             }
         }

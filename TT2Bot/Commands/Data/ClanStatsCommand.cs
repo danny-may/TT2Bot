@@ -22,12 +22,13 @@ namespace TT2Bot.Commands.Data
             var nextTitanLordHp = Calculator.TitanLordHp(absLevel);
             var advanceStart = Calculator.AdvanceStart(absLevel);
 
+            var avatar = me.GetAvatarUrl() == null ? null : new Uri(me.GetAvatarUrl());
 
             var builder = new EmbedBuilder
             {
                 Footer = new EmbedFooterBuilder
                 {
-                    IconUrl = me.GetAvatarUrl(),
+                    IconUrl = avatar,
                     Text = me.Username + "#" + me.Discriminator
                 },
                 Color = System.Drawing.Color.DarkOrange.ToDiscord(),

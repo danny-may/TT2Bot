@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TT2Bot.Models.Settings
+namespace TT2Bot.Models
 {
     class HighScoreSettings
     {
