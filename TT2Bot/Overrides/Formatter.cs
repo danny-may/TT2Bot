@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using TitanBot.Commands;
 using TitanBot.Formatter;
 using TitanBot.TypeReaders;
+using TT2Bot.Helpers;
 using TT2Bot.Models;
 
 namespace TT2Bot.Overrides
@@ -83,14 +84,34 @@ namespace TT2Bot.Overrides
                 {BonusType.MonsterHP, "Titan HP"}
             };
 
-        public Formatter(ICommandContext context, ITypeReaderCollection typeReaders, bool altFormat) : base(context, typeReaders, altFormat)
+        public Formatter(ICommandContext context, bool altFormat) : base(context, altFormat)
         {
-            Add<int>(Beautify, TryParse);
-            Add<double>(Beautify, TryParse);
+            Add<int>(Beautify);
+            Add<double>(Beautify);
+            Add<BonusType>(Beautify);
+            Add<EquipmentClass>(Beautify);
+            Add<HelperType>(Beautify);
+            Add<TimeSpan>(Beautify);
+        }
 
-            Add<BonusType>(Beautify, TryParse);
-            Add<EquipmentClass>(Beautify, TryParse);
-            Add<HelperType>(Beautify, TryParse);
+        public string Beautify(TimeSpan value)
+        {
+            var s = $"{value.Seconds} {(value.Seconds != 1 ? "seconds" : "second")}";
+            var m = $"{value.Minutes} {(value.Minutes != 1 ? "minutes" : "minute")}";
+            var h = $"{value.Hours} {(value.Hours != 1 ? "hours" : "hour")}";
+            var d = $"{value.Days} {(value.Days != 1 ? "days" : "day")}";
+
+            var sections = new List<string>();
+            if (value.Days != 0)
+                sections.Add(d);
+            if (value.Hours != 0)
+                sections.Add(h);
+            if (value.Minutes != 0)
+                sections.Add(m);
+            if (value.Seconds != 0 || sections.Count == 0)
+                sections.Add(s);
+
+            return sections.Join(", ", " and ");
         }
         
         static string Format(string t)
@@ -98,15 +119,6 @@ namespace TT2Bot.Overrides
 
         private string Beautify(int value)
             => Beautify((double)value);
-
-        private bool TryParse(string text, out int value)
-        {
-            value = 0;
-            if (!TryParse(text, out double parsed) || parsed > int.MaxValue)
-                return false;
-            value = (int)parsed;
-            return true;
-        }
 
         string alphabet = "abcdefghijklmnopqrstuvwxyz";
 
@@ -138,37 +150,11 @@ namespace TT2Bot.Overrides
             return sign+string.Format("{0:0.##} " + postfix, value / (Math.Pow(10, magnitude * 3)));
         }
 
-        private bool TryParse(string text, out double value)
-        {
-            if (Regex.IsMatch(text, @"^\d+[kmbt]?$", RegexOptions.IgnoreCase))
-            {
-                value = 1;
-                return true;
-            }
-            else if (Regex.IsMatch(text, $@"^\d+[{alphabet}]{{2}}$", RegexOptions.IgnoreCase))
-            {
-                value = 2;
-                return true;
-            }
-            value = 0;
-            return false;
-        }
-
         private string Beautify(BonusType value)
         {
             if (BonusTypeMap.ContainsKey(value))
                 return BonusTypeMap[value];
             return value.ToString();
-        }
-
-        private bool TryParse(string text, out BonusType value)
-        {
-            value = default(BonusType);
-            var res = BonusTypeMap.Where(m => Format(m.Value) == Format(text));
-            if (res.Count() != 1)
-                return false;
-            value = res.First().Key;
-            return true;
         }
 
         private string Beautify(EquipmentClass value)
@@ -178,31 +164,11 @@ namespace TT2Bot.Overrides
             return value.ToString();
         }
 
-        private bool TryParse(string text, out EquipmentClass value)
-        {
-            value = default(EquipmentClass);
-            var res = EquipmentClassMap.Where(m => Format(m.Value) == Format(text));
-            if (res.Count() != 1)
-                return false;
-            value = res.First().Key;
-            return true;
-        }
-
         private string Beautify(HelperType value)
         {
             if (HelperTypeMap.ContainsKey(value))
                 return HelperTypeMap[value];
             return value.ToString();
-        }
-
-        private bool TryParse(string text, out HelperType value)
-        {
-            value = default(HelperType);
-            var res = HelperTypeMap.Where(m => Format(m.Value) == Format(text));
-            if (res.Count() != 1)
-                return false;
-            value = res.First().Key;
-            return true;
         }
     }
 }

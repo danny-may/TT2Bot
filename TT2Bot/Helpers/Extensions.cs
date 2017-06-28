@@ -9,6 +9,16 @@ namespace TT2Bot.Helpers
 {
     static class Extensions
     {
+        public static string Join<T>(this IEnumerable<T> values, string separator, string finalSeparator = null)
+        {
+            finalSeparator = finalSeparator ?? separator;
+            var firstElements = values.Take(Math.Max(values.Count() - 1, 0)).ToArray();
+            var finalElement = values.Last();
+            if (firstElements.Length == 0)
+                return finalElement.ToString();
+            return string.Join(separator, firstElements) + finalSeparator + finalElement.ToString();
+        }
+
         public static string FormatValue(this BonusType bonusType, double value)
         {
             value = Math.Round(value, 5);
