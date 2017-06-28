@@ -27,10 +27,11 @@ namespace TT2Bot
             Client = new BotClient(MapDependencies);
             Client.Install(Assembly.GetExecutingAssembly());
 
-            Console.WriteLine("Do you want to convert from an old database? Press enter if not, or type in the location of the database if you do:");
-            var location = Console.ReadLine();
-            if (!string.IsNullOrWhiteSpace(location))
-                new Converter(location, Client).Convert();
+            //This is just for migrating from the old titanbot database structure
+            //Console.WriteLine("Do you want to convert from an old database? Press enter if not, or type in the location of the database if you do:");
+            //var location = Console.ReadLine();
+            //if (!string.IsNullOrWhiteSpace(location))
+            //    new Converter(location, Client).Convert();
 
             RegisterSettings();
             RegisterTypeReaders();
