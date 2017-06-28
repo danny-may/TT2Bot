@@ -43,6 +43,7 @@ namespace Conversion
             var oldUsers = Database.GetCollection<User>().FindAll().ToArray();
             var newUsers = oldUsers.Select(u => new PlayerData
             {
+                Id = u.DiscordId,
                 PlayerCode = u.SupportCode,
                 CanAddExcuse = true,
                 CanGHSubmit = u.CanSubmit,
