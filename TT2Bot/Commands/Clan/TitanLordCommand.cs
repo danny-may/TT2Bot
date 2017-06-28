@@ -95,10 +95,10 @@ namespace TT2Bot.Commands.Clan
         private async Task TitanLordWhenAsync()
         {
             var current = Scheduler.GetMostRecent<TitanLordTickCallback>(Guild.Id);
-            if (current.EndTime > DateTime.Now)
+            if (current == null || current.EndTime < DateTime.Now)
                 await ReplyAsync($"There is no currently active Titan Lord timer running", ReplyType.Info);
             else
-                await ReplyAsync($"There will be a Titan Lord in {current.EndTime - DateTime.Now}", ReplyType.Info);
+                await ReplyAsync($"There will be a Titan Lord in {Formatter.Beautify(current.EndTime - DateTime.Now)}", ReplyType.Info);
         }
 
         [Call("Info")]

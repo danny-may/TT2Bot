@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using TitanBot.Commands;
 using TitanBot.Formatter;
@@ -86,6 +87,7 @@ namespace TT2Bot.Overrides
         {
             Add<int>(Beautify, TryParse);
             Add<double>(Beautify, TryParse);
+
             Add<BonusType>(Beautify, TryParse);
             Add<EquipmentClass>(Beautify, TryParse);
             Add<HelperType>(Beautify, TryParse);
@@ -95,23 +97,61 @@ namespace TT2Bot.Overrides
             => new string(t.Where(c => !char.IsWhiteSpace(c)).ToArray()).ToLower();
 
         private string Beautify(int value)
-        {
-            return value.ToString();
-        }
+            => Beautify((double)value);
 
         private bool TryParse(string text, out int value)
         {
-            return int.TryParse(text, out value);
+            value = 0;
+            if (!TryParse(text, out double parsed) || parsed > int.MaxValue)
+                return false;
+            value = (int)parsed;
+            return true;
         }
+
+        string alphabet = "abcdefghijklmnopqrstuvwxyz";
 
         private string Beautify(double value)
         {
-            return value.ToString();
+            string sign = "";
+            
+            if (double.IsNaN(value))
+                return "NaN";
+            if (value == 0)
+                return "0";
+            if (value < 0)
+            {
+                sign = "-";
+                value = -value;
+            }
+            if (double.IsInfinity(value))
+                return sign+"∞";
+            var postfixes = new string[] { "", "K", "M", "B", "T" };
+            var magnitude = (int)Math.Floor(Math.Log10(value)) / 3;
+            string postfix;
+
+            if (magnitude > postfixes.Length - 1)
+                postfix = alphabet[(magnitude - (postfixes.Length)) / 26].ToString() +
+                          alphabet[(magnitude - (postfixes.Length)) % 26].ToString();
+            else
+                postfix = postfixes[magnitude];
+
+            return sign+string.Format("{0:0.##} " + postfix, value / (Math.Pow(10, magnitude * 3)));
         }
 
         private bool TryParse(string text, out double value)
         {
-            return double.TryParse(text, out value);
+            if (Regex.IsMatch(text, @"^\d+[kmbt]?$", RegexOptions.IgnoreCase))
+            {
+                value = 1;
+                return true;
+            }
+            else if (Regex.IsMatch(text, $@"^\d+[{alphabet}]{{2}}$", RegexOptions.IgnoreCase))
+            {
+                value = 2;
+                return true;
+            }
+            value = 0;
+            return false;
         }
 
         private string Beautify(BonusType value)
