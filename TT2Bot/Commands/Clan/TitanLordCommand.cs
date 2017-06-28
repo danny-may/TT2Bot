@@ -57,7 +57,7 @@ namespace TT2Bot.Commands.Clan
             {
                 var mostRecent = Scheduler.GetMostRecent<TitanLordTickCallback>(Guild.Id);
                 if (mostRecent != null && mostRecent.EndTime > mostRecent.StartTime.AddHours(6))
-                    await ReplyAsync("", embed: NewBoss(time));
+                    await ReplyAsync(tlChannel, "", embed: NewBoss(time));
             }
 
             var timer = await ReplyAsync(tlChannel, "Loading timer...\n_If this takes longer than 20s please let Titansmasher know_");
