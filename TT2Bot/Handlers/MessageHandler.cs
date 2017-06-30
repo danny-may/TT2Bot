@@ -20,6 +20,12 @@ namespace TT2Bot.Handlers
         private async Task MessageRecieved(SocketMessage msg)
         {
             await Logger.LogAsync(LogSeverity.Verbose, LogType.Message, msg.ToString(), "MessageHandler");
+            if (msg is SocketUserMessage message && message.Content.Contains("👋"))
+                try
+                {
+                    await message.AddReactionAsync(new Discord.Emoji("👋"));
+                }
+                catch { }
         }
     }
 }
