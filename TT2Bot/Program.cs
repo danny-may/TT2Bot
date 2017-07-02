@@ -12,7 +12,7 @@ namespace TT2BotConsole
         public async Task Start()
         {
             var client = new TT2BotClient();
-            await client.StartAsync(current => 
+            await client.StartAsync(current =>
             {
                 if (current != null)
                     return current;

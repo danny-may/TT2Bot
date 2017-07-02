@@ -194,6 +194,7 @@
     <Compile Include="Commands\Data\HighScoreCommand.cs" />
     <Compile Include="Commands\Data\PetsCommand.cs" />
     <Compile Include="Commands\Data\PrestigeCommand.cs" />
+    <Compile Include="Commands\Games\Eevee.cs" />
     <Compile Include="Commands\GuildSpecific\Singularity\ChampionCommand.cs" />
     <Compile Include="Commands\GuildSpecific\Singularity\ColourMeCommand.cs" />
     <Compile Include="Commands\GuildSpecific\Singularity\DemoteCommand.cs" />
