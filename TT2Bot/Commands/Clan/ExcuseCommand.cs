@@ -32,7 +32,7 @@ namespace TT2Bot.Commands.Clan
             {
                 Author = new EmbedAuthorBuilder
                 {
-                    IconUrl = AuthorAvatar,
+                    IconUrl = new Uri(submitter.GetAvatarUrl()),
                     Name = $"{user.Username}#{user.Discriminator}"
                 },
                 Footer = new EmbedFooterBuilder

@@ -50,7 +50,7 @@ namespace TT2Bot.Callbacks
             var user = timer.UserId;
             var remaining = 0;
             var completesAt = timer.StartTime;
-            var round = 2 + (eventTime - timer.StartTime).TotalSeconds / timer.Interval.TotalSeconds;
+            var round = (int)(2 + (eventTime - timer.StartTime).TotalSeconds / timer.Interval.TotalSeconds);
 
             return message.Replace("%CQ%", CQ.ToString())
                           .Replace("%USER%", $"<@{user}>")
