@@ -13,5 +13,7 @@ namespace TT2Bot.Models
         public bool CanGHSubmit { get; set; } = true;
         public bool CanAddExcuse { get; set; } = true;
         public bool CanBotSubmit { get; set; } = true;
+        public int Eevees { get; set; }
+        public int CritEevees { get; set; }
     }
 }

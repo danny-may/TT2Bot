@@ -1,4 +1,6 @@
-﻿using Discord.WebSocket;
+﻿using Discord;
+using Discord.WebSocket;
+using System.Linq;
 using System.Threading.Tasks;
 using TitanBot.Commands;
 using TitanBot.DiscordHandlers;
@@ -15,17 +17,32 @@ namespace TT2Bot.Handlers
             CommandService = commandService;
 
             Client.MessageReceived += MessageRecieved;
+            Client.ReactionAdded += ReactionAdded;
         }
 
         private async Task MessageRecieved(SocketMessage msg)
         {
-            await Logger.LogAsync(LogSeverity.Verbose, LogType.Message, msg.ToString(), "MessageHandler");
-            if (msg is SocketUserMessage message && message.Content.Contains("👋"))
-                try
+            await Logger.LogAsync(TitanBot.Logging.LogSeverity.Verbose, LogType.Message, msg.ToString(), "MessageHandler");
+            if (!(msg is SocketUserMessage message))
+                return;
+            for (int i = 0; i < message.Content.Length - 1; i++)
+            {
+                if (message.Content.Substring(i, 2) != "👋")
+                    continue;
+                var tone = "";
+                if (message.Content.Length >= i + 4)
                 {
-                    await message.AddReactionAsync(new Discord.Emoji("👋"));
+                    tone = message.Content.Substring(i + 2, 2);
+                    if (!"🏿🏼🏽🏾🏻".Contains(tone))
+                        tone = "";
                 }
-                catch { }
+                await message.AddReactionAsync(new Emoji("👋" + tone));
+            }
+        }
+
+        private async Task ReactionAdded(Cacheable<IUserMessage, ulong> message, ISocketMessageChannel channel, SocketReaction reaction)
+        {
+
         }
     }
 }
