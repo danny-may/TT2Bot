@@ -173,7 +173,7 @@
       <HintPath>..\packages\System.Xml.XPath.XDocument.4.3.0\lib\net46\System.Xml.XPath.XDocument.dll</HintPath>
     </Reference>
     <Reference Include="TitanBot, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Titansmasher.TitanBot.2.0.1\lib\net461\TitanBot.dll</HintPath>
+      <HintPath>..\packages\Titansmasher.TitanBot.2.0.0\lib\net461\TitanBot.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -205,7 +205,6 @@
     <Compile Include="Helpers\Calculator.cs" />
     <Compile Include="Helpers\Extensions.cs" />
     <Compile Include="Helpers\TimerExtensions.cs" />
-    <Compile Include="Helpers\TitanLordExtensions.cs" />
     <Compile Include="Helpers\TT2DataService.cs" />
     <Compile Include="Models\Database\Excuse.cs" />
     <Compile Include="Models\Database\PlayerData.cs" />

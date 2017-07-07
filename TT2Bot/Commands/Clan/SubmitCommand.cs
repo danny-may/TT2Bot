@@ -38,13 +38,11 @@ namespace TitanBot2.Commands.Clan
             if (submission.Answerer != null)
                 replier = Client.GetUser(submission.Answerer.Value);
 
-            var submitavatar = replier.GetAvatarUrl() == null ? null : new Uri(replier.GetAvatarUrl());
-
             var builder = new EmbedBuilder
             {
                 Author = new EmbedAuthorBuilder
                 {
-                    IconUrl = submitavatar,
+                    IconUrl = replier.GetAvatarUrl(),
                     Name = $"{submitter?.ToString() ?? "Unknown User"} ({submission.Submitter})"
                 },
                 Color = color,
@@ -62,12 +60,10 @@ namespace TitanBot2.Commands.Clan
             else
                 builder.AddField("GH reply", submission.Response);
 
-            var replyavatar = replier.GetAvatarUrl() == null ? null : new Uri(replier.GetAvatarUrl());
-
             if (replier != null)
                 builder.WithFooter(new EmbedFooterBuilder
                 {
-                    IconUrl = replyavatar,
+                    IconUrl = replier.GetAvatarUrl(),
                     Text = $"{replier} | Replied {submission.ReplyTime}"
                 });
 

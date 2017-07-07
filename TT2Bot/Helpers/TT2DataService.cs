@@ -30,9 +30,9 @@ namespace TT2Bot.Helpers
             Settings = settings;
         }
 
-        private Task<Dictionary<Uri, Bitmap>> GetImages(IEnumerable<Uri> urls)
+        private Task<Dictionary<string, Bitmap>> GetImages(IEnumerable<string> urls)
             => GetImages(urls.ToArray());
-        private async Task<Dictionary<Uri, Bitmap>> GetImages(Uri[] urls)
+        private async Task<Dictionary<string, Bitmap>> GetImages(string[] urls)
         {
             var res = urls.Distinct().ToDictionary(u => u, u => GetImage(u));
 
@@ -41,17 +41,17 @@ namespace TT2Bot.Helpers
             return res.ToDictionary(r => r.Key, r => r.Value.Result);
         }
 
-        private async Task<Bitmap> GetImage(Uri url, int retries = 1)
+        private async Task<Bitmap> GetImage(string url, int retries = 1)
         {
             try
             {
-                return await WebClient.GetImage(url);
+                return await WebClient.GetImage(new Uri(url));
             }
             catch
             {
                 if (retries > 0)
                 {
-                    WebClient.HardReset(url);
+                    WebClient.HardReset(new Uri(url));
                     return await GetImage(url, --retries);
                 }
 
@@ -230,7 +230,7 @@ namespace TT2Bot.Helpers
 
             var items = new List<Tuple<Artifact.ArtifactStatic, ICsvLine, Bitmap>>();
 
-            Dictionary<Uri, Bitmap> images;
+            Dictionary<string, Bitmap> images;
             var imageTask = GetImages(Artifact.All.Select(a => a.ImageUrl));
             if (!skipImages)
                 images = await imageTask;
@@ -265,7 +265,7 @@ namespace TT2Bot.Helpers
 
             var items = new List<Tuple<Equipment.EquipmentStatic, ICsvLine, Bitmap>>();
 
-            Dictionary<Uri, Bitmap> images;
+            Dictionary<string, Bitmap> images;
             var imageTask = GetImages(Equipment.All.Select(a => a.ImageUrl));
             if (!skipImages)
                 images = await imageTask;
@@ -301,7 +301,7 @@ namespace TT2Bot.Helpers
 
             var items = new List<Tuple<Pet.PetStatic, ICsvLine, Bitmap>>();
 
-            Dictionary<Uri, Bitmap> images;
+            Dictionary<string, Bitmap> images;
             var imageTask = GetImages(Pet.All.Select(a => a.ImageUrl));
             if (!skipImages)
                 images = await imageTask;
@@ -337,7 +337,7 @@ namespace TT2Bot.Helpers
 
             var items = new List<Tuple<Helper.HelperStatic, ICsvLine, Bitmap>>();
 
-            Dictionary<Uri, Bitmap> images;
+            Dictionary<string, Bitmap> images;
             var imageTask = GetImages(Helper.All.Select(a => a.ImageUrl));
             if (!skipImages)
                 images = await imageTask;

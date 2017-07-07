@@ -134,7 +134,7 @@ namespace TT2Bot.Commands.Clan
                     //IconUrl = Res.Emoji.Information_source,
                     Name = "Titan Lord data updated!"
                 },
-                ThumbnailUrl = new Uri("https://cdn.discordapp.com/attachments/275257967937454080/308047011289235456/emoji.png"),
+                ThumbnailUrl = "https://cdn.discordapp.com/attachments/275257967937454080/308047011289235456/emoji.png",
                 Color = System.Drawing.Color.DarkOrange.ToDiscord(),
                 Timestamp = DateTime.Now,
             }.AddField("New Clan Quest", TitanLordSettings.CQ)

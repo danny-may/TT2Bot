@@ -28,7 +28,7 @@ namespace TT2Bot.Commands.Bot
                 Author = new EmbedAuthorBuilder
                 {
                     Name = $"{Author.Username}#{Author.Discriminator}",
-                    IconUrl = AuthorAvatar
+                    IconUrl = Author.GetAvatarUrl()
                 },
                 Timestamp = DateTime.Now,
                 Color = System.Drawing.Color.ForestGreen.ToDiscord()
