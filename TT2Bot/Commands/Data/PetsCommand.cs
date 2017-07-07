@@ -33,7 +33,7 @@ namespace TT2Bot.Commands.Data
                 ThumbnailUrl = pet.ImageUrl,
                 Footer = new EmbedFooterBuilder
                 {
-                    IconUrl = BotAvatar,
+                    IconUrl = BotUser.GetAvatarUrl(),
                     Text = $"{BotUser.Username} Pet tool | TT2 v{pet.FileVersion}"
                 },
                 Timestamp = DateTime.Now,
@@ -94,14 +94,14 @@ namespace TT2Bot.Commands.Data
             {
                 Author = new EmbedAuthorBuilder
                 {
-                    IconUrl = BotAvatar,
+                    IconUrl = BotUser.GetAvatarUrl(),
                     Name = "Pet listing"
                 },
                 Color = System.Drawing.Color.LightBlue.ToDiscord(),
                 Description = "All Pets",
                 Footer = new EmbedFooterBuilder
                 {
-                    IconUrl = BotAvatar,
+                    IconUrl = BotUser.GetAvatarUrl(),
                     Text = $"{BotUser.Username} Pet tool"
                 },
                 Timestamp = DateTime.Now

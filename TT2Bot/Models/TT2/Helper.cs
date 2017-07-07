@@ -16,7 +16,7 @@ namespace TT2Bot.Models
         public IReadOnlyList<HelperSkill> Skills { get; }
         public bool IsInGame { get; }
         public string FileVersion { get; }
-        public Uri ImageUrl => _staticData.ImageUrl;
+        public string ImageUrl => _staticData.ImageUrl;
         public Bitmap Image { get; }
 
         private HelperStatic _staticData { get; }
@@ -114,9 +114,9 @@ namespace TT2Bot.Models
             public int Id { get; }
             public string Name { get; }
             public string[] Alias { get; }
-            public Uri ImageUrl { get; }
+            public string ImageUrl { get; }
 
-            internal HelperStatic(int id, string name, string[] alias, Uri imageUrl)
+            internal HelperStatic(int id, string name, string[] alias, string imageUrl)
             {
                 Id = id;
                 Name = name;

@@ -43,7 +43,7 @@ namespace TT2Bot.Commands.Data
                 Color = System.Drawing.Color.Gold.ToDiscord(),
                 Footer = new EmbedFooterBuilder
                 {
-                    IconUrl = BotAvatar,
+                    IconUrl = BotUser.GetAvatarUrl(),
                     Text = "Prestige data"
                 }
             }

@@ -15,7 +15,7 @@ namespace TT2Bot.Models
         public double BonusBase { get; }
         public double BonusIncrement { get; }
         public string FileVersion { get; }
-        public Uri ImageUrl => _staticData.ImageUrl;
+        public string ImageUrl => _staticData.ImageUrl;
         public Bitmap Image { get; }
 
         private PetStatic _staticData { get; }
@@ -62,22 +62,22 @@ namespace TT2Bot.Models
 
         public static List<PetStatic> All { get; } = new List<PetStatic>
         {
-            new PetStatic(1, "Nova", new string[0], new Uri("http://www.cockleshell.org/static/TT2/img/p9.png")),
-            new PetStatic(2, "Toto", new string[0], new Uri("http://www.cockleshell.org/static/TT2/img/p7.png")),
-            new PetStatic(3, "Cerberus ", new string[0], new Uri("http://www.cockleshell.org/static/TT2/img/p2.png")),
-            new PetStatic(4, "Mousy", new string[0], new Uri("http://www.cockleshell.org/static/TT2/img/p5.png")),
-            new PetStatic(5, "Harker ", new string[0], new Uri("http://www.cockleshell.org/static/TT2/img/p1.png")),
-            new PetStatic(6, "Bubbles ", new string[0], new Uri("http://www.cockleshell.org/static/TT2/img/p12.png")),
-            new PetStatic(7, "Demos ", new string[0], new Uri("http://www.cockleshell.org/static/TT2/img/p8.png")),
-            new PetStatic(8, "Tempest", new string[0], new Uri("http://www.cockleshell.org/static/TT2/img/p6.png")),
-            new PetStatic(9, "Basky ", new string[0], new Uri("http://www.cockleshell.org/static/TT2/img/p3.png")),
-            new PetStatic(10, "Scraps ", new string[0], new Uri("http://www.cockleshell.org/static/TT2/img/p4.png")),
-            new PetStatic(11, "Zero", new string[0], new Uri("http://www.cockleshell.org/static/TT2/img/p0.png")),
-            new PetStatic(12, "Polly ", new string[0], new Uri("http://www.cockleshell.org/static/TT2/img/p13.png")),
-            new PetStatic(13, "Hamy ", new string[0], new Uri("http://www.cockleshell.org/static/TT2/img/p10.png")),
-            new PetStatic(14, "Phobos ", new string[0], new Uri("http://www.cockleshell.org/static/TT2/img/p11.png")),
-            new PetStatic(15, "Fluffers", new string[0], new Uri("http://www.cockleshell.org/static/TT2/img/p15.png")),
-            new PetStatic(16, "Kit", new string[0], new Uri("http://www.cockleshell.org/static/TT2/img/p14.png")),
+            new PetStatic(1, "Nova", new string[0], "http://www.cockleshell.org/static/TT2/img/p9.png"),
+            new PetStatic(2, "Toto", new string[0], "http://www.cockleshell.org/static/TT2/img/p7.png"),
+            new PetStatic(3, "Cerberus ", new string[0], "http://www.cockleshell.org/static/TT2/img/p2.png"),
+            new PetStatic(4, "Mousy", new string[0], "http://www.cockleshell.org/static/TT2/img/p5.png"),
+            new PetStatic(5, "Harker ", new string[0], "http://www.cockleshell.org/static/TT2/img/p1.png"),
+            new PetStatic(6, "Bubbles ", new string[0], "http://www.cockleshell.org/static/TT2/img/p12.png"),
+            new PetStatic(7, "Demos ", new string[0], "http://www.cockleshell.org/static/TT2/img/p8.png"),
+            new PetStatic(8, "Tempest", new string[0], "http://www.cockleshell.org/static/TT2/img/p6.png"),
+            new PetStatic(9, "Basky ", new string[0], "http://www.cockleshell.org/static/TT2/img/p3.png"),
+            new PetStatic(10, "Scraps ", new string[0], "http://www.cockleshell.org/static/TT2/img/p4.png"),
+            new PetStatic(11, "Zero", new string[0], "http://www.cockleshell.org/static/TT2/img/p0.png"),
+            new PetStatic(12, "Polly ", new string[0], "http://www.cockleshell.org/static/TT2/img/p13.png"),
+            new PetStatic(13, "Hamy ", new string[0], "http://www.cockleshell.org/static/TT2/img/p10.png"),
+            new PetStatic(14, "Phobos ", new string[0], "http://www.cockleshell.org/static/TT2/img/p11.png"),
+            new PetStatic(15, "Fluffers", new string[0], "http://www.cockleshell.org/static/TT2/img/p15.png"),
+            new PetStatic(16, "Kit", new string[0], "http://www.cockleshell.org/static/TT2/img/p14.png"),
         };
 
         public class PetStatic
@@ -85,9 +85,9 @@ namespace TT2Bot.Models
             public int Id { get; }
             public string Name { get; }
             public string[] Alias { get; }
-            public Uri ImageUrl { get; }
+            public string ImageUrl { get; }
 
-            internal PetStatic(int id, string name, string[] alias, Uri imageUrl)
+            internal PetStatic(int id, string name, string[] alias, string imageUrl)
             {
                 Id = id;
                 Name = name;
