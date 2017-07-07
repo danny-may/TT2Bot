@@ -59,7 +59,8 @@ namespace TT2Bot
                                                                            "Use `%TIME%` to include how long until the titan lord is up\n" +
                                                                            "Use `%ROUND%` for the round number\n" +
                                                                            "Use `%CQ%` for the current CQ number\n" +
-                                                                           "Use `%COMPLETE%` for the time the titan lord will be up (UTC time)")
+                                                                           "Use `%COMPLETE%` for the time the titan lord will be up (UTC time)\n" + 
+                                                                           "Alternatively `%COMPLETE+timezone%` can be used to define the timezone, e.g. `%COMPLETE+6%`, minus can also be used but timezone has to be a number from 0 to 12")
                                                                 .AddSetting(s => s.TimerText, validator: strLengthValidator)
                                                                 .AddSetting(s => s.InXText, validator: strLengthValidator)
                                                                 .AddSetting(s => s.NowText, validator: strLengthValidator)

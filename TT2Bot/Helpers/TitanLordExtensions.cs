@@ -30,7 +30,7 @@ namespace TT2Bot.Helpers
 
         public static string ReplaceUniversalTime(this string msg, DateTime universalEventTime, string dateTimeFormat)
         {
-            var regex = new Regex(@"(%COMPLETE)(?<time>[\+\-](\d|1[0-2]))?(%)");
+            var regex = new Regex(@"(%COMPLETE)(?<time>[\+\-](\d|1[0-2]))?%");
 
             // Contains a valid %COMPLETE% format?
             var match = regex.Match(msg);
