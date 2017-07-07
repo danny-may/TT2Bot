@@ -11,7 +11,7 @@ namespace TT2Bot.Helpers
 {
     public static class TitanLordExtensions
     {
-        public static string Contextualise(this string message, int cq, ISchedulerRecord timer, DateTime eventTime)
+        public static string Contextualise(this string message, int cq, ISchedulerRecord timer, DateTime eventTime, string dateTimeFormat)
         {
             var CQ = cq;
             var user = timer.UserId;
@@ -20,7 +20,7 @@ namespace TT2Bot.Helpers
             var round = (int)(2 + (eventTime - timer.StartTime).TotalSeconds / timer.Interval.TotalSeconds);
 
             // Handle %COMPLETE% message
-            message = ReplaceUniversalTime(message, completesAt.ToUniversalTime());
+            message = ReplaceUniversalTime(message, completesAt.ToUniversalTime(), dateTimeFormat);
 
             return message.Replace("%CQ%", CQ.ToString())
                 .Replace("%USER%", $"<@{user}>")
@@ -28,7 +28,7 @@ namespace TT2Bot.Helpers
                 .Replace("%ROUND%", round.ToString());
         }
 
-        public static string ReplaceUniversalTime(this string msg, DateTime universalEventTime)
+        public static string ReplaceUniversalTime(this string msg, DateTime universalEventTime, string dateTimeFormat)
         {
             var regex = new Regex(@"(%COMPLETE)(?<time>[\+\-](\d|1[0-2]))?(%)");
 
@@ -42,7 +42,7 @@ namespace TT2Bot.Helpers
                 return msg;
 
             var newTime = universalEventTime.AddHours(val);
-            var strToReplace = newTime.ToString("dd/MMM/yy hh:mm:ss") + $" (UTC{time})"; // TODO: Add setting property for display type
+            var strToReplace = newTime.ToString(dateTimeFormat) + $" (UTC{time})"; // TODO: Add setting property for display type
             return regex.Replace(msg, strToReplace);
         }
     }

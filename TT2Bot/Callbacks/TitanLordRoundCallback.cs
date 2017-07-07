@@ -36,14 +36,15 @@ namespace TT2Bot.Callbacks
         {
             if (record.GuildId == null)
                 return;
-
+            
             var data = JsonConvert.DeserializeObject<TitanLordTimerData>(record.Data);
             var settings = SettingsManager.GetGroup<TitanLordSettings>(record.GuildId.Value);
+            var guildSettings = SettingsManager.GetGroup<GeneralSettings>(record.GuildId.Value);
 
             var messageChannel = Client.GetChannel(data.MessageChannelId) as IMessageChannel;
 
             if (settings.RoundPings)
-                await (messageChannel?.SendMessageSafeAsync(settings.RoundText.Contextualise(settings.CQ, record, eventTime)) ?? Task.CompletedTask);
+                await (messageChannel?.SendMessageSafeAsync(settings.RoundText.Contextualise(settings.CQ, record, eventTime, guildSettings.DateTimeFormat)) ?? Task.CompletedTask);
         }
     }
 }
