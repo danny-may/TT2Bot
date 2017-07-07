@@ -5,10 +5,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using TitanBot.Scheduling;
 using TitanBot.Settings;
 using TitanBot.Util;
+using TT2Bot.Helpers;
 using TT2Bot.Models;
 
 namespace TT2Bot.Callbacks
@@ -41,22 +43,7 @@ namespace TT2Bot.Callbacks
             var messageChannel = Client.GetChannel(data.MessageChannelId) as IMessageChannel;
 
             if (settings.RoundPings)
-                await (messageChannel?.SendMessageSafeAsync(Contextualise(settings.RoundText, settings, record, eventTime)) ?? Task.CompletedTask);
-        }
-
-        private static string Contextualise(string message, TitanLordSettings settings, ISchedulerRecord timer, DateTime eventTime)
-        {
-            var CQ = settings.CQ;
-            var user = timer.UserId;
-            var remaining = 0;
-            var completesAt = timer.StartTime;
-            var round = (int)(2 + (eventTime - timer.StartTime).TotalSeconds / timer.Interval.TotalSeconds);
-
-            return message.Replace("%CQ%", CQ.ToString())
-                          .Replace("%USER%", $"<@{user}>")
-                          .Replace("%TIME%", remaining.ToString())
-                          .Replace("%ROUND%", round.ToString())
-                          .Replace("%COMPLETE%", completesAt.ToShortTimeString());
+                await (messageChannel?.SendMessageSafeAsync(settings.RoundText.Contextualise(settings.CQ, record, eventTime)) ?? Task.CompletedTask);
         }
     }
 }

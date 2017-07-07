@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using TitanBot.Scheduling;
 using TitanBot.Settings;
 using TitanBot.Util;
+using TT2Bot.Helpers;
 using TT2Bot.Models;
 
 namespace TT2Bot.Callbacks
@@ -37,14 +38,14 @@ namespace TT2Bot.Callbacks
             {
                 var message = messageChannel?.GetMessageAsync(data.MessageId)?.Result as IUserMessage;
 
-                message?.ModifySafeAsync(m => m.Content = Contextualise(settings.TimerText, settings, record, eventTime)).Wait();
+                message?.ModifySafeAsync(m => m.Content = settings.TimerText.Contextualise(settings.CQ, record, eventTime)).Wait();
             }
 
             foreach (var ping in settings.PrePings)
             {
                 var delta = (record.EndTime - eventTime).Add(new TimeSpan(0, 0, -ping));
                 if (delta < record.Interval && delta >= new TimeSpan())
-                    messageChannel?.SendMessageSafeAsync(Contextualise(settings.InXText, settings, record, eventTime)).Wait();
+                    messageChannel?.SendMessageSafeAsync(settings.InXText.Contextualise(settings.CQ, record, eventTime)).Wait();
             }
         }
 
@@ -64,22 +65,7 @@ namespace TT2Bot.Callbacks
             }
 
             if (!wasCancelled)
-                messageChannel?.SendMessageSafeAsync(Contextualise(settings.NowText, settings, record, record.EndTime)).Wait();
-        }
-
-        private static string Contextualise(string message, TitanLordSettings settings, ISchedulerRecord timer, DateTime eventTime)
-        {
-            var CQ = settings.CQ;
-            var user = timer.UserId;
-            var remaining = timer.EndTime - eventTime;
-            var completesAt = timer.EndTime;
-            var round = 0;
-
-            return message.Replace("%CQ%", CQ.ToString())
-                          .Replace("%USER%", $"<@{user}>")
-                          .Replace("%TIME%", remaining.ToString())
-                          .Replace("%ROUND%", round.ToString())
-                          .Replace("%COMPLETE%", completesAt.ToShortTimeString());
+                messageChannel?.SendMessageSafeAsync(settings.NowText.Contextualise(settings.CQ, record, record.EndTime)).Wait();
         }
     }
 }
