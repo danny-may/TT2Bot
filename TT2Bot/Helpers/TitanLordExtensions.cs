@@ -15,7 +15,7 @@ namespace TT2Bot.Helpers
         {
             var CQ = cq;
             var user = timer.UserId;
-            var remaining = 0;
+            var remaining = timer.EndTime - eventTime;
             var completesAt = timer.StartTime;
             var round = (int)(2 + (eventTime - timer.StartTime).TotalSeconds / timer.Interval.TotalSeconds);
 
