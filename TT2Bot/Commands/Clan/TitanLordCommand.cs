@@ -62,6 +62,9 @@ namespace TT2Bot.Commands.Clan
 
             var timer = await ReplyAsync(tlChannel, "Loading timer...\n_If this takes longer than 20s please let Titansmasher know_");
 
+            if (TitanLordSettings.PinTimer)
+                await timer.PinAsync();
+
             var data = new TitanLordTimerData
             {
                 MessageChannelId = tlChannel.Id,
