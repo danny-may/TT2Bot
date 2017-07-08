@@ -1,11 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using TitanBot.Scheduling;
-using TT2Bot.Models;
 
 namespace TT2Bot.Helpers
 {
@@ -13,37 +8,46 @@ namespace TT2Bot.Helpers
     {
         public static string Contextualise(this string message, int cq, ISchedulerRecord timer, DateTime eventTime, string dateTimeFormat)
         {
-            var CQ = cq;
             var user = timer.UserId;
             var remaining = timer.EndTime - eventTime;
-            var completesAt = timer.StartTime;
             var round = (int)(2 + (eventTime - timer.StartTime).TotalSeconds / timer.Interval.TotalSeconds);
 
             // Handle %COMPLETE% message
-            message = ReplaceUniversalTime(message, completesAt.ToUniversalTime(), dateTimeFormat);
+            message = ReplaceUniversalTime(message, timer.EndTime, dateTimeFormat);
 
-            return message.Replace("%CQ%", CQ.ToString())
+            return message.Replace("%CQ%", cq.ToString())
                 .Replace("%USER%", $"<@{user}>")
                 .Replace("%TIME%", remaining.ToString())
                 .Replace("%ROUND%", round.ToString());
         }
 
-        public static string ReplaceUniversalTime(this string msg, DateTime universalEventTime, string dateTimeFormat)
+        public static string ReplaceUniversalTime(this string msg, DateTime eventTime, string dateTimeFormat)
         {
             var regex = new Regex(@"(%COMPLETE)(?<time>[\+\-](\d|1[0-2]))?%");
 
-            // Contains a valid %COMPLETE% format?
-            var match = regex.Match(msg);
-            if (!match.Success)
+            // Contains a valid format?
+            var matches = regex.Matches(msg);
+            if (matches.Count <= 0)
                 return msg;
+            
+            var timeZoneOffset = TimeZone.CurrentTimeZone.GetUtcOffset(eventTime);  // There might be a better way of getting UTC time of a DateTime
+            var utcEventTime = eventTime.Add(-timeZoneOffset);                      // but have not found one, and this will make it independant of
+                                                                                    // where this code is run from.
+            // Replace for all matches of %COMPLETE%
+            foreach (Match match in matches)
+            {
+                var time = match.Groups["time"].ToString();
+                if (!int.TryParse(time, out int hour))
+                {
+                    msg = msg.Replace(match.ToString(), $"{utcEventTime.ToString(dateTimeFormat)}");
+                    continue;
+                }
 
-            var time = match.Groups["time"].ToString();
-            if (!int.TryParse(time, out int val))
-                return msg;
+                var newTime = utcEventTime.AddHours(hour);
+                msg = msg.Replace(match.ToString(), $"{newTime.ToString(dateTimeFormat)} (UTC{time})");
+            }
 
-            var newTime = universalEventTime.AddHours(val);
-            var strToReplace = newTime.ToString(dateTimeFormat) + $" (UTC{time})"; // TODO: Add setting property for display type
-            return regex.Replace(msg, strToReplace);
+            return msg;
         }
     }
 }
