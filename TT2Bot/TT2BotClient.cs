@@ -60,7 +60,8 @@ namespace TT2Bot
                                                                            "Use `%ROUND%` for the round number\n" +
                                                                            "Use `%CQ%` for the current CQ number\n" +
                                                                            "Use `%COMPLETE%` for the time the titan lord will be up (UTC time)\n" + 
-                                                                           "Alternatively `%COMPLETE+timezone%` can be used to define the timezone, e.g. `%COMPLETE+6%`, minus can also be used but timezone has to be a number from 0 to 12")
+                                                                           "Alternatively `%COMPLETE+timezone%` can be used to define the timezone, e.g. `%COMPLETE+6%`, minus can also be used but timezone has to be a number from 0 to 12\n" +
+                                                                           "One important note is that the timezone has to be the number used during winter. For example, during summer England is using UTC+1, but here you would simply use +0")
                                                                 .AddSetting(s => s.TimerText, validator: strLengthValidator)
                                                                 .AddSetting(s => s.InXText, validator: strLengthValidator)
                                                                 .AddSetting(s => s.NowText, validator: strLengthValidator)

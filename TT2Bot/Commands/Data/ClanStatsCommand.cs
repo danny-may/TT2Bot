@@ -57,7 +57,7 @@ namespace TT2Bot.Commands.Data
         [Call]
         [Usage("Shows data about a clan with the given level")]
         async Task ShowStatsAsync(int clanLevel,
-            [CallFlag('s', "stage", "Average max stage to use")] int averageMs = 3500,
+            [CallFlag('s', "stage", "Average max stage to use")] int averageMs = 4000,
             [CallFlag('t', "taps", "Average taps to use")] int tapsPerCQ = 500,
             [CallFlag('a', "attackers", "Number of attackers to use (array)")]int[] attackers = null)
         {
