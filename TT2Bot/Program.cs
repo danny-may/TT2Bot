@@ -4,9 +4,9 @@ using TT2Bot;
 
 namespace TT2BotConsole
 {
-    class Program
+    public class Program
     {
-        static void Main(string[] args)
+        public static void Main(string[] args)
             => new Program().Start().GetAwaiter().GetResult();
 
         public async Task Start()
