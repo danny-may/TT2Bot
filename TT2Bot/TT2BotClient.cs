@@ -15,7 +15,7 @@ using TT2Bot.TypeReaders;
 
 namespace TT2Bot
 {
-    class TT2BotClient
+    public class TT2BotClient
     {
         BotClient Client;
 

@@ -24,6 +24,15 @@ namespace TT2Bot.Commands.Clan
     {
         TitanLordSettings TitanLordSettings => GuildSettings.Get<TitanLordSettings>();
 
+        // Since TimeSpans are counting down from when they are created,
+        // these arrays have been made from which the timespans will be
+        // initialized from during runtime.
+        private static readonly int[] BossUptime = { 24, 0, 0 };
+        private static readonly int[] BossDelay = { 6, 0, 0};
+        private static readonly int[] BossRound = { 1, 0, 0 };
+        private static readonly int[] AttackTime = { 0, 0, 30 };
+        private static readonly int[] UpdateDelay = { 0, 0, 10 };
+
         [Call("In")]
         [Usage("Sets a Titan Lord timer running for the given period.")]
         private Task TitanLordInAsync([Dense]TimeSpan time)
@@ -37,11 +46,11 @@ namespace TT2Bot.Commands.Clan
         [Call("Dead")]
         [Usage("Sets a Titan Lord timer running for 6 hours.")]
         private Task TitanLordDead()
-            => TitanLordInAsync(new TimeSpan(6, 0, 0));
+            => TitanLordInAsync(BossDelay.ConvertToTimeSpam());
 
         private async Task LockedTitanLordIn(TimeSpan time)
         {
-            if (time > new TimeSpan(6,0,0))
+            if (time > BossDelay.ConvertToTimeSpam())
             {
                 await ReplyAsync("You cannot set a timer for longer than 6 hours", ReplyType.Error);
                 return;
@@ -49,14 +58,14 @@ namespace TT2Bot.Commands.Clan
 
             (var ticks, var rounds) = CancelCurrent();
 
-            var startTime = DateTime.Now.Add(time).AddHours(-6);
+            var startTime = DateTime.Now.Add(time).Add(-BossDelay.ConvertToTimeSpam());
 
             var tlChannel = Client.GetChannel(TitanLordSettings.Channel ?? Channel.Id) as IMessageChannel;
 
             if (ticks.Length == 0)
             {
                 var mostRecent = Scheduler.GetMostRecent<TitanLordTickCallback>(Guild.Id);
-                if (mostRecent != null && mostRecent.EndTime > mostRecent.StartTime.AddHours(6))
+                if (mostRecent != null && mostRecent.EndTime > mostRecent.StartTime.Add(BossDelay.ConvertToTimeSpam()))
                     await Replier.Reply(tlChannel).WithEmbedable(Embedable.FromEmbed(NewBoss(time))).SendAsync();
             }
 
@@ -70,7 +79,7 @@ namespace TT2Bot.Commands.Clan
                 {
                     await timer.PinAsync();
                 }
-                catch { }
+                catch { } // ... This needs to be logged
             }
 
             var data = new TitanLordTimerData
@@ -89,7 +98,7 @@ namespace TT2Bot.Commands.Clan
         private async Task TitanLordNowAsync()
         {
             CancelCurrent();
-            var startTime = DateTime.Now.AddHours(-6);
+            var startTime = DateTime.Now.Add(-BossDelay.ConvertToTimeSpam());
 
             var data = new TitanLordTimerData
             {
@@ -126,7 +135,7 @@ namespace TT2Bot.Commands.Clan
             await ReplyAsync("All currently running Titan Lord timers have been stopped", ReplyType.Success);
         }
 
-        EmbedBuilder NewBoss(TimeSpan time)
+        private EmbedBuilder NewBoss(TimeSpan time)
         {
             GuildSettings.Edit<TitanLordSettings>(s => s.CQ++);
 
@@ -150,7 +159,8 @@ namespace TT2Bot.Commands.Clan
             }.AddField("New Clan Quest", TitanLordSettings.CQ)
              .AddField("New bonus", Formatter.Beautify(clanBonus))
              .AddField("Next Titan Lord HP", Formatter.Beautify(bossHp))
-             .AddField("Time to kill", Formatter.Beautify(DateTime.Now.Add(time).AddHours(-6) - latestTimer.EndTime));
+             .AddField("Time to kill", 
+                Formatter.Beautify(DateTime.Now.Add(time).Add(-BossDelay.ConvertToTimeSpam()) - latestTimer.EndTime));
 
             return builder;
         }
@@ -159,7 +169,15 @@ namespace TT2Bot.Commands.Clan
             => (Scheduler.Complete<TitanLordTickCallback>(Guild.Id, null), Scheduler.Complete<TitanLordRoundCallback>(Guild.Id, null));
 
         private (ulong TickTimer, ulong RoundTimer) StartTimers(DateTime from, TitanLordTimerData data)
-            => (Scheduler.Queue<TitanLordTickCallback>(Author.Id, Guild.Id, from, new TimeSpan(0, 0, 10), from.AddHours(6), JsonConvert.SerializeObject(data)),
-                Scheduler.Queue<TitanLordRoundCallback>(Author.Id, Guild.Id, from.Add(new TimeSpan(7, 0, 30)), new TimeSpan(1, 0, 30), from.AddHours(30), JsonConvert.SerializeObject(data)));
+            => (
+                Scheduler.Queue<TitanLordTickCallback>(Author.Id, Guild.Id, from, 
+                    UpdateDelay.ConvertToTimeSpam(), from.Add(BossDelay.ConvertToTimeSpam()), 
+                    JsonConvert.SerializeObject(data)),
+                Scheduler.Queue<TitanLordRoundCallback>(Author.Id, Guild.Id, 
+                    from.Add(BossDelay.ConvertToTimeSpam() + BossRound.ConvertToTimeSpam() + AttackTime.ConvertToTimeSpam()),  // Uuurgh, I promise it makes sense though
+                    BossRound.ConvertToTimeSpam() + AttackTime.ConvertToTimeSpam(),
+                    from.Add(BossUptime.ConvertToTimeSpam() + BossDelay.ConvertToTimeSpam()),
+                    JsonConvert.SerializeObject(data))
+            );
     }
 }
