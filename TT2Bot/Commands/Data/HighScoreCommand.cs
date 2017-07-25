@@ -11,11 +11,11 @@ namespace TT2Bot.Commands.Data
     class HighScoreCommand : Command
     {
         private TT2DataService DataService { get; }
+        protected override string DelayMessage { get; } = "This might take a short while, theres a fair bit of data to download!";
 
         public HighScoreCommand(TT2DataService dataService)
         {
             DataService = dataService;
-            DelayMessage = "This might take a short while, theres a fair bit of data to download!";
         }
 
         [Call]

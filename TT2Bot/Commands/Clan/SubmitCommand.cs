@@ -8,14 +8,13 @@ using TitanBot.Commands;
 using TitanBot.Util;
 using TT2Bot.Models;
 
-namespace TitanBot2.Commands.Clan
+namespace TT2Bot.Commands.Clan
 {
     [Description("Allows you to submit a bug, suggestion or question to GameHive!")]
     [RequireGuild(169160979744161793)]
-    class SubmitCommand : Command
+    class SubmitCommand : TT2Command
     {
-        private TT2GlobalSettings TT2Settings => SettingsManager.GetCustomGlobal<TT2GlobalSettings>();
-        private IMessageChannel SubmissionChannel => Client.GetChannel(TT2Settings.GHFeedbackChannel) as IMessageChannel;
+        private IMessageChannel SubmissionChannel => (Client.GetChannel(TT2Global.GHFeedbackChannel) as IMessageChannel);
 
         EmbedBuilder GetSubmissionMessage(TT2Submission submission)
         {
@@ -93,7 +92,7 @@ namespace TitanBot2.Commands.Clan
 
             
 
-            var urlString = Message.Attachments.FirstOrDefault(a => Regex.IsMatch(a.Url, TT2Settings.ImageRegex))?.Url;
+            var urlString = Message.Attachments.FirstOrDefault(a => Regex.IsMatch(a.Url, TT2Global.ImageRegex))?.Url;
             Uri imageUrl = null;
             if (urlString != null)
                 if (image != null)
@@ -103,7 +102,7 @@ namespace TitanBot2.Commands.Clan
                 }
                 else
                     imageUrl = new Uri(urlString);
-            else if (image != null && !Regex.IsMatch(image.AbsoluteUri, TT2Settings.ImageRegex))
+            else if (image != null && !Regex.IsMatch(image.AbsoluteUri, TT2Global.ImageRegex))
             {
                 await ReplyAsync("The image you supplied is not a valid image!", ReplyType.Error);
                 return;
@@ -132,7 +131,9 @@ namespace TitanBot2.Commands.Clan
 
             await Database.Insert(submission);
 
-            var message = await ReplyAsync(SubmissionChannel, "", embed: GetSubmissionMessage(submission).Build());
+            var message = await Replier.Reply(SubmissionChannel)
+                                       .WithEmbedable(Embedable.FromEmbed(GetSubmissionMessage(submission)))
+                                       .SendAsync();
 
             submission.Message = message.Id;
             await Database.Upsert(submission);
@@ -216,7 +217,9 @@ namespace TitanBot2.Commands.Clan
 
             var submitter = Client.GetUser(submission.Submitter);
             if (submitter != null && !alreadyReplied && !quiet)
-                await ReplyAsync(submitter, $"Your recent {submission.Type} titled `{submission.Title}` has just been replied to:\n\n{reply}\n - {Author}");
+                await Replier.Reply(await submitter.GetOrCreateDMChannelAsync())
+                             .WithMessage($"Your recent {submission.Type} titled `{submission.Title}` has just been replied to:\n\n{reply}\n - {Author}")
+                             .SendAsync();
 
             await ReplyAsync("Reply has been accepted!", ReplyType.Success);
         }
@@ -277,7 +280,9 @@ namespace TitanBot2.Commands.Clan
             else
             {
                 await ReplyAsync("Ill DM you the submission!", ReplyType.Success);
-                await ReplyAsync(Author, "", embed: GetSubmissionMessage(submission));
+                await Replier.Reply(await Author.GetOrCreateDMChannelAsync())
+                             .WithEmbedable(Embedable.FromEmbed(GetSubmissionMessage(submission)))
+                             .SendAsync();
             }
         }
     }

@@ -8,17 +8,22 @@ namespace TT2Bot.TypeReaders
 {
     class HelperTypeReader : TypeReader
     {
+        private TT2DataService DataService { get; }
+
+        public HelperTypeReader(TT2DataService dataService)
+        {
+            DataService = dataService;
+        }
+
         public override async Task<TypeReaderResponse> Read(ICommandContext context, string value)
         {
             var helper = Helper.Find(value);
             if (helper == null)
-                return TypeReaderResponse.FromError($"`{value}` is not a valid hero");
+                return TypeReaderResponse.FromError("TYPEREADER_UNABLETOREAD", value, typeof(Helper));
 
-            var dataService = context.DependencyFactory.Get<TT2DataService>();
-
-            var hero = await dataService.GetHelper(helper);
+            var hero = await DataService.GetHelper(helper);
             if (hero == null)
-                return TypeReaderResponse.FromError($"Could not download data for hero `#{helper.Id}`");
+                return TypeReaderResponse.FromError("Could not download data for helper `{2}`", "#" + helper.Id.ToString(), typeof(Helper));
             return TypeReaderResponse.FromSuccess(hero);
         }
     }

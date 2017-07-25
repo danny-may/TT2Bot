@@ -15,11 +15,11 @@ namespace TT2Bot.Commands.Data
     class HelpersCommand : Command
     {
         private TT2DataService DataService { get; }
+        protected override string DelayMessage { get; } = "This might take a short while, theres a fair bit of data to download!";
 
         public HelpersCommand(TT2DataService dataService)
         {
             DataService = dataService;
-            DelayMessage = "This might take a short while, theres a fair bit of data to download!";
         }
 
         [Call("List")]
@@ -60,7 +60,7 @@ namespace TT2Bot.Commands.Data
                                                                          .Tableify()+"\n```");
                 }
 
-            await ReplyAsync("", embed: builder.Build());
+            await ReplyAsync(builder);
         }
 
         EmbedBuilder GetBaseEmbed(Helper helper)
@@ -105,7 +105,7 @@ namespace TT2Bot.Commands.Data
                 builder.AddInlineField("Damage", Formatter.Beautify(helper.GetDps(level ?? 1)));
             }
 
-            await ReplyAsync("", embed: builder.Build());
+            await ReplyAsync(builder);
         }
     }
 }

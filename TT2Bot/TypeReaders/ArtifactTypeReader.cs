@@ -8,17 +8,22 @@ namespace TT2Bot.TypeReaders
 {
     class ArtifactTypeReader : TypeReader
     {
+        private TT2DataService DataService { get; }
+
+        public ArtifactTypeReader(TT2DataService dataService)
+        {
+            DataService = dataService;
+        }
+
         public override async Task<TypeReaderResponse> Read(ICommandContext context, string value)
         {
             var art = Artifact.Find(value);
             if (art == null)
-                return TypeReaderResponse.FromError($"`{value}` is not a valid artifact");
+                return TypeReaderResponse.FromError("TYPEREADER_UNABLETOREAD", value, typeof(Artifact));
 
-            var dataService = context.DependencyFactory.Get<TT2DataService>();
-
-            var artifact = await dataService.GetArtifact(art);
+            var artifact = await DataService.GetArtifact(art);
             if (artifact == null)
-                return TypeReaderResponse.FromError($"Could not download data for artifact `#{art.Id}`");
+                return TypeReaderResponse.FromError("Could not download data for artifact `{2}`", "#" + art.Id.ToString(), typeof(Artifact));
             return TypeReaderResponse.FromSuccess(artifact);
         }
     }

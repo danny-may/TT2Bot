@@ -52,7 +52,7 @@ namespace TT2Bot.Commands.Data
             .AddInlineField("Enemies", $"{enemiesToKill} + {stage - startingStage} Bosses")
             .AddInlineField("Time", $"~{timeTaken}. 4x splash ~{timeTakenSplash}");
 
-            await ReplyAsync("", embed: builder.Build());
+            await ReplyAsync(builder);
         }
     }
 }

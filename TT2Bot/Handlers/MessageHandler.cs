@@ -17,7 +17,6 @@ namespace TT2Bot.Handlers
             CommandService = commandService;
 
             Client.MessageReceived += MessageRecieved;
-            Client.ReactionAdded += ReactionAdded;
         }
 
         private async Task MessageRecieved(SocketMessage msg)
@@ -38,11 +37,6 @@ namespace TT2Bot.Handlers
                 }
                 await message.AddReactionAsync(new Emoji("👋" + tone));
             }
-        }
-
-        private async Task ReactionAdded(Cacheable<IUserMessage, ulong> message, ISocketMessageChannel channel, SocketReaction reaction)
-        {
-
         }
     }
 }

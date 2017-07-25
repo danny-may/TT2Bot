@@ -15,11 +15,11 @@ namespace TT2Bot.Commands.Data
     class EquipmentsCommand : Command
     {
         private TT2DataService DataService { get; }
+        protected override string DelayMessage { get; } = "This might take a short while, theres a fair bit of data to download!";
 
         public EquipmentsCommand(TT2DataService dataService)
         {
             DataService = dataService;
-            DelayMessage = "This might take a short while, theres a fair bit of data to download!";
         }
 
         [Call("List")]
@@ -41,45 +41,45 @@ namespace TT2Bot.Commands.Data
                 },
                 Timestamp = DateTime.Now
             };
-            
-            IEnumerable<ValueTuple<string, string>> fields;
-            List<Equipment> allEquip = await DataService.GetAllEquipment(true);
+
+            IEnumerable<(string Title, string Values)> fields;
+            List<Equipment> allEquip = (await DataService.GetAllEquipment(true)).OrderBy(e => e.BonusBase).ThenBy(e => e.BonusIncrease).ToList();
             
             switch (equipClass?.ToLower())
             {
                 case "aura":
                     fields = allEquip.Where(e => e.Class == EquipmentClass.Aura)
                                      .GroupBy(e => e.BonusType)
-                                     .Select(g => ValueTuple.Create(Formatter.Beautify(g.Key), string.Join("\n", g.OrderBy(e => e.Rarity))));
+                                     .Select(g => (Formatter.Beautify(g.Key), string.Join("\n", g.OrderBy(e => e.Rarity))));
                     break;
                 case "weapon":
                 case "sword":
                     fields = allEquip.Where(e => e.Class == EquipmentClass.Weapon)
                                      .GroupBy(e => e.BonusType)
-                                     .Select(g => ValueTuple.Create(Formatter.Beautify(g.Key), string.Join("\n", g.OrderBy(e => e.Rarity))));
+                                     .Select(g => (Formatter.Beautify(g.Key), string.Join("\n", g.OrderBy(e => e.Rarity))));
                     break;
                 case "hat":
                 case "helmet":
                     fields = allEquip.Where(e => e.Class == EquipmentClass.Hat)
                                      .GroupBy(e => e.BonusType)
-                                     .Select(g => ValueTuple.Create(Formatter.Beautify(g.Key), string.Join("\n", g.OrderBy(e => e.Rarity))));
+                                     .Select(g => (title: Formatter.Beautify(g.Key), values: string.Join("\n", g.OrderBy(e => e.Rarity))));
                     break;
                 case "slash":
                     fields = allEquip.Where(e => e.Class == EquipmentClass.Slash)
                                      .GroupBy(e => e.BonusType)
-                                     .Select(g => ValueTuple.Create(Formatter.Beautify(g.Key), string.Join("\n", g.OrderBy(e => e.Rarity))));
+                                     .Select(g => (title: Formatter.Beautify(g.Key), values: string.Join("\n", g.OrderBy(e => e.Rarity))));
                     break;
                 case "suit":
                 case "armor":
                 case "body":
                     fields = allEquip.Where(e => e.Class == EquipmentClass.Suit)
                                      .GroupBy(e => e.BonusType)
-                                     .Select(g => ValueTuple.Create(Formatter.Beautify(g.Key), string.Join("\n", g.OrderBy(e => e.Rarity))));
+                                     .Select(g => (title: Formatter.Beautify(g.Key), values: string.Join("\n", g.OrderBy(e => e.Rarity))));
                     break;
                 case "removed":
                     fields = allEquip.Where(e => e.Rarity == EquipmentRarity.Removed)
                                      .GroupBy(e => e.Class)
-                                     .Select(g => ValueTuple.Create(Formatter.Beautify(g.Key), string.Join("\n", g.OrderBy(e => e.Name))));
+                                     .Select(g => (title: Formatter.Beautify(g.Key), values: string.Join("\n", g.OrderBy(e => e.Name))));
                     break;
                 default:
                     fields = null;
@@ -91,10 +91,10 @@ namespace TT2Bot.Commands.Data
             {
                 builder.WithDescription($"All {equipClass} equipment");
                 foreach (var field in fields)
-                    builder.AddInlineField(field.Item1, field.Item2);
+                    builder.AddInlineField(field.Title, field.Values);
             }
 
-            await ReplyAsync("", embed: builder.Build());
+            await ReplyAsync(builder);
         }
 
         EmbedBuilder GetBaseEmbed(Equipment equipment)
@@ -144,7 +144,7 @@ namespace TT2Bot.Commands.Data
                 builder.AddField("Note", "*The level displayed by equipment ingame is actually 10x lower than the real level and rounded.*");
             }
 
-            await ReplyAsync("", embed: builder.Build());
+            await ReplyAsync(builder);
         }
     }
 }

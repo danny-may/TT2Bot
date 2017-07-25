@@ -20,9 +20,9 @@ namespace TT2Bot.Commands.Clan
     [DefaultPermission(8)]
     [RequireContext(ContextType.Guild)]
     [Alias("TL", "Boss")]
-    class TitanLordCommand : Command
+    class TitanLordCommand : TT2Command
     {
-        TitanLordSettings TitanLordSettings => SettingsManager.GetGroup<TitanLordSettings>(Guild.Id);
+        TitanLordSettings TitanLordSettings => GuildSettings.Get<TitanLordSettings>();
 
         [Call("In")]
         [Usage("Sets a Titan Lord timer running for the given period.")]
@@ -57,10 +57,12 @@ namespace TT2Bot.Commands.Clan
             {
                 var mostRecent = Scheduler.GetMostRecent<TitanLordTickCallback>(Guild.Id);
                 if (mostRecent != null && mostRecent.EndTime > mostRecent.StartTime.AddHours(6))
-                    await ReplyAsync(tlChannel, "", embed: NewBoss(time));
+                    await Replier.Reply(tlChannel).WithEmbedable(Embedable.FromEmbed(NewBoss(time))).SendAsync();
             }
 
-            var timer = await ReplyAsync(tlChannel, "Loading timer...\n_If this takes longer than 20s please let Titansmasher know_");
+            var timer = await Replier.Reply(tlChannel)
+                                     .WithMessage("Loading timer...\n_If this takes longer than 20s please let Titansmasher know_")
+                                     .SendAsync();
 
             if (TitanLordSettings.PinTimer)
             {
@@ -113,7 +115,7 @@ namespace TT2Bot.Commands.Clan
         [Call("Info")]
         [Usage("Gets information about the clans current level")]
         private Task TitanLordInfoAsync()
-            => ReplyAsync("", embed: ClanStatsCommand.StatsBuilder(Formatter, BotUser, TitanLordSettings.CQ, 4000, 500, new int[] { 20, 30, 40, 50 }).Build());
+            => ReplyAsync(ClanStatsCommand.StatsBuilder(Formatter, BotUser, TitanLordSettings.CQ, 4000, 500, new int[] { 20, 30, 40, 50 }));
 
         [Call("Stop")]
         [Usage("Stops any currently running timers.")]
@@ -124,15 +126,14 @@ namespace TT2Bot.Commands.Clan
             await ReplyAsync("All currently running Titan Lord timers have been stopped", ReplyType.Success);
         }
 
-        Embed NewBoss(TimeSpan time)
+        EmbedBuilder NewBoss(TimeSpan time)
         {
-            var settings = SettingsManager.GetGroup<TitanLordSettings>(Guild.Id);
-            settings.CQ += 1;
-            SettingsManager.SaveGroup(Guild.Id, settings);
+            GuildSettings.Edit<TitanLordSettings>(s => s.CQ++);
 
-            var bossHp = Calculator.TitanLordHp(settings.CQ);
-            var clanBonus = Calculator.ClanBonus(settings.CQ);
-            var advStart = Calculator.AdvanceStart(settings.CQ);
+
+            var bossHp = Calculator.TitanLordHp(TitanLordSettings.CQ);
+            var clanBonus = Calculator.ClanBonus(TitanLordSettings.CQ);
+            var advStart = Calculator.AdvanceStart(TitanLordSettings.CQ);
 
             var latestTimer = Scheduler.GetMostRecent<TitanLordTickCallback>(Guild.Id);
 
@@ -151,7 +152,7 @@ namespace TT2Bot.Commands.Clan
              .AddField("Next Titan Lord HP", Formatter.Beautify(bossHp))
              .AddField("Time to kill", Formatter.Beautify(DateTime.Now.Add(time).AddHours(-6) - latestTimer.EndTime));
 
-            return builder.Build();
+            return builder;
         }
 
         private (ISchedulerRecord[] Ticks, ISchedulerRecord[] Rounds) CancelCurrent()

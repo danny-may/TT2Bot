@@ -8,14 +8,13 @@ using TT2Bot.Models;
 namespace TT2Bot.Commands.Bot
 {
     [Description("Allows you to make suggestions and feature requests for me!")]
-    class ReportCommand : Command
+    class ReportCommand : TT2Command
     {
         [Call]
         [Usage("Sends a suggestion to my home guild.")]
         public async Task ReportAsync([Dense]string message)
         {
-            var settings = SettingsManager.GetCustomGlobal<TT2GlobalSettings>();
-            var bugChannel = Client.GetChannel(settings.BotBugChannel) as IMessageChannel;
+            var bugChannel = Client.GetChannel(TT2Global.BotBugChannel) as IMessageChannel;
 
             if (bugChannel == null)
             {
@@ -36,7 +35,9 @@ namespace TT2Bot.Commands.Bot
             .AddField("Bug report", message)
             .AddInlineField(Guild?.Name ?? Author.Username, Guild?.Id ?? Author.Id)
             .AddInlineField(Channel.Name, Channel.Id);
-            await bugChannel.SendMessageSafeAsync("", embed: builder.Build());
+            await Replier.Reply(bugChannel)
+                         .WithEmbedable(Embedable.FromEmbed(builder))
+                         .SendAsync();
             await ReplyAsync("Bug report sent", ReplyType.Success);
         }
     }

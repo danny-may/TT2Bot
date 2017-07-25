@@ -4,7 +4,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using TitanBot.Commands;
-using TitanBot.Formatter;
+using TitanBot.Formatting;
 using TitanBot.Util;
 using TT2Bot.Helpers;
 
@@ -13,7 +13,7 @@ namespace TT2Bot.Commands.Data
     [Description("Shows various information for any clan with given attributes")]
     class ClanStatsCommand : Command
     {        
-        internal static EmbedBuilder StatsBuilder(OutputFormatter formatter, SocketSelfUser me, int clanLevel, int averageMS, int tapsPerCq, int[] attackers)
+        internal static EmbedBuilder StatsBuilder(ValueFormatter formatter, SocketSelfUser me, int clanLevel, int averageMS, int tapsPerCq, int[] attackers)
         {
             var absLevel = Math.Abs(clanLevel);
 
@@ -62,7 +62,7 @@ namespace TT2Bot.Commands.Data
             [CallFlag('a', "attackers", "Number of attackers to use (array)")]int[] attackers = null)
         {
             attackers = attackers ?? new int[] { 20, 30, 40, 50 };
-            await ReplyAsync("", embed: StatsBuilder(Formatter, BotUser, clanLevel, averageMs, tapsPerCQ, attackers).Build());
+            await ReplyAsync(StatsBuilder(Formatter, BotUser, clanLevel, averageMs, tapsPerCQ, attackers));
         }
     }
 }

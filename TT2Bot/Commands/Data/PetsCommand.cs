@@ -14,11 +14,11 @@ namespace TT2Bot.Commands.Data
     class PetsCommand : Command
     {
         private TT2DataService DataService { get; }
+        protected override string DelayMessage { get; } = "This might take a short while, theres a fair bit of data to download!";
 
         public PetsCommand(TT2DataService dataService)
         {
             DataService = dataService;
-            DelayMessage = "This might take a short while, theres a fair bit of data to download!";
         }
 
         EmbedBuilder GetBaseEmbed(Pet pet)
@@ -81,7 +81,7 @@ namespace TT2Bot.Commands.Data
                 }
             }
 
-            await ReplyAsync("", embed: builder.Build());
+            await ReplyAsync(builder);
         }
 
         [Call("List")]
@@ -112,7 +112,7 @@ namespace TT2Bot.Commands.Data
                 builder.AddInlineField(Formatter.Beautify(bonus.Key), string.Join("\n", bonus.Select(a => $"{a.Name} ({a.Id})")));
             }
 
-            await ReplyAsync("", embed: builder.Build());
+            await ReplyAsync(builder);
         }
     }
 }

@@ -5,14 +5,14 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using TitanBot.Commands;
-using TitanBot.Formatter;
+using TitanBot.Formatting;
 using TitanBot.TypeReaders;
 using TT2Bot.Helpers;
 using TT2Bot.Models;
 
 namespace TT2Bot.Overrides
 {
-    class Formatter : OutputFormatter
+    class Formatter : ValueFormatter
     {
         static Dictionary<BonusType, string> BonusTypeMap { get; } = LoadBonusTypes();
         static Dictionary<EquipmentClass, string> EquipmentClassMap { get; } = LoadEquipmentClasses();
@@ -84,7 +84,7 @@ namespace TT2Bot.Overrides
                 {BonusType.MonsterHP, "Titan HP"}
             };
 
-        public Formatter(ICommandContext context, bool altFormat) : base(context, altFormat)
+        public Formatter(ICommandContext context) : base(context)
         {
             Add<int>(Beautify);
             Add<double>(Beautify);

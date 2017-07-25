@@ -9,18 +9,23 @@ namespace TT2Bot.TypeReaders
 {
     class PetTypeReader : TypeReader
     {
+        private TT2DataService DataService { get; }
+
+        public PetTypeReader(TT2DataService dataService)
+        {
+            DataService = dataService;
+        }
+
         public override async Task<TypeReaderResponse> Read(ICommandContext context, string value)
         {
             var pet = Pet.Find(value);
             if (pet == null)
-                return TypeReaderResponse.FromError($"`{value}` is not a valid pet");
+                return TypeReaderResponse.FromError("TYPEREADER_UNABLETOREAD", value, typeof(Pet));
 
-            var dataService = context.DependencyFactory.Get<TT2DataService>();
-
-            var artifact = await dataService.GetPet(pet);
-            if (artifact == null)
-                return TypeReaderResponse.FromError($"Could not download data for pet `#{pet.Id}`");
-            return TypeReaderResponse.FromSuccess(artifact);
+            var petData = await DataService.GetPet(pet);
+            if (petData == null)
+                return TypeReaderResponse.FromError("Could not download data for pet `{2}`", "#" + pet.Id.ToString(), typeof(Pet));
+            return TypeReaderResponse.FromSuccess(petData);
         }
     }
 }

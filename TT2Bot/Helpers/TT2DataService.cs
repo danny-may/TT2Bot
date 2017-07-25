@@ -14,8 +14,8 @@ namespace TT2Bot.Helpers
     class TT2DataService
     {
         private IDownloader WebClient { get; }
-        private ISettingsManager Settings { get; }
-        private TT2GlobalSettings GlobalSettings => Settings.GetCustomGlobal<TT2GlobalSettings>();
+        private ISettingManager Settings { get; }
+        private TT2GlobalSettings GlobalSettings => Settings.GetContext(Settings.Global).Get<TT2GlobalSettings>();
         private static readonly string GHStatic = "https://s3.amazonaws.com/tt2-static/info_files/";
         private static readonly string ArtifactsPath = "/ArtifactInfo.csv";
         private static readonly string EquipmentPath = "/EquipmentInfo.csv";
@@ -24,7 +24,7 @@ namespace TT2Bot.Helpers
         private static readonly string HelpersSkillPath = "/HelperSkillInfo.csv";
         private static readonly string HighScoreSheet = "https://docs.google.com/spreadsheets/d/13hsvWaYvp_QGFuQ0ukcgG-FlSAj2NyW8DOvPUG3YguY/export?format=csv&id=13hsvWaYvp_QGFuQ0ukcgG-FlSAj2NyW8DOvPUG3YguY&gid=4642011";
 
-        public TT2DataService(IDownloader client, ISettingsManager settings)
+        public TT2DataService(IDownloader client, ISettingManager settings)
         {
             WebClient = client;
             Settings = settings;
@@ -383,7 +383,7 @@ namespace TT2Bot.Helpers
             var sheet = new HighScoreSheet(CsvReader.ReadFromText(data, new CsvOptions
             {
                 HeaderMode = HeaderMode.HeaderAbsent
-            }), Settings.GetCustomGlobal<HighScoreSettings>());
+            }), Settings.GetContext(Settings.Global).Get<HighScoreSettings>());
 
             return sheet;
         }

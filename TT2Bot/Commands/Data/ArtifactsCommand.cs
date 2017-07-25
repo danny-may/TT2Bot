@@ -14,11 +14,11 @@ namespace TT2Bot.Commands.Data
     class ArtifactsCommand : Command
     {
         private TT2DataService DataService { get; }
+        protected override string DelayMessage { get; } = "This might take a short while, theres a fair bit of data to download!";
 
         public ArtifactsCommand(TT2DataService dataService)
         {
             DataService = dataService;
-            DelayMessage = "This might take a short while, theres a fair bit of data to download!";
         }
 
         [Call("List")]
@@ -49,7 +49,7 @@ namespace TT2Bot.Commands.Data
                 builder.AddInlineField($"Tier {tier.Key}", string.Join("\n", tier.Select(a => $"{a.Name} ({a.Id})")));
             }
 
-            await ReplyAsync("", embed: builder.Build());
+            await ReplyAsync(builder);
         }
 
         EmbedBuilder GetBaseEmbed(Artifact artifact)
@@ -119,7 +119,7 @@ namespace TT2Bot.Commands.Data
                 builder.AddInlineField($"Cost of lv {endLevel}", Formatter.Beautify((int)artifact.CostOfLevel(endLevel)) + " relics");
             }
             
-            await ReplyAsync("", embed: builder.Build());
+            await ReplyAsync(builder);
         }
     }
 }

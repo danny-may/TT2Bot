@@ -9,7 +9,7 @@ using TT2Bot.Models;
 namespace TT2Bot.Commands.Clan
 {
     [Description("Missed the boss? Or did someone else? Use this to get a water-tight excuse whenever you need!")]
-    class ExcuseCommand : Command
+    class ExcuseCommand : TT2Command
     {
         [Call]
         [Usage("Gets an excuse for why that person (or yourself) didnt attack the boss")]
@@ -43,7 +43,7 @@ namespace TT2Bot.Commands.Clan
                 Color = System.Drawing.Color.Green.ToDiscord(),
                 Description = excuse.ExcuseText
             };
-            await ReplyAsync($"<@{user.Id}> didnt attack the boss because: ", embed: builder);
+            await ReplyAsync($"<@{user.Id}> didnt attack the boss because: ", builder);
         }
 
         [Call("Add")]

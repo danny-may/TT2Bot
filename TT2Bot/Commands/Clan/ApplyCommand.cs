@@ -14,10 +14,8 @@ namespace TT2Bot.Commands.Clan
     [Description("Allows a user to register their interest in joining the clan")]
     [DefaultPermission(8)]
     [Alias("R", "Reg", "Register")]
-    class ApplyCommand : Command
+    class ApplyCommand : TT2Command
     {
-        private TT2GlobalSettings TT2GlobalSettings => GlobalSettings.GetCustom<TT2GlobalSettings>();
-
         [Call]
         [Usage("Creates your application for this clan")]
         [DefaultPermission(0)]
@@ -140,7 +138,7 @@ namespace TT2Bot.Commands.Clan
              .AddInlineField("Taps/CQ", Formatter.Beautify(player.TapsPerCQ))
              .AddField("Images", string.Join("\n", current.Images?.Select(i => i.AbsoluteUri) ?? new string[] { "None" }));
 
-            await ReplyAsync("", embed: builder);
+            await ReplyAsync(builder);
         }
 
         [Call("Cancel")]
@@ -182,13 +180,13 @@ namespace TT2Bot.Commands.Clan
         [RequireContext(ContextType.Guild)]
         async Task IgnoreUser(IUser user, bool ignore = true)
         {
-            var registerSettings = SettingsManager.GetGroup<RegistrationSettings>(Guild.Id);
-            if (ignore)
-                registerSettings.IgnoreList.Add(user.Id);
-            else
-                registerSettings.IgnoreList.Remove(user.Id);
-
-            SettingsManager.SaveGroup(Guild.Id, registerSettings);
+            GuildSettings.Edit<RegistrationSettings>(s =>
+            {
+                if (ignore)
+                    s.IgnoreList.Add(user.Id);
+                else
+                    s.IgnoreList.Remove(user.Id);
+            });
 
             if (ignore)
                 await ReplyAsync("That user will no longer be shown from the global listings. They will be for local ones however.", ReplyType.Success);
@@ -213,7 +211,7 @@ namespace TT2Bot.Commands.Clan
 
             var paired = applications.Join(players, a => a.UserId, p => p.Id, (a, p) => (Application: a, Player: p));
 
-            var ignore = SettingsManager.GetGroup<RegistrationSettings>(Guild.Id).IgnoreList;
+            var ignore = GuildSettings.Get<RegistrationSettings>().IgnoreList;
             paired = paired.Where(a => !(ignore.Contains(a.Application.UserId) && a.Application.GuildId == null))
                                        .OrderByDescending(a => a.Player.MaxStage)
                                        .ThenByDescending(a => Math.Round(Math.Sqrt(a.Player.Relics), 0))

@@ -17,10 +17,10 @@ namespace TT2Bot.Callbacks
 {
     class TitanLordRoundCallback : ISchedulerCallback
     {
-        ISettingsManager SettingsManager { get; }
+        ISettingManager SettingsManager { get; }
         DiscordSocketClient Client { get; }
 
-        public TitanLordRoundCallback(ISettingsManager manager, DiscordSocketClient client)
+        public TitanLordRoundCallback(ISettingManager manager, DiscordSocketClient client)
         {
             SettingsManager = manager;
             Client = client;
@@ -38,8 +38,9 @@ namespace TT2Bot.Callbacks
                 return;
             
             var data = JsonConvert.DeserializeObject<TitanLordTimerData>(record.Data);
-            var settings = SettingsManager.GetGroup<TitanLordSettings>(record.GuildId.Value);
-            var guildSettings = SettingsManager.GetGroup<GeneralSettings>(record.GuildId.Value);
+            var settingContext = SettingsManager.GetContext(record.GuildId.Value);
+            var settings = settingContext.Get<TitanLordSettings>();
+            var guildSettings = settingContext.Get<GeneralGuildSetting>();
 
             var messageChannel = Client.GetChannel(data.MessageChannelId) as IMessageChannel;
 
