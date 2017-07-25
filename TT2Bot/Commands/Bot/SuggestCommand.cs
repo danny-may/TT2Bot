@@ -3,7 +3,6 @@ using System;
 using System.Threading.Tasks;
 using TitanBot.Commands;
 using TitanBot.Util;
-using TT2Bot.Models;
 
 namespace TT2Bot.Commands.Bot
 {

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using TitanBot.Commands;
 using TitanBot.TypeReaders;
 using TT2Bot.Helpers;

@@ -1,13 +1,9 @@
 ﻿using Discord;
 using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using TitanBot.Commands;
 using TitanBot.Scheduling;
-using TitanBot.Settings;
 using TitanBot.Util;
 using TT2Bot.Callbacks;
 using TT2Bot.Commands.Data;

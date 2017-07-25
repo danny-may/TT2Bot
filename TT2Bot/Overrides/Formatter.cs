@@ -1,12 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using TitanBot.Commands;
 using TitanBot.Formatting;
-using TitanBot.TypeReaders;
 using TT2Bot.Helpers;
 using TT2Bot.Models;
 
