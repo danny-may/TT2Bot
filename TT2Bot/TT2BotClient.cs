@@ -17,19 +17,19 @@ namespace TT2Bot
 {
     public class TT2BotClient
     {
-        BotClient Client;
+        BotClient _client { get; }
 
-        public Task UntilOffline => Client.UntilOffline;
+        public Task UntilOffline => _client.UntilOffline;
 
         public TT2BotClient()
         {
-            Client = new BotClient(MapDependencies);
-            Client.InstallHandlers(Assembly.GetExecutingAssembly());
-            Client.CommandService.Install(Client.DefaultCommands);
-            Client.CommandService.Install(Assembly.GetExecutingAssembly());
+            _client = new BotClient(MapDependencies);
+            _client.InstallHandlers(Assembly.GetExecutingAssembly());
+            _client.CommandService.Install(_client.DefaultCommands);
+            _client.CommandService.Install(Assembly.GetExecutingAssembly());
 
-            RegisterSettings(Client.SettingsManager);
-            RegisterTypeReaders(Client.TypeReaders, Client.DependencyFactory);
+            RegisterSettings(_client.SettingsManager);
+            RegisterTypeReaders(_client.TypeReaders, _client.DependencyFactory);
         }
 
         private void MapDependencies(IDependencyFactory factory)
@@ -91,10 +91,10 @@ namespace TT2Bot
 
         public async Task StartAsync(Func<string, string> getToken)
         {
-            await Client.StartAsync(getToken);
+            await _client.StartAsync(getToken);
         }
 
         public Task StopAsync()
-            => Client.StopAsync();
+            => _client.StopAsync();
     }
 }
