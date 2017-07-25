@@ -199,7 +199,6 @@
     <Compile Include="Handlers\MessageHandler.cs" />
     <Compile Include="Helpers\Calculator.cs" />
     <Compile Include="Helpers\Extensions.cs" />
-    <Compile Include="Helpers\TimerExtensions.cs" />
     <Compile Include="Helpers\TitanLordExtensions.cs" />
     <Compile Include="Helpers\TT2DataService.cs" />
     <Compile Include="Models\Database\Excuse.cs" />
