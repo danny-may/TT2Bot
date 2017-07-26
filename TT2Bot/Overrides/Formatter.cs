@@ -80,14 +80,23 @@ namespace TT2Bot.Overrides
                 {BonusType.MonsterHP, "Titan HP"}
             };
 
+        public static readonly FormattingType Scientific = 1;
+        private static readonly string Alphabet = "abcdefghijklmnopqrstuvwxyz";
+        private static readonly string[] PostFixes = new string[] { "", "K", "M", "B", "T" };
+
+        public Formatter() : base() { }
+
         public Formatter(ICommandContext context) : base(context)
         {
-            Add<int>(Beautify);
+            Add<int>(i => Beautify((int)i));
+            Add<long>(l => Beautify((double)l));
             Add<double>(Beautify);
             Add<BonusType>(Beautify);
             Add<EquipmentClass>(Beautify);
             Add<HelperType>(Beautify);
             Add<TimeSpan>(Beautify);
+
+            Names.Add((Scientific, "Scientific"));
         }
 
         public string Beautify(TimeSpan value)
@@ -113,37 +122,37 @@ namespace TT2Bot.Overrides
         static string Format(string t)
             => new string(t.Where(c => !char.IsWhiteSpace(c)).ToArray()).ToLower();
 
-        private string Beautify(int value)
-            => Beautify((double)value);
-
-        string alphabet = "abcdefghijklmnopqrstuvwxyz";
-
         private string Beautify(double value)
         {
-            string sign = "";
-            
             if (double.IsNaN(value))
                 return "NaN";
             if (value == 0)
                 return "0";
-            if (value < 0)
-            {
-                sign = "-";
-                value = -value;
-            }
+            var sign = value < 0 ? "-" : "";
             if (double.IsInfinity(value))
-                return sign+"∞";
-            var postfixes = new string[] { "", "K", "M", "B", "T" };
-            var magnitude = (int)Math.Floor(Math.Log10(value)) / 3;
+                return sign + "∞";
+
+            value = Math.Abs(value);
+            var exponent = (int)Math.Floor(Math.Log10(value));
+            double mantissa;
             string postfix;
-
-            if (magnitude > postfixes.Length - 1)
-                postfix = alphabet[(magnitude - (postfixes.Length)) / 26].ToString() +
-                          alphabet[(magnitude - (postfixes.Length)) % 26].ToString();
+            if (exponent / 3 >= 0 && exponent / 3 < PostFixes.Length)
+            {
+                mantissa = value / (Math.Pow(10, (exponent / 3) * 3));
+                postfix = PostFixes[exponent / 3];
+            }   
+            else if (AltFormat == Scientific)
+            {
+                mantissa = value / Math.Pow(10, exponent);
+                postfix = "+e" + exponent;
+            }
             else
-                postfix = postfixes[magnitude];
-
-            return sign+string.Format("{0:0.##} " + postfix, value / (Math.Pow(10, magnitude * 3)));
+            {
+                mantissa = value / (Math.Pow(10, (exponent / 3) * 3));
+                postfix = Alphabet[(exponent / 3 - (PostFixes.Length)) / 26].ToString() +
+                          Alphabet[(exponent / 3 - (PostFixes.Length)) % 26].ToString();
+            }
+            return sign + mantissa.ToString("0.###") + postfix;            
         }
 
         private string Beautify(BonusType value)

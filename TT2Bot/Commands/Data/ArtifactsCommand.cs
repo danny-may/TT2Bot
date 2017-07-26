@@ -114,9 +114,9 @@ namespace TT2Bot.Commands.Data
                 builder.AddField("Effect type", Formatter.Beautify(BonusType.ArtifactDamage));
                 builder.AddInlineField($"Effect at lv {startLevel}", BonusType.ArtifactDamage.FormatValue(artifact.DamageAt(startLevel)));
                 builder.AddInlineField($"Effect at lv {endLevel}", BonusType.ArtifactDamage.FormatValue(artifact.DamageAt(endLevel)));
-                builder.AddField($"Cost for {startLevel} -> {endLevel}", Formatter.Beautify((int)artifact.CostToLevel(startLevel + 1, endLevel)) + " relics");
-                builder.AddInlineField($"Cost at {startLevel}", Formatter.Beautify((int)artifact.CostOfLevel(startLevel + 1)) + " relics");
-                builder.AddInlineField($"Cost of lv {endLevel}", Formatter.Beautify((int)artifact.CostOfLevel(endLevel)) + " relics");
+                builder.AddField($"Cost for {startLevel} -> {endLevel}", Formatter.Beautify(artifact.CostToLevel(startLevel + 1, endLevel)) + " relics");
+                builder.AddInlineField($"Cost at {startLevel}", Formatter.Beautify(artifact.CostOfLevel(startLevel + 1)) + " relics");
+                builder.AddInlineField($"Cost of lv {endLevel}", Formatter.Beautify(artifact.CostOfLevel(endLevel)) + " relics");
             }
             
             await ReplyAsync(builder);

@@ -50,28 +50,20 @@ namespace TT2Bot.Models
         }
 
         public double EffectAt(int level)
-        {
-            return EffectPerLevel * level;
-        }
+            => EffectPerLevel * level;
 
         public double DamageAt(int level)
-        {
-            return DamageBonus * level;
-        }
+            => DamageBonus * level;
 
-        public double CostOfLevel(int level)
-        {
-            return Math.Ceiling(CostCoef * Math.Pow(level, CostExpo));
-        }
+        public long CostOfLevel(int level)
+            => (long)Math.Ceiling(CostCoef * Math.Pow(level, CostExpo));
 
-        public double CostToLevel(int finish)
-        {
-            return CostToLevel(0, finish);
-        }
+        public long CostToLevel(int finish)
+            => CostToLevel(0, finish);
 
-        public double CostToLevel(int start, int finish)
+        public long CostToLevel(int start, int finish)
         {
-            double total = 0;
+            long total = 0;
             for (int i = start; i <= finish; i++)
             {
                 total += CostOfLevel(i);

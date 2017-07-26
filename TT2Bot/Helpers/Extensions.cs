@@ -17,6 +17,15 @@ namespace TT2Bot.Helpers
             return string.Join(separator, firstElements) + finalSeparator + finalElement.ToString();
         }
 
+        public static bool Between<TValue, TRange>(this TValue value, TRange minimum, TRange maximum) 
+            where TValue : IComparable<TRange> 
+            where TRange : IComparable<TRange>
+        {
+            if (minimum.CompareTo(maximum) == 1)
+                (minimum, maximum) = (maximum, minimum);
+            return value.CompareTo(minimum) == 1 && value.CompareTo(maximum) == -1;
+        }
+
         public static string FormatValue(this BonusType bonusType, double value)
         {
             value = Math.Round(value, 5);
