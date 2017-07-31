@@ -30,18 +30,18 @@ namespace TT2Bot.Helpers
             Settings = settings;
         }
 
-        private Task<Dictionary<string, Bitmap>> GetImages(IEnumerable<string> urls)
+        private ValueTask<Dictionary<string, Bitmap>> GetImages(IEnumerable<string> urls)
             => GetImages(urls.ToArray());
-        private async Task<Dictionary<string, Bitmap>> GetImages(string[] urls)
+        private async ValueTask<Dictionary<string, Bitmap>> GetImages(string[] urls)
         {
             var res = urls.Distinct().ToDictionary(u => u, u => GetImage(u));
 
-            await Task.WhenAll(res.Select(r => r.Value));
+            await ValueTask.WhenAll(res.Select(r => r.Value));
 
             return res.ToDictionary(r => r.Key, r => r.Value.Result);
         }
 
-        private async Task<Bitmap> GetImage(string url, int retries = 1)
+        private async ValueTask<Bitmap> GetImage(string url, int retries = 1)
         {
             try
             {
@@ -130,7 +130,7 @@ namespace TT2Bot.Helpers
             return new HelperSkill(skillId, helperId, name, type, magnitude, requirement, version);
         }        
 
-        public async Task<Artifact> GetArtifact(Artifact.ArtifactStatic artifactStatic)
+        public async ValueTask<Artifact> GetArtifact(Artifact.ArtifactStatic artifactStatic)
         {
             var version = GlobalSettings.FileVersions.Artifact;
             if (string.IsNullOrWhiteSpace(version))
@@ -150,7 +150,7 @@ namespace TT2Bot.Helpers
             return BuildArtifact(artifactRow, artifactStatic, image, version);
         }
 
-        public async Task<Equipment> GetEquipment(Equipment.EquipmentStatic equipmentStatic)
+        public async ValueTask<Equipment> GetEquipment(Equipment.EquipmentStatic equipmentStatic)
         {
 
             var version = GlobalSettings.FileVersions.Equipment;
@@ -171,7 +171,7 @@ namespace TT2Bot.Helpers
             return BuildEquipment(equipmentRow, equipmentStatic, image, version);
         }
 
-        public async Task<Pet> GetPet(Pet.PetStatic petStatic)
+        public async ValueTask<Pet> GetPet(Pet.PetStatic petStatic)
         {
 
             var version = GlobalSettings.FileVersions.Pet;
@@ -192,7 +192,7 @@ namespace TT2Bot.Helpers
             return BuildPet(petRow, petStatic, image, version);
         }
 
-        public async Task<Helper> GetHelper(Helper.HelperStatic helperStatic)
+        public async ValueTask<Helper> GetHelper(Helper.HelperStatic helperStatic)
         {
 
             var version = GlobalSettings.FileVersions.Helper;
@@ -216,7 +216,7 @@ namespace TT2Bot.Helpers
         }
 
 
-        public async Task<List<Artifact>> GetAllArtifacts(bool skipImages = false)
+        public async ValueTask<List<Artifact>> GetAllArtifacts(bool skipImages = false)
         {
             var version = GlobalSettings.FileVersions.Artifact;
             if (string.IsNullOrWhiteSpace(version))
@@ -251,7 +251,7 @@ namespace TT2Bot.Helpers
             return items.Select(i => BuildArtifact(i.Item2, i.Item1, i.Item3, version)).ToList();
         }
 
-        public async Task<List<Equipment>> GetAllEquipment(bool skipImages = false)
+        public async ValueTask<List<Equipment>> GetAllEquipment(bool skipImages = false)
         {
             var version = GlobalSettings.FileVersions.Equipment;
             if (string.IsNullOrWhiteSpace(version))
@@ -287,7 +287,7 @@ namespace TT2Bot.Helpers
             return items.Select(i => BuildEquipment(i.Item2, i.Item1, i.Item3, version)).ToList();
         }
 
-        public async Task<List<Pet>> GetAllPets(bool skipImages = false)
+        public async ValueTask<List<Pet>> GetAllPets(bool skipImages = false)
         {
             var version = GlobalSettings.FileVersions.Pet;
             if (string.IsNullOrWhiteSpace(version))
@@ -323,7 +323,7 @@ namespace TT2Bot.Helpers
             return items.Select(i => BuildPet(i.Item2, i.Item1, i.Item3, version)).ToList();
         }
 
-        public async Task<List<Helper>> GetAllHelpers(bool skipImages = false)
+        public async ValueTask<List<Helper>> GetAllHelpers(bool skipImages = false)
         {
             var version = GlobalSettings.FileVersions.Helper;
             if (string.IsNullOrWhiteSpace(version))
@@ -361,7 +361,7 @@ namespace TT2Bot.Helpers
             return items.Select(i => BuildHelper(i.Item2, skills, i.Item1, i.Item3, version)).ToList();
         }
 
-        public async Task<List<HelperSkill>> GetAllHelperSkills()
+        public async ValueTask<List<HelperSkill>> GetAllHelperSkills()
         {
             var version = GlobalSettings.FileVersions.HelperSkill;
             if (string.IsNullOrWhiteSpace(version))
@@ -376,7 +376,7 @@ namespace TT2Bot.Helpers
             return dataCSV.Select(d => BuildHelperSkill(d, version)).ToList();
         }
 
-        public async Task<HighScoreSheet> GetHighScores()
+        public async ValueTask<HighScoreSheet> GetHighScores()
         {
             var data = await WebClient.GetString(new Uri(HighScoreSheet), Encoding.UTF8);
 

@@ -213,7 +213,7 @@ namespace TT2Bot.Commands.Clan
             await Database.Upsert(submission);
 
             if (submission.Message != null && await SubmissionChannel.GetMessageAsync(submission.Message.Value) is IUserMessage message)
-                await message.ModifySafeAsync(m => m.Embed = GetSubmissionMessage(submission).Build());
+                await Modify(message).ChangeEmbedable(Embedable.FromEmbed(GetSubmissionMessage(submission))).ModifyAsync();
 
             var submitter = Client.GetUser(submission.Submitter);
             if (submitter != null && !alreadyReplied && !quiet)

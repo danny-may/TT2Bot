@@ -119,8 +119,8 @@ namespace TT2Bot.Commands.Clan
 
         [Call("Info")]
         [Usage("Gets information about the clans current level")]
-        private Task TitanLordInfoAsync()
-            => ReplyAsync(ClanStatsCommand.StatsBuilder(Formatter, BotUser, TitanLordSettings.CQ, 4000, 500, new int[] { 20, 30, 40, 50 }));
+        private async Task TitanLordInfoAsync()
+            => await ReplyAsync(ClanStatsCommand.StatsBuilder(Formatter, BotUser, TitanLordSettings.CQ, 4000, 500, new int[] { 20, 30, 40, 50 }));
 
         [Call("Stop")]
         [Usage("Stops any currently running timers.")]
@@ -167,13 +167,17 @@ namespace TT2Bot.Commands.Clan
         private (ulong TickTimer, ulong RoundTimer) StartTimers(DateTime from, TitanLordTimerData data)
             => (
                 Scheduler.Queue<TitanLordTickCallback>(Author.Id, Guild.Id, from, 
-                    UpdateDelay, from.Add(BossDelay), 
-                    JsonConvert.SerializeObject(data)),
+                    UpdateDelay, from.Add(BossDelay),
+                    channel: Channel.Id,
+                    message: Message.Id,
+                    data: JsonConvert.SerializeObject(data)),
                 Scheduler.Queue<TitanLordRoundCallback>(Author.Id, Guild.Id, 
                     from.Add(BossDelay + BossRound + AttackTime),  // Uuurgh, I promise it makes sense though
                     BossRound + AttackTime,
                     from.Add(BossUptime + BossDelay),
-                    JsonConvert.SerializeObject(data))
+                    channel: Channel.Id,
+                    message: Message.Id,
+                    data: JsonConvert.SerializeObject(data))
             );
     }
 }

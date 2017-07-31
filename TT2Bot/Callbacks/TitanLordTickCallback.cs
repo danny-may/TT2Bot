@@ -2,6 +2,7 @@
 using Discord.WebSocket;
 using Newtonsoft.Json;
 using System;
+using TitanBot.Commands;
 using TitanBot.Scheduling;
 using TitanBot.Settings;
 using TitanBot.Util;
@@ -12,52 +13,44 @@ namespace TT2Bot.Callbacks
 {
     class TitanLordTickCallback : ISchedulerCallback
     {
-        ISettingManager SettingsManager { get; }
-        DiscordSocketClient Client { get; }
-
-        public TitanLordTickCallback(ISettingManager manager, DiscordSocketClient client)
+        public void Handle(ISchedulerContext context, DateTime eventTime)
         {
-            SettingsManager = manager;
-            Client = client;
-        }
-
-        public void Handle(ISchedulerRecord record, DateTime eventTime)
-        {
-            if (record.GuildId == null)
+            if (context.Guild == null)
                 return;
 
-            var data = JsonConvert.DeserializeObject<TitanLordTimerData>(record.Data);
-            var settingContext = SettingsManager.GetContext(record.GuildId.Value);
-            var settings = settingContext.Get<TitanLordSettings>();
-            var guildSettings = settingContext.Get<GeneralGuildSetting>();
+            var data = JsonConvert.DeserializeObject<TitanLordTimerData>(context.Record.Data);
+            var settings = context.GuildSettings.Get<TitanLordSettings>();
 
-            var messageChannel = Client.GetChannel(data.MessageChannelId) as IMessageChannel;
+            var messageChannel = context.Client.GetChannel(data.MessageChannelId) as IMessageChannel;
             if (data.MessageId != 0)
             {
                 var message = messageChannel?.GetMessageAsync(data.MessageId)?.Result as IUserMessage;
-
-                message?.ModifySafeAsync(m => m.Content = settings.TimerText.Contextualise(settings.CQ, record, eventTime, guildSettings.DateTimeFormat)).Wait();
+                context.Replier.Modify(message).ChangeMessage(settings.TimerText.Contextualise(settings.CQ, 
+                                                                                               context.Record, 
+                                                                                               eventTime, 
+                                                                                               context.GeneralGuildSetting.DateTimeFormat)).Modify();
             }
 
             foreach (var ping in settings.PrePings)
             {
-                var delta = (record.EndTime - eventTime).Add(new TimeSpan(0, 0, -ping));
-                if (delta < record.Interval && delta >= new TimeSpan())
-                    messageChannel?.SendMessageSafeAsync(settings.InXText.Contextualise(settings.CQ, record, eventTime, guildSettings.DateTimeFormat)).Wait();
+                var delta = (context.Record.EndTime - eventTime).Add(new TimeSpan(0, 0, -ping));
+                if (delta < context.Record.Interval && delta >= new TimeSpan())
+                    context.Replier.Reply(messageChannel).WithMessage(settings.InXText.Contextualise(settings.CQ,
+                                                                                                     context.Record,
+                                                                                                     eventTime,
+                                                                                                     context.GeneralGuildSetting.DateTimeFormat)).Send();
             }
         }
 
-        public void Complete(ISchedulerRecord record, bool wasCancelled)
+        public void Complete(ISchedulerContext context, bool wasCancelled)
         {
-            if (record.GuildId == null)
+            if (context.Guild == null)
                 return;
 
-            var data = JsonConvert.DeserializeObject<TitanLordTimerData>(record.Data);
-            var settingContext = SettingsManager.GetContext(record.GuildId.Value);
-            var settings = settingContext.Get<TitanLordSettings>();
-            var guildSettings = settingContext.Get<GeneralGuildSetting>();
+            var data = JsonConvert.DeserializeObject<TitanLordTimerData>(context.Record.Data);
+            var settings = context.GuildSettings.Get<TitanLordSettings>();
 
-            var messageChannel = Client.GetChannel(data.MessageChannelId) as IMessageChannel;
+            var messageChannel = context.Client.GetChannel(data.MessageChannelId) as IMessageChannel;
             if (data.MessageId != 0)
             {
                 var message = messageChannel?.GetMessageAsync(data.MessageId)?.Result as IUserMessage;
@@ -65,7 +58,10 @@ namespace TT2Bot.Callbacks
             }
 
             if (!wasCancelled)
-                messageChannel?.SendMessageSafeAsync(settings.NowText.Contextualise(settings.CQ, record, record.EndTime, guildSettings.DateTimeFormat)).Wait();
+                context.Replier.Reply(messageChannel).WithMessage(settings.NowText.Contextualise(settings.CQ, 
+                                                                                                 context.Record, 
+                                                                                                 context.Record.EndTime, 
+                                                                                                 context.GeneralGuildSetting.DateTimeFormat)).Send();
         }
     }
 }

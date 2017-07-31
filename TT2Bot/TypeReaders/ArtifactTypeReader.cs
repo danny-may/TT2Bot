@@ -15,7 +15,7 @@ namespace TT2Bot.TypeReaders
             DataService = dataService;
         }
 
-        public override async Task<TypeReaderResponse> Read(ICommandContext context, string value)
+        public override async ValueTask<TypeReaderResponse> Read(ICommandContext context, string value)
         {
             var art = Artifact.Find(value);
             if (art == null)

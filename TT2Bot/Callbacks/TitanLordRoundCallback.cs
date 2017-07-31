@@ -3,6 +3,8 @@ using Discord.WebSocket;
 using Newtonsoft.Json;
 using System;
 using System.Threading.Tasks;
+using TitanBot.Commands;
+using TitanBot.Dependencies;
 using TitanBot.Scheduling;
 using TitanBot.Settings;
 using TitanBot.Util;
@@ -13,35 +15,29 @@ namespace TT2Bot.Callbacks
 {
     class TitanLordRoundCallback : ISchedulerCallback
     {
-        ISettingManager SettingsManager { get; }
-        DiscordSocketClient Client { get; }
-
-        public TitanLordRoundCallback(ISettingManager manager, DiscordSocketClient client)
-        {
-            SettingsManager = manager;
-            Client = client;
-        }
-
-        public void Complete(ISchedulerRecord record, bool wasCancelled)
+        public void Complete(ISchedulerContext context, bool wasCancelled)
         {
             if (!wasCancelled)
-                Handle(record, record.EndTime);
+                Handle(context, context.Record.EndTime);
         }
 
-        public async void Handle(ISchedulerRecord record, DateTime eventTime)
+        public void Handle(ISchedulerContext context, DateTime eventTime)
         {
-            if (record.GuildId == null)
+            if (context.Guild == null)
                 return;
             
-            var data = JsonConvert.DeserializeObject<TitanLordTimerData>(record.Data);
-            var settingContext = SettingsManager.GetContext(record.GuildId.Value);
-            var settings = settingContext.Get<TitanLordSettings>();
-            var guildSettings = settingContext.Get<GeneralGuildSetting>();
+            var data = JsonConvert.DeserializeObject<TitanLordTimerData>(context.Record.Data);
+            var settings = context.GuildSettings.Get<TitanLordSettings>();
 
-            var messageChannel = Client.GetChannel(data.MessageChannelId) as IMessageChannel;
+            var messageChannel = context.Client.GetChannel(data.MessageChannelId) as IMessageChannel;
+
+            var replier = new DependencyFactory().Construct<IReplier>();
 
             if (settings.RoundPings)
-                await (messageChannel?.SendMessageSafeAsync(settings.RoundText.Contextualise(settings.CQ, record, eventTime, guildSettings.DateTimeFormat)) ?? Task.CompletedTask);
-        }
+                context.Replier.Reply(messageChannel).WithMessage(settings.RoundText.Contextualise(settings.CQ, 
+                                                                                                   context.Record, 
+                                                                                                   eventTime, 
+                                                                                                   context.GeneralGuildSetting.DateTimeFormat)).Send();
+            }
     }
 }
