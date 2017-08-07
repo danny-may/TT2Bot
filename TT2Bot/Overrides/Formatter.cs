@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using TitanBot.Commands;
 using TitanBot.Formatting;
 using TT2Bot.Helpers;
-using TT2Bot.Models;
 using TT2Bot.Models.General;
 
 namespace TT2Bot.Overrides

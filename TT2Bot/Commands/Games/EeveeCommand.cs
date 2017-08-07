@@ -3,8 +3,6 @@ using System;
 using System.Threading.Tasks;
 using TitanBot.Commands;
 using TT2Bot.Models;
-using static TT2Bot.TT2Localisation;
-using static TT2Bot.TT2Localisation.Help;
 
 namespace TT2Bot.Commands.Games
 {

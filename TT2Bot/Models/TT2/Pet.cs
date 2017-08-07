@@ -4,9 +4,7 @@ using System.Collections.Immutable;
 using System.Drawing;
 using System.Linq;
 using System.Threading.Tasks;
-using TitanBot.Commands;
 using TitanBot.Formatting;
-using TitanBot.Formatting.Interfaces;
 using TT2Bot.Models.General;
 using static TT2Bot.TT2Localisation;
 

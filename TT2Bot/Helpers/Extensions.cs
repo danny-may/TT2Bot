@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using TitanBot.Commands;
-using TitanBot.Formatting;
-using TT2Bot.Models;
 
 namespace TT2Bot.Helpers
 {

@@ -1,5 +1,5 @@
 ﻿using System;
-using TitanBot.Commands;
+using TitanBot.Formatting;
 using static TT2Bot.TT2Localisation.Enums.BonusTypeText;
 
 namespace TT2Bot.Models

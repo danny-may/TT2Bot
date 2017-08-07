@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using System;
 using System.Threading.Tasks;
 using TitanBot.Commands;
+using TitanBot.Formatting;
 using TitanBot.Replying;
 using TitanBot.Scheduling;
 using TT2Bot.Callbacks;

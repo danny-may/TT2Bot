@@ -1,4 +1,4 @@
-﻿using TitanBot.Commands;
+﻿using TitanBot.Formatting;
 using static TT2Bot.TT2Localisation.Enums.EquipmentRarityText;
 
 namespace TT2Bot.Models

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using TitanBot.Commands;
 using TitanBot.Formatting;
 using static TT2Bot.TT2Localisation.Enums.EquipmentClassText;
 

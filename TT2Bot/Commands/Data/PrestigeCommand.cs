@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using TitanBot.Commands;
-using TitanBot.Util;
+using TitanBot.Formatting;
 using TT2Bot.Helpers;
 using static TT2Bot.TT2Localisation.Commands;
 using static TT2Bot.TT2Localisation.Help;

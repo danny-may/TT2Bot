@@ -4,7 +4,7 @@ using System.Drawing;
 using System.Linq;
 using System.Threading.Tasks;
 using TitanBot.Commands;
-using TT2Bot.Helpers;
+using TitanBot.Formatting;
 using TT2Bot.Models;
 using TT2Bot.Services;
 using static TT2Bot.TT2Localisation.Commands;

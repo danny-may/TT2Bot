@@ -1,12 +1,8 @@
 ﻿using Discord;
-using Discord.WebSocket;
 using Newtonsoft.Json;
 using System;
-using TitanBot.Commands;
 using TitanBot.Contexts;
 using TitanBot.Scheduling;
-using TitanBot.Settings;
-using TitanBot.Util;
 using TT2Bot.Helpers;
 using TT2Bot.Models;
 

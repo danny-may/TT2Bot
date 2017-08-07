@@ -8,7 +8,6 @@ using TitanBot.Formatting;
 using TitanBot.Logging;
 using TitanBot.Settings;
 using TitanBot.TypeReaders;
-using TT2Bot.Helpers;
 using TT2Bot.Models;
 using TT2Bot.Overrides;
 using TT2Bot.Services;

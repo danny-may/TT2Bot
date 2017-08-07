@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace TT2Bot.Models.General
+﻿namespace TT2Bot.Models.General
 {
     public struct Percentage
     {

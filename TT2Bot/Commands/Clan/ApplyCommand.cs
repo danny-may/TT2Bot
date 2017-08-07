@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using TitanBot.Commands;
+using TitanBot.Formatting;
 using TitanBot.Replying;
 using TT2Bot.Models;
 using static TT2Bot.TT2Localisation.Commands;

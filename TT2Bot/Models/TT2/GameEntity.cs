@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TitanBot.Commands;
-using TitanBot.Formatting;
+﻿using TitanBot.Formatting;
 using TitanBot.Formatting.Interfaces;
 using TT2Bot.Helpers;
 

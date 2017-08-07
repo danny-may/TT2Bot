@@ -1,6 +1,5 @@
 ﻿using Csv;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using TitanBot.Downloader;
 using TT2Bot.Models;

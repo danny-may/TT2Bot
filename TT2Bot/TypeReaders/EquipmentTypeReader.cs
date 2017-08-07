@@ -1,9 +1,4 @@
-﻿using System;
-using System.Linq;
-using System.Threading.Tasks;
-using TitanBot.Contexts;
-using TitanBot.TypeReaders;
-using TT2Bot.Models;
+﻿using TT2Bot.Models;
 using TT2Bot.Services;
 using TT2Bot.Services.ServiceAreas;
 

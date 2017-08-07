@@ -5,7 +5,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using TitanBot.Commands;
 using TitanBot.Formatting;
-using TitanBot.Util;
 using TT2Bot.Helpers;
 using TT2Bot.Models;
 using static TT2Bot.TT2Localisation.Commands;
