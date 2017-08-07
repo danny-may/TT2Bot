@@ -4,26 +4,28 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using TitanBot.Commands;
-using TitanBot.Util;
+using TitanBot.Replying;
 using TT2Bot.Models;
+using static TT2Bot.TT2Localisation.Commands;
+using static TT2Bot.TT2Localisation.Help;
 
 namespace TT2Bot.Commands.Clan
 {
-    [Description("Allows a user to register their interest in joining the clan")]
+    [Description(Desc.APPLY)]
     [DefaultPermission(8)]
     [Alias("R", "Reg", "Register")]
     class ApplyCommand : TT2Command
     {
         [Call]
-        [Usage("Creates your application for this clan")]
+        [Usage(Usage.APPLY_REGISTER_GUILD)]
         [DefaultPermission(0)]
         [RequireContext(ContextType.Guild)]
         private async Task RegisterGuildAsync(int maxStage, [Dense]string message,
-            [CallFlag('g', "global", "Specifies that the application is a global application.")]bool isGlobal = false,
-            [CallFlag('i', "images", "Specifies a list of images to use with your application")]Uri[] images = null,
-            [CallFlag('r', "relics", "Specifies how many relics you have earned")]double relics = -1,
-            [CallFlag('a', "attacks", "Specifies how many attacks you aim to do per week")]int attacks = -1,
-            [CallFlag('t', "taps", "Specifies how many taps you average per CQ")]int taps = -1)
+            [CallFlag('g', "global", Flag.APPLY_G)]bool isGlobal = false,
+            [CallFlag('i', "images", Flag.APPLY_I)]Uri[] images = null,
+            [CallFlag('r', "relics", Flag.APPLY_R)]double relics = -1,
+            [CallFlag('a', "attacks", Flag.APPLY_A)]int attacks = -1,
+            [CallFlag('t', "taps", Flag.APPLY_T)]int taps = -1)
         {
             if (isGlobal)
                 await RegisterAsync(maxStage, message, null, images, relics, attacks, taps);
@@ -32,13 +34,13 @@ namespace TT2Bot.Commands.Clan
         }
 
         [Call]
-        [Usage("Creates a global application")]
+        [Usage(Usage.APPLY_REGISTER_GLOBAL)]
         [RequireContext(ContextType.DM | ContextType.Group)]
         private Task RegisterGlobalAsync(int maxStage, [Dense]string message,
-            [CallFlag('i', "images", "Specifies a list of images to use with your application")]Uri[] images = null,
-            [CallFlag('r', "relics", "Specifies how many relics you have earned")]double relics = -1,
-            [CallFlag('a', "attacks", "Specifies how many attacks you aim to do per week")]int attacks = -1,
-            [CallFlag('t', "taps", "Specifies how many taps you average per CQ")]int taps = -1)
+            [CallFlag('i', "images", Flag.APPLY_I)]Uri[] images = null,
+            [CallFlag('r', "relics", Flag.APPLY_R)]double relics = -1,
+            [CallFlag('a', "attacks", Flag.APPLY_A)]int attacks = -1,
+            [CallFlag('t', "taps", Flag.APPLY_T)]int taps = -1)
             => RegisterAsync(maxStage, message, null, images, relics, attacks, taps);
 
         private async Task RegisterAsync(int maxStage, string message, ulong? guildId, Uri[] images, double relics, int attacks, int taps)
@@ -68,36 +70,36 @@ namespace TT2Bot.Commands.Clan
             if (taps != -1)
                 playerData.TapsPerCQ = taps.Clamp(0, 600);
             playerData.MaxStage = maxStage;
-
+            
             await Database.Upsert(current);
             await Database.Upsert(playerData);
 
             if (isNew && guildId == null)
-                await ReplyAsync("Your global application has been successful. Recruiters from any TT2 guild will be able to see your application and might choose to recruit you.", ReplyType.Success);
+                await ReplyAsync(ApplyText.APPLICATION_SUCCESSFUL_GLOBAL, ReplyType.Success);
             else if (isNew)
-                await ReplyAsync("Your application has been successful. The clan recruiter will review your application and potentially get back to you.", ReplyType.Success);
+                await ReplyAsync(ApplyText.APPLICATION_SUCCESSFUL_GUILD, ReplyType.Success);
             else
-                await ReplyAsync("Your global application has been successfully updated", ReplyType.Success);
+                await ReplyAsync(ApplyText.APPLICATION_UPDATED, ReplyType.Success);
         }
 
         [Call("View")]
-        [Usage("Views your registration for this guild")]
+        [Usage(Usage.APPLY_VIEW_GUILD)]
         [RequireContext(ContextType.Guild)]
         [DefaultPermission(0)]
-        Task ViewGuildRegistrationAsync([CallFlag('g', "global", "Specifies that the application is a global application.")]bool isGlobal = false)
+        Task ViewGuildRegistrationAsync([CallFlag('g', "global", Flag.APPLY_G)]bool isGlobal = false)
             => ViewRegistrationAsync(Guild.Id, Author, isGlobal);
 
         [Call("View")]
-        [Usage("Views your global registration")]
+        [Usage(Usage.APPLY_VIEW_GLOBAL)]
         [RequireContext(ContextType.DM | ContextType.Group)]
         Task ViewGlobalRegistrationAsync()
             => ViewRegistrationAsync(null, Author, true);
 
         [Call("View")]
-        [Usage("View the registration for the given user")]
+        [Usage(Usage.APPLY_VIEW_USER)]
         [RequireContext(ContextType.Guild)]
         Task ViewGuildRegistrationAsync(IUser user,
-            [CallFlag('g', "global", "Specifies that the application is a global application.")]bool isGlobal = false)
+            [CallFlag('g', "global", Flag.APPLY_G)]bool isGlobal = false)
             => ViewRegistrationAsync(Guild.Id, user, isGlobal);
 
         async Task ViewRegistrationAsync(ulong? guildId, IUser user, bool global)
@@ -108,52 +110,51 @@ namespace TT2Bot.Commands.Clan
             if (current == null)
             {
                 if (user.Id == Author.Id)
-                    await ReplyAsync("You have not registered yet!", ReplyType.Error);
+                    await ReplyAsync(ApplyText.VIEW_NOTREGISTERED, ReplyType.Error);
                 else if (global)
-                    await ReplyAsync("That user does not have a global registration yet!", ReplyType.Error);
+                    await ReplyAsync(ApplyText.VIEW_GLOBAL_NOTREGISTERED, ReplyType.Error);
                 else
-                    await ReplyAsync("That user does not have a registration here yet!", ReplyType.Error);
+                    await ReplyAsync(ApplyText.VIEW_GUILD_NOTREGISTERED, ReplyType.Error);
                 return;
             }
 
-            var builder = new EmbedBuilder
+            var builder = new LocalisedEmbedBuilder
             {
-                Author = new EmbedAuthorBuilder
-                {
-                    IconUrl = Author.GetAvatarUrl(),
-                    Name = $"{user} ({user.Id})"
-                },
+                Author = LocalisedAuthorBuilder.FromUser(Author),
                 Color = System.Drawing.Color.SkyBlue.ToDiscord(),
-                Description = current.Message,
-                Title = "Application",
-                Footer = new EmbedFooterBuilder
+                Description = (RawString)current.Message,
+                Footer = new LocalisedFooterBuilder
                 {
-                    Text = $"{(current.GuildId == null ? "Global" : "Local")} application | Applied {current.ApplyTime} | Updated {current.EditTime}"
+                    Text = (current.GuildId == null ? ApplyText.VIEW_FOOTER_GLOBAL : ApplyText.VIEW_FOOTER_GUILD, current.ApplyTime, current.EditTime)
                 }
-            }.AddInlineField("Max Stage", Formatter.Beautify(player.MaxStage))
-             .AddInlineField("Relics", Formatter.Beautify(player.Relics))
-             .AddInlineField("CQ/Week", Formatter.Beautify(player.AttacksPerWeek))
-             .AddInlineField("Taps/CQ", Formatter.Beautify(player.TapsPerCQ))
-             .AddField("Images", string.Join("\n", current.Images?.Select(i => i.AbsoluteUri) ?? new string[] { "None" }));
+            }.WithTitle(ApplyText.VIEW_TITLE)
+             .AddInlineField(f => f.WithName(MAXSTAGE).WithValue(player.MaxStage))
+             .AddInlineField(f => f.WithName(RELICS).WithValue(player.Relics))
+             .AddInlineField(f => f.WithName(ATTACKSPERWEEK).WithValue(player.AttacksPerWeek))
+             .AddInlineField(f => f.WithName(TAPSPERCQ).WithValue(player.TapsPerCQ));
+            if (current.Images == null)
+                builder.AddField(f => f.WithName(IMAGES).WithValue(NONE));
+            else
+                builder.AddField(f => f.WithName(IMAGES).WithValues("\n", current.Images.Select(i => i.AbsoluteUri)));
 
             await ReplyAsync(builder);
         }
 
         [Call("Cancel")]
-        [Usage("Cancels your registration for this guild")]
+        [Usage(Usage.APPLY_CANCEL_GUILD)]
         [RequireContext(ContextType.Guild)]
         [DefaultPermission(0)]
         Task RemoveGuildRegistrationAsync()
             => RemoveRegistrationAsync(Guild.Id, Author);
 
         [Call("Cancel")]
-        [Usage("Cancels your global registration")]
+        [Usage(Usage.APPLY_CANCEL_GLOBAL)]
         [RequireContext(ContextType.DM | ContextType.Group)]
         Task RemoveGlobalRegistrationAsync()
             => RemoveRegistrationAsync(null, Author);
 
         [Call("Remove")]
-        [Usage("Removes the registration for the given user")]
+        [Usage(Usage.APPLY_CANCEL_USER)]
         [RequireContext(ContextType.Guild)]
         Task RemoveGuildRegistrationAsync(IUser user)
             => RemoveRegistrationAsync(Guild.Id, user);
@@ -162,19 +163,19 @@ namespace TT2Bot.Commands.Clan
         {
             if (guildID == null && user != Author)
             {
-                await ReplyAsync($"You cannot remove another users global application. Try usng `{Prefix}apply ignore <user>`.", ReplyType.Error);
+                await ReplyAsync(ApplyText.REMOVE_GLOBAL_NOTALLOWED, ReplyType.Error);
                 return;
             }
             await Database.Delete<Registration>(r => r.UserId == user.Id && r.GuildId == guildID);
 
             if (user.Id == Author.Id)
-                await ReplyAsync($"You have successfully removed your {(guildID == null ? "global " : "")}application{(guildID != null ? " for this guild" : "")}", ReplyType.Success);
+                await ReplyAsync(guildID == null ? ApplyText.REMOVE_GLOBAL_SUCCESS : ApplyText.REMOVE_GUILD_SUCCESS, ReplyType.Success);
             else
-                await ReplyAsync($"You have successfully removed the application by {user.Username} for this guild", ReplyType.Success);
+                await ReplyAsync(ApplyText.REMOVE_OTHER_SUCCESS, ReplyType.Success, user.Username);
         }
 
         [Call("Ignore")]
-        [Usage("Specifies if a users global registrations should be ignored. Defaults to yes")]
+        [Usage(Usage.APPLY_IGNORE)]
         [RequireContext(ContextType.Guild)]
         async Task IgnoreUser(IUser user, bool ignore = true)
         {
@@ -187,16 +188,16 @@ namespace TT2Bot.Commands.Clan
             });
 
             if (ignore)
-                await ReplyAsync("That user will no longer be shown from the global listings. They will be for local ones however.", ReplyType.Success);
+                await ReplyAsync(ApplyText.IGNORE_IGNORED, ReplyType.Success);
             else
-                await ReplyAsync("That user will now be shown in global listings.", ReplyType.Success);
+                await ReplyAsync(ApplyText.IGNORE_UNIGNORED, ReplyType.Success);
         }
 
         [Call("List")]
-        [Usage("Lists all applications for this guild")]
+        [Usage(Usage.APPLY_LIST)]
         [RequireContext(ContextType.Guild)]
         async Task ListRegistrationsAsync(int? start = null, int? end = null,
-            [CallFlag('g', "global", "Specifies that the application is a global application.")]bool isGlobal = false)
+            [CallFlag('g', "global", Flag.APPLY_G)]bool isGlobal = false)
         {
             var from = start ?? 0;
             var to = end ?? from + 20;
@@ -218,35 +219,24 @@ namespace TT2Bot.Commands.Clan
                                        .Skip(from);
 
             var table = new List<string[]> { };
-            table.Add(new string[]
-            {
-                "#",
-                "User",
-                "MS",
-                "Imgs",
-                "Relics",
-                "CQ/wk",
-                "Taps/CQ",
-                "Last edit",
-                ""
-            });
+            table.Add(TextResource.GetResource(ApplyText.LIST_TABLEHEADERS).Split(','));
             var pos = from + 1;
             foreach (var app in paired)
             {
                 var user = Client.GetUser(app.Application.UserId);
                 if (user == null)
                     continue;
-                table.Add(new string[]{
-                    "#" + pos++.ToString(),
-                    $"{user} ({user.Id})",
-                    $"[{Formatter.Beautify(app.Player.MaxStage)}]",
-                    (app.Application.Images?.Length ?? 0).ToString(),
-                    $"#{Formatter.Beautify(app.Player.Relics)}",
-                    Formatter.Beautify(app.Player.AttacksPerWeek),
-                    Formatter.Beautify(app.Player.TapsPerCQ),
-                    (DateTime.Now - app.Application.EditTime).Days + " day(s) ago",
-                    app.Application.GuildId == null ? "-g" : ""
-                });
+                table.Add(TextResource.Format(ApplyText.LIST_ROW, pos++.ToString(),
+                                                                user,
+                                                                user.Id,
+                                                                app.Player.MaxStage,
+                                                                app.Application.Images?.Length ?? 0,
+                                                                app.Player.Relics,
+                                                                app.Player.AttacksPerWeek,
+                                                                app.Player.TapsPerCQ,
+                                                                (DateTime.Now - app.Application.EditTime).Days,
+                                                                app.Application.GuildId == null ? "-g" : ""
+                                                                ).Split(','));
                 if (table.Count == to - from)
                     break;
             }
@@ -254,18 +244,18 @@ namespace TT2Bot.Commands.Clan
             var text = table.ToArray().Tableify();
 
             if (table.Count == 1)
-                await ReplyAsync("You have no registered users!", ReplyType.Error);
+                await ReplyAsync(ApplyText.LIST_NONE, ReplyType.Error);
             else
-                await ReplyAsync($"```css\n{text}```");
+                await ReplyAsync(ApplyText.LIST_FORMAT, text);
         }
 
         [Call("Clear")]
-        [Usage("Completely clears your guilds application list")]
+        [Usage(Usage.APPLY_CLEAR)]
         [RequireContext(ContextType.Guild)]
         async Task ClearRegistrationsAsync()
         {
             await Database.Delete<Registration>(r => r.GuildId == Guild.Id);
-            await ReplyAsync("Your guilds registrations have been wiped", ReplyType.Success);
+            await ReplyAsync(ApplyText.CLEAR_SUCCESS, ReplyType.Success);
         }
 
         private IEnumerable<Registration> GetRegistrations(ulong? guildId, ulong? userId, bool includeGlobal)

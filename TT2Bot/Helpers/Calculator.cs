@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using TT2Bot.Models.General;
 
 namespace TT2Bot.Helpers
 {
@@ -21,7 +22,7 @@ namespace TT2Bot.Helpers
         public static int TotalAttackCost(int attacks)
             => Enumerable.Range(0, attacks).Sum(v => AttackCost(v));
 
-        public static double AdvanceStart(int clanQuest)
+        public static Percentage AdvanceStart(int clanQuest)
             => Math.Min(0.5, Math.Min((double)clanQuest, 200) / 1000 + Math.Max((double)clanQuest - 200, 0) / 2000);
 
         public static int AttacksNeeded(int clanLevel, int attackers, int maxStage, int tapsPerAttack)

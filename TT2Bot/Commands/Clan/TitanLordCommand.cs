@@ -3,16 +3,18 @@ using Newtonsoft.Json;
 using System;
 using System.Threading.Tasks;
 using TitanBot.Commands;
+using TitanBot.Replying;
 using TitanBot.Scheduling;
-using TitanBot.Util;
 using TT2Bot.Callbacks;
 using TT2Bot.Commands.Data;
 using TT2Bot.Helpers;
 using TT2Bot.Models;
+using static TT2Bot.TT2Localisation.Commands;
+using static TT2Bot.TT2Localisation.Help;
 
 namespace TT2Bot.Commands.Clan
 {
-    [Description("Used for Titan Lord timers and management")]
+    [Description(Desc.TITANLORD)]
     [DefaultPermission(8)]
     [RequireContext(ContextType.Guild)]
     [Alias("TL", "Boss")]
@@ -30,7 +32,7 @@ namespace TT2Bot.Commands.Clan
         private static readonly TimeSpan UpdateDelay = new TimeSpan( 0, 0, 10 );
 
         [Call("In")]
-        [Usage("Sets a Titan Lord timer running for the given period.")]
+        [Usage(Usage.TITANLORD_IN)]
         private Task TitanLordInAsync([Dense]TimeSpan time)
         {
             lock (GuildCommandLock)
@@ -40,7 +42,7 @@ namespace TT2Bot.Commands.Clan
         }
 
         [Call("Dead")]
-        [Usage("Sets a Titan Lord timer running for 6 hours.")]
+        [Usage(Usage.TITANLORD_DEAD)]
         private Task TitanLordDead()
             => TitanLordInAsync(BossDelay);
 
@@ -48,7 +50,7 @@ namespace TT2Bot.Commands.Clan
         {
             if (time > BossDelay)
             {
-                await ReplyAsync("You cannot set a timer for longer than 6 hours", ReplyType.Error);
+                await ReplyAsync(TitanLordText.TIMER_TOOLONG, ReplyType.Error);
                 return;
             }
 
@@ -62,12 +64,11 @@ namespace TT2Bot.Commands.Clan
             {
                 var mostRecent = Scheduler.GetMostRecent<TitanLordTickCallback>(Guild.Id);
                 if (mostRecent != null && mostRecent.EndTime > mostRecent.StartTime.Add(BossDelay))
-                    await Replier.Reply(tlChannel).WithEmbedable(Embedable.FromEmbed(NewBoss(time))).SendAsync();
+                    await Reply(tlChannel).WithEmbedable(NewBoss(time)).SendAsync();
             }
 
-            var timer = await Replier.Reply(tlChannel)
-                                     .WithMessage("Loading timer...\n_If this takes longer than 20s please let Titansmasher know_")
-                                     .SendAsync();
+            var timer = await Reply(tlChannel).WithMessage(TitanLordText.TIMER_LOADING)
+                                              .SendAsync();
 
             if (TitanLordSettings.PinTimer)
             {
@@ -86,11 +87,11 @@ namespace TT2Bot.Commands.Clan
 
             StartTimers(startTime, data);
 
-            await ReplyAsync($"Set a timer running for {time}", ReplyType.Success);
+            await ReplyAsync(TitanLordText.TIMER_SET, ReplyType.Success, time);
         }
 
         [Call("Now")]
-        [Usage("Alerts everyone that the Titan Lord is ready to be killed right now")]
+        [Usage(Usage.TITANLORD_NOW)]
         private async Task TitanLordNowAsync()
         {
             CancelCurrent();
@@ -103,35 +104,35 @@ namespace TT2Bot.Commands.Clan
 
             StartTimers(startTime, data);
 
-            await ReplyAsync("Ill let everyone know", ReplyType.Success);
+            await ReplyAsync(TitanLordText.NOW_SUCCESS, ReplyType.Success);
         }
 
         [Call("When")]
-        [Usage("Gets the time until the Titan Lord is ready to be killed")]
+        [Usage(Usage.TITANLORD_WHEN)]
         private async Task TitanLordWhenAsync()
         {
             var current = Scheduler.GetMostRecent<TitanLordTickCallback>(Guild.Id);
             if (current == null || current.EndTime < DateTime.Now)
-                await ReplyAsync($"There is no currently active Titan Lord timer running", ReplyType.Info);
+                await ReplyAsync(TitanLordText.WHEN_NORUNNING, ReplyType.Info);
             else
-                await ReplyAsync($"There will be a Titan Lord in {Formatter.Beautify(current.EndTime - DateTime.Now)}", ReplyType.Info);
+                await ReplyAsync(TitanLordText.WHEN_RUNNING, ReplyType.Info, current.EndTime - DateTime.Now);
         }
 
         [Call("Info")]
-        [Usage("Gets information about the clans current level")]
+        [Usage(Usage.TITANLORD_INFO)]
         private async Task TitanLordInfoAsync()
-            => await ReplyAsync(ClanStatsCommand.StatsBuilder(Formatter, BotUser, TitanLordSettings.CQ, 4000, 500, new int[] { 20, 30, 40, 50 }));
+            => await ReplyAsync(ClanStatsCommand.StatsBuilder(BotUser, TitanLordSettings.CQ, 4000, 500, new int[] { 20, 30, 40, 50 }));
 
         [Call("Stop")]
-        [Usage("Stops any currently running timers.")]
+        [Usage(Usage.TITANLORD_STOP)]
         private async Task TitanLordStopAsync()
         {
             CancelCurrent();
 
-            await ReplyAsync("All currently running Titan Lord timers have been stopped", ReplyType.Success);
+            await ReplyAsync(TitanLordText.STOP_SUCCESS, ReplyType.Success);
         }
 
-        private EmbedBuilder NewBoss(TimeSpan time)
+        private LocalisedEmbedBuilder NewBoss(TimeSpan time)
         {
             GuildSettings.Edit<TitanLordSettings>(s => s.CQ++);
 
@@ -142,21 +143,16 @@ namespace TT2Bot.Commands.Clan
 
             var latestTimer = Scheduler.GetMostRecent<TitanLordTickCallback>(Guild.Id);
 
-            var builder = new EmbedBuilder
+            var builder = new LocalisedEmbedBuilder
             {
-                Author = new EmbedAuthorBuilder
-                {
-                    //IconUrl = Res.Emoji.Information_source,
-                    Name = "Titan Lord data updated!"
-                },
-                ThumbnailUrl = "https://cdn.discordapp.com/attachments/275257967937454080/308047011289235456/emoji.png",
                 Color = System.Drawing.Color.DarkOrange.ToDiscord(),
                 Timestamp = DateTime.Now,
-            }.AddField("New Clan Quest", TitanLordSettings.CQ)
-             .AddField("New bonus", Formatter.Beautify(clanBonus))
-             .AddField("Next Titan Lord HP", Formatter.Beautify(bossHp))
-             .AddField("Time to kill", 
-                Formatter.Beautify(DateTime.Now.Add(time).Add(-BossDelay) - latestTimer.EndTime));
+            }.WithTitle(TitanLordText.NEWBOSS_EMBED_TITLE)
+             .WithRawThumbnailUrl("https://cdn.discordapp.com/attachments/275257967937454080/308047011289235456/emoji.png")
+             .AddField(f => f.WithName(TitanLordText.NEWBOSS_EMBED_CQ).WithValue(TitanLordSettings.CQ))
+             .AddField(f => f.WithName(TitanLordText.NEWBOSS_EMBED_BONUS).WithValue(clanBonus))
+             .AddField(f => f.WithName(TitanLordText.NEWBOSS_EMBED_HP).WithValue(bossHp))
+             .AddField(f => f.WithName(TitanLordText.NEWBOSS_EMBED_TTK).WithValue(DateTime.Now.Add(time).Add(-BossDelay) - latestTimer.EndTime));
 
             return builder;
         }

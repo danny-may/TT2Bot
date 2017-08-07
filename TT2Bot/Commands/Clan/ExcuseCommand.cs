@@ -3,54 +3,48 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using TitanBot.Commands;
-using TitanBot.Util;
+using TitanBot.Replying;
 using TT2Bot.Models;
+using static TT2Bot.TT2Localisation.Commands;
+using static TT2Bot.TT2Localisation.Help;
 
 namespace TT2Bot.Commands.Clan
 {
-    [Description("Missed the boss? Or did someone else? Use this to get a water-tight excuse whenever you need!")]
+    [Description(Desc.EXCUSE)]
     class ExcuseCommand : TT2Command
     {
         [Call]
-        [Usage("Gets an excuse for why that person (or yourself) didnt attack the boss")]
+        [Usage(Usage.EXCUSE)]
         public async Task ExcuseUserAsync(IUser user = null,
-            [CallFlag('i', "id", "Specifies an ID to use")]ulong? excuseId = null)
+            [CallFlag('i', "id", Flag.EXCUSE_I)]ulong? excuseId = null)
         {
             user = user ?? Author;
 
             if (user?.Id == BotUser.Id)
             {
-                await ReplyAsync("Haha! You must be mistaken, I never miss a Titan Lord attack.");
+                await ReplyAsync(ExcuseText.SELF);
                 return;
             }
 
-            var excuse = GetExcuse(excuseId, true);
+            var excuse = GetExcuse(excuseId, true) ?? GetExcuse(null, true);
 
             var submitter = Client.GetUser(excuse.CreatorId);
 
-            var builder = new EmbedBuilder
+            var builder = new LocalisedEmbedBuilder
             {
-                Author = new EmbedAuthorBuilder
-                {
-                    IconUrl = submitter.GetAvatarUrl(),
-                    Name = $"{user.Username}#{user.Discriminator}"
-                },
-                Footer = new EmbedFooterBuilder
-                {
-                    Text = $"Excuse #{excuse.Id}",
-                },
+                Author = LocalisedAuthorBuilder.FromUser(submitter),
+                Footer = new LocalisedFooterBuilder().WithText(ExcuseText.ID, excuse.Id),
                 Timestamp = DateTime.Now.AddSeconds(-new Random().Next(120, 3600)),
                 Color = System.Drawing.Color.Green.ToDiscord(),
-                Description = excuse.ExcuseText
-            };
-            await ReplyAsync($"<@{user.Id}> didnt attack the boss because: ", builder);
+            }.WithRawDescription(excuse.ExcuseText);
+            await ReplyAsync(ExcuseText.REASON, builder, user.Id);
         }
 
         [Call("Add")]
-        [Usage("Adds an excuse to the pool of available excuses")]
+        [Usage(Usage.EXCUSE_ADD)]
         public async Task AddExcuseAsync([Dense]string text)
         {
-            var excuse = new Excuse
+            var excuse = new Models.Excuse
             {
                 CreatorId = Author.Id,
                 ExcuseText = text,
@@ -58,24 +52,24 @@ namespace TT2Bot.Commands.Clan
             };
             await Database.Insert(excuse);
 
-            await ReplyAsync($"Added the excuse as #{excuse.Id}", ReplyType.Success);
+            await ReplyAsync(ExcuseText.ADD_SUCCESS, ReplyType.Success, excuse.Id);
         }
 
         [Call("Remove")]
-        [Usage("Removes an excuse you made by ID")]
+        [Usage(Usage.EXCUSE_REMOVE)]
         public async Task RemoveExcuseAsync(ulong id)
         {
             var excuse = GetExcuse(id, false);
 
             if (excuse == null || excuse.Id == 0)
             {
-                await ReplyAsync("There is no excuse with that ID", ReplyType.Error);
+                await ReplyAsync(ExcuseText.REMOVE_NOTFOUND, ReplyType.Error);
                 return;
             }
 
             if (!Bot.Owners.Contains(Author.Id) && Author.Id != excuse.CreatorId)
             {
-                await ReplyAsync("You do not own this excuse.", ReplyType.Error);
+                await ReplyAsync(ExcuseText.REMOVE_NOTOWN, ReplyType.Error);
                 return;
             }
 
@@ -83,7 +77,7 @@ namespace TT2Bot.Commands.Clan
 
             await Database.Upsert(excuse);
 
-            await ReplyAsync($"Removed excuse #{excuse.Id}", ReplyType.Success);
+            await ReplyAsync(ExcuseText.REMOVE_SUCCESS, ReplyType.Success);
         }
 
         private Excuse GetExcuse(ulong? id, bool allowRandom)

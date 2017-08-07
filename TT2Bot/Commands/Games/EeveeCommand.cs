@@ -3,11 +3,13 @@ using System;
 using System.Threading.Tasks;
 using TitanBot.Commands;
 using TT2Bot.Models;
+using static TT2Bot.TT2Localisation;
+using static TT2Bot.TT2Localisation.Help;
 
 namespace TT2Bot.Commands.Games
 {
     [Hidden]
-    class Eevee : Command
+    class EeveeCommand : Command
     {
         private float criticalChance = 0.01f;
         private float eeveeCriticalChance = 0.5f;

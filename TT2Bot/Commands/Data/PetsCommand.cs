@@ -7,47 +7,40 @@ using TitanBot.Commands;
 using TitanBot.Util;
 using TT2Bot.Helpers;
 using TT2Bot.Models;
+using TT2Bot.Services;
+using static TT2Bot.TT2Localisation.Commands;
+using static TT2Bot.TT2Localisation.Help;
 
 namespace TT2Bot.Commands.Data
 {
-    [Description("Displays data about any pet ")]
+    [Description(Desc.PETS)]
     [Alias("Pet")]
     class PetsCommand : Command
     {
         private TT2DataService DataService { get; }
-        protected override string DelayMessage { get; } = "This might take a short while, theres a fair bit of data to download!";
+        protected override string DelayMessage { get; } = DELAYMESSAGE_DATA;
 
         public PetsCommand(TT2DataService dataService)
         {
             DataService = dataService;
         }
 
-        EmbedBuilder GetBaseEmbed(Pet pet)
+        LocalisedEmbedBuilder GetBaseEmbed(Pet pet)
         {
-            var builder = new EmbedBuilder
+            var builder = new LocalisedEmbedBuilder
             {
-                Author = new EmbedAuthorBuilder
-                {
-                    Name = "Pet data for " + pet.Name,
-                    IconUrl = pet.ImageUrl,
-                },
-                ThumbnailUrl = pet.ImageUrl,
-                Footer = new EmbedFooterBuilder
-                {
-                    IconUrl = BotUser.GetAvatarUrl(),
-                    Text = $"{BotUser.Username} Pet tool | TT2 v{pet.FileVersion}"
-                },
+                Author = new LocalisedAuthorBuilder().WithName(PetText.SHOW_TITLE, pet.Name).WithRawIconUrl(pet.ImageUrl),
+                Footer = new LocalisedFooterBuilder().WithText(PetText.SHOW_FOOTER, BotUser.Username, pet.FileVersion).WithRawIconUrl(BotUser.GetAvatarUrl()),
                 Timestamp = DateTime.Now,
                 Color = pet.Image.AverageColor(0.3f, 0.5f).ToDiscord(),
-            };
-
-            builder.AddInlineField("Pet id", pet.Id);
+            }.WithRawThumbnailUrl(pet.ImageUrl)
+             .AddInlineField(f => f.WithName(PetText.SHOW_FIELD_ID).WithValue(pet.Id));
 
             return builder;
         }
 
         [Call]
-        [Usage("Shows stats for a given pet on the given level")]
+        [Usage(Usage.PET)]
         async Task ShowPetAsync(Pet pet, int? level = null)
         {
             
@@ -55,30 +48,35 @@ namespace TT2Bot.Commands.Data
 
             if (level == null)
             {
-                builder.AddField("Base damage", BonusType.PetDamage.FormatValue(pet.DamageBase));
+                builder.AddField(f => f.WithName(PetText.SHOW_FIELD_BASEDAMAGE).WithValue(BonusType.PetDamage.LocaliseValue(pet.DamageBase)));
                 var keysOrdered = pet.IncreaseRanges.Keys.OrderBy(k => k).ToList();
                 for (int i = 0; i < keysOrdered.Count(); i++)
                 {
                     if (i == keysOrdered.Count() - 1)
-                        builder.AddInlineField($"lv {keysOrdered[i]}+", BonusType.PetDamage.FormatValue(pet.IncreaseRanges[keysOrdered[i]]));
+                        builder.AddInlineField(f => f.WithName(PetText.SHOW_FIELD_LVLXUP, keysOrdered[i])
+                                                     .WithValue(BonusType.PetDamage.LocaliseValue(pet.IncreaseRanges[keysOrdered[i]])));
                     else
-                        builder.AddInlineField($"lv {keysOrdered[i]}-{keysOrdered[i + 1] - 1}", BonusType.PetDamage.FormatValue(pet.IncreaseRanges[keysOrdered[i]]));
+                        builder.AddInlineField(f => f.WithName(PetText.SHOW_FIELD_LVLXTOY, keysOrdered[i], keysOrdered[i + 1] - 1)
+                                                     .WithValue(BonusType.PetDamage.LocaliseValue(pet.IncreaseRanges[keysOrdered[i]])));
                 }
-                builder.AddField("Bonus type", Formatter.Beautify(pet.BonusType));
-                builder.AddInlineField("Base bonus", pet.BonusType.FormatValue(pet.BonusBase));
-                builder.AddInlineField("Bonus increment", pet.BonusType.FormatValue(pet.BonusIncrement));
+                builder.AddField(f => f.WithName(PetText.SHOW_FIELD_BONUSTYPE).WithValue(pet.BonusType.ToLocalisable()));
+                builder.AddInlineField(f => f.WithName(PetText.SHOW_FIELD_BONUSBASE).WithValue(pet.BonusType.LocaliseValue(pet.BonusBase)));
+                builder.AddInlineField(f => f.WithName(PetText.SHOW_FIELD_BONUSINCREASE).WithValue(pet.BonusType.LocaliseValue(pet.BonusIncrement)));
             }
             else
             {
                 var actualLevel = level ?? 1;
-                builder.AddField("Bonus type", Formatter.Beautify(pet.BonusType));
-                builder.AddInlineField($"Damage at lv {actualLevel}", BonusType.PetDamage.FormatValue(pet.DamageOnLevel(actualLevel)));
-                builder.AddInlineField($"Bonus at lv {actualLevel}", pet.BonusType.FormatValue(pet.BonusOnLevel(actualLevel)));
+                var dmg = pet.DamageOnLevel(actualLevel);
+                var bonus = pet.BonusOnLevel(actualLevel);
+                builder.AddField(f => f.WithName(PetText.SHOW_FIELD_BONUSTYPE).WithValue(pet.BonusType.ToLocalisable()));
+                builder.AddInlineField(f => f.WithValue(PetText.SHOW_FIELD_DAMAGEAT, actualLevel).WithValue(BonusType.PetDamage.LocaliseValue(dmg)));
+                builder.AddInlineField(f => f.WithValue(PetText.SHOW_FIELD_BONUSAT, actualLevel).WithValue(pet.BonusType.LocaliseValue(bonus)));
                 if (pet.InactiveMultiplier(actualLevel) < 1)
                 {
-                    builder.AddField($"Inactive % at lv {actualLevel}", Formatter.Beautify(pet.InactiveMultiplier(actualLevel) * 100) + "%");
-                    builder.AddInlineField($"Inactive damage at lv {actualLevel}", BonusType.PetDamage.FormatValue(pet.InactiveMultiplier(actualLevel) * pet.DamageOnLevel(actualLevel)));
-                    builder.AddInlineField($"Inactive bonus at lv {actualLevel}", pet.BonusType.FormatValue(pet.InactiveMultiplier(actualLevel) * pet.BonusOnLevel(actualLevel)));
+                    var mult = pet.InactiveMultiplier(actualLevel);
+                    builder.AddField(f => f.WithName(PetText.SHOW_FIELD_INACTIVEPERCENT, actualLevel).WithValue(mult));
+                    builder.AddInlineField(f => f.WithName(PetText.SHOW_FIELD_INACTIVEDAMAGEAT, actualLevel).WithValue(BonusType.PetDamage.LocaliseValue(mult * dmg)));
+                    builder.AddInlineField(f => f.WithName(PetText.SHOW_FIELD_INACTIVEBONUSAT, actualLevel).WithValue(pet.BonusType.LocaliseValue(mult * bonus)));
                 }
             }
 
@@ -86,12 +84,12 @@ namespace TT2Bot.Commands.Data
         }
 
         [Call("List")]
-        [Usage("Lists all pets available")]
+        [Usage(Usage.PET_LIST)]
         async Task ListPetsAsync()
         {
-            var pets = await DataService.GetAllPets(true);
+            var pets = await DataService.Pets.GetAll();
 
-            var builder = new EmbedBuilder
+            var builder = new LocalisedEmbedBuilder
             {
                 Author = new EmbedAuthorBuilder
                 {
@@ -99,7 +97,7 @@ namespace TT2Bot.Commands.Data
                     Name = "Pet listing"
                 },
                 Color = System.Drawing.Color.LightBlue.ToDiscord(),
-                Description = "All Pets",
+                Description = (RawString)"All Pets",
                 Footer = new EmbedFooterBuilder
                 {
                     IconUrl = BotUser.GetAvatarUrl(),
@@ -109,9 +107,7 @@ namespace TT2Bot.Commands.Data
             };
 
             foreach (var bonus in pets.GroupBy(p => p.BonusType).OrderBy(t => t.Key))
-            {
-                builder.AddInlineField(Formatter.Beautify(bonus.Key), string.Join("\n", bonus.Select(a => $"{a.Name} ({a.Id})")));
-            }
+                builder.AddInlineField(f => f.WithName(bonus.Key.ToLocalisable()).WithValues("\n", bonus));
 
             await ReplyAsync(builder);
         }

@@ -1,30 +1,20 @@
-﻿using System.Threading.Tasks;
-using TitanBot.Commands;
-using TitanBot.TypeReaders;
-using TT2Bot.Helpers;
-using TT2Bot.Models;
+﻿using TT2Bot.Models;
+using TT2Bot.Services;
+using TT2Bot.Services.ServiceAreas;
 
 namespace TT2Bot.TypeReaders
 {
-    class HelperTypeReader : TypeReader
+    class HelperTypeReader : GameEntityTypeReader<Helper, int>
     {
         private TT2DataService DataService { get; }
+
+        protected override GameEntityService<Helper, int> Service => DataService.Helpers;
+        protected override string UNABLE_DOWNLOAD => TT2Localisation.Game.Helper.UNABLE_DOWNLOAD;
+        protected override string MULTIPLE_MATCHES => TT2Localisation.Game.Helper.MULTIPLE_MATCHES;
 
         public HelperTypeReader(TT2DataService dataService)
         {
             DataService = dataService;
-        }
-
-        public override async ValueTask<TypeReaderResponse> Read(ICommandContext context, string value)
-        {
-            var helper = Helper.Find(value);
-            if (helper == null)
-                return TypeReaderResponse.FromError("TYPEREADER_UNABLETOREAD", value, typeof(Helper));
-
-            var hero = await DataService.GetHelper(helper);
-            if (hero == null)
-                return TypeReaderResponse.FromError("Could not download data for helper `{2}`", "#" + helper.Id.ToString(), typeof(Helper));
-            return TypeReaderResponse.FromSuccess(hero);
         }
     }
 }

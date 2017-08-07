@@ -11,6 +11,7 @@ using TitanBot.TypeReaders;
 using TT2Bot.Helpers;
 using TT2Bot.Models;
 using TT2Bot.Overrides;
+using TT2Bot.Services;
 using TT2Bot.TypeReaders;
 
 namespace TT2Bot
@@ -24,6 +25,7 @@ namespace TT2Bot
         public TT2BotClient()
         {
             _client = new BotClient(MapDependencies);
+            _client.TextResourceManager.RequireKeys(TT2Localisation.Defaults);
             _client.InstallHandlers(Assembly.GetExecutingAssembly());
             _client.CommandService.Install(_client.DefaultCommands);
             _client.CommandService.Install(Assembly.GetExecutingAssembly());

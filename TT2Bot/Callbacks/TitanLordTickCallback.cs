@@ -3,6 +3,7 @@ using Discord.WebSocket;
 using Newtonsoft.Json;
 using System;
 using TitanBot.Commands;
+using TitanBot.Contexts;
 using TitanBot.Scheduling;
 using TitanBot.Settings;
 using TitanBot.Util;
@@ -25,20 +26,20 @@ namespace TT2Bot.Callbacks
             if (data.MessageId != 0)
             {
                 var message = messageChannel?.GetMessageAsync(data.MessageId)?.Result as IUserMessage;
-                context.Replier.Modify(message).ChangeMessage(settings.TimerText.Contextualise(settings.CQ, 
-                                                                                               context.Record, 
-                                                                                               eventTime, 
-                                                                                               context.GeneralGuildSetting.DateTimeFormat)).Modify();
+                context.Replier.Modify(message, context.Author).ChangeMessage(settings.TimerText.Contextualise(settings.CQ, 
+                                                                                                               context.Record, 
+                                                                                                               eventTime, 
+                                                                                                               context.GeneralGuildSetting.DateTimeFormat)).Modify();
             }
 
             foreach (var ping in settings.PrePings)
             {
                 var delta = (context.Record.EndTime - eventTime).Add(new TimeSpan(0, 0, -ping));
                 if (delta < context.Record.Interval && delta >= new TimeSpan())
-                    context.Replier.Reply(messageChannel).WithMessage(settings.InXText.Contextualise(settings.CQ,
-                                                                                                     context.Record,
-                                                                                                     eventTime,
-                                                                                                     context.GeneralGuildSetting.DateTimeFormat)).Send();
+                    context.Replier.Reply(messageChannel, context.Author).WithMessage(settings.InXText.Contextualise(settings.CQ,
+                                                                                                                     context.Record,
+                                                                                                                     eventTime,
+                                                                                                                     context.GeneralGuildSetting.DateTimeFormat)).Send();
             }
         }
 
@@ -58,10 +59,10 @@ namespace TT2Bot.Callbacks
             }
 
             if (!wasCancelled)
-                context.Replier.Reply(messageChannel).WithMessage(settings.NowText.Contextualise(settings.CQ, 
-                                                                                                 context.Record, 
-                                                                                                 context.Record.EndTime, 
-                                                                                                 context.GeneralGuildSetting.DateTimeFormat)).Send();
+                context.Replier.Reply(messageChannel, context.Author).WithMessage(settings.NowText.Contextualise(settings.CQ, 
+                                                                                                                 context.Record, 
+                                                                                                                 context.Record.EndTime, 
+                                                                                                                 context.GeneralGuildSetting.DateTimeFormat)).Send();
         }
     }
 }

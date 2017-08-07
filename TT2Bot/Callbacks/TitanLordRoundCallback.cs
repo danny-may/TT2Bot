@@ -4,6 +4,7 @@ using Newtonsoft.Json;
 using System;
 using System.Threading.Tasks;
 using TitanBot.Commands;
+using TitanBot.Contexts;
 using TitanBot.Dependencies;
 using TitanBot.Scheduling;
 using TitanBot.Settings;
@@ -31,13 +32,11 @@ namespace TT2Bot.Callbacks
 
             var messageChannel = context.Client.GetChannel(data.MessageChannelId) as IMessageChannel;
 
-            var replier = new DependencyFactory().Construct<IReplier>();
-
             if (settings.RoundPings)
-                context.Replier.Reply(messageChannel).WithMessage(settings.RoundText.Contextualise(settings.CQ, 
-                                                                                                   context.Record, 
-                                                                                                   eventTime, 
-                                                                                                   context.GeneralGuildSetting.DateTimeFormat)).Send();
+                context.Replier.Reply(messageChannel, context.Author).WithMessage(settings.RoundText.Contextualise(settings.CQ, 
+                                                                                                                   context.Record, 
+                                                                                                                   eventTime, 
+                                                                                                                   context.GeneralGuildSetting.DateTimeFormat)).Send();
             }
     }
 }

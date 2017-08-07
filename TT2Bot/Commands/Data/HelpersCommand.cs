@@ -1,5 +1,6 @@
 ﻿using Discord;
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Threading.Tasks;
@@ -7,16 +8,20 @@ using TitanBot.Commands;
 using TitanBot.Util;
 using TT2Bot.Helpers;
 using TT2Bot.Models;
+using TT2Bot.Services;
+using static TT2Bot.TT2Localisation.Commands;
+using static TT2Bot.TT2Localisation.Help;
 
 namespace TT2Bot.Commands.Data
 {
-    [Description("Displays data about any hero")]
+    [Description(Desc.HELPER)]
     [RequireOwner]
-    [Alias("Hero")]
+    [Alias("Helper")]
+    [Name("Hero")]
     class HelpersCommand : Command
     {
         private TT2DataService DataService { get; }
-        protected override string DelayMessage { get; } = "This might take a short while, theres a fair bit of data to download!";
+        protected override string DelayMessage { get; } = DELAYMESSAGE_DATA;
 
         public HelpersCommand(TT2DataService dataService)
         {
@@ -24,86 +29,72 @@ namespace TT2Bot.Commands.Data
         }
 
         [Call("List")]
-        [Usage("Lists all heros available")]
+        [Usage(Usage.HELPER_LIST)]
         
-        async Task ListHelpersAsync([CallFlag('g', "group", "Groups the heroes by damage")]bool shouldGroup = false)
+        async Task ListHelpersAsync([CallFlag('g', "group", Flag.HELPER_G)]bool shouldGroup = false)
         {
-            var helpers = await DataService.GetAllHelpers(true);
+            var helpers = (await DataService.Helpers.GetAll())?.Where(h => h.IsInGame).OrderBy(h => h.Order);
 
-            var builder = new EmbedBuilder
+            var builder = new LocalisedEmbedBuilder
             {
-                Author = new EmbedAuthorBuilder
-                {
-                    IconUrl = BotUser.GetAvatarUrl(),
-                    Name = "Hero listing"
-                },
                 Color = System.Drawing.Color.LightBlue.ToDiscord(),
-                Description = "All Heros",
-                Footer = new EmbedFooterBuilder
-                {
-                    IconUrl = BotUser.GetAvatarUrl(),
-                    Text = $"{BotUser.Username} Hero tool"
-                },
+                Footer = new LocalisedFooterBuilder().WithText(HelperText.LIST_FOOTER, BotUser.Username).WithRawIconUrl(BotUser.GetAvatarUrl()),
                 Timestamp = DateTime.Now
-            };
+            }.WithTitle(HelperText.LIST_TITLE)
+             .WithDescription(HelperText.LIST_DESCRIPTION);
 
             if (shouldGroup)
-                builder.AddField("Current Heroes", string.Join("\n", helpers.Where(h => h.IsInGame)
-                                                                            .OrderBy(h => h.Order)
-                                                                            .Select(h => $"{h.Name} - {h.HelperType.ToString().First()}")));
+                builder.AddField(f => f.WithName(HelperText.LIST_FIELD_ALL).WithRawValue(MakeTable(helpers)));
             else
-                foreach (var group in helpers.Where(h => h.IsInGame)
-                                             .OrderBy(h => h.Order)
-                                             .GroupBy(h => h.HelperType))
+                foreach (var group in helpers.GroupBy(h => h.HelperType))
                 {
-                    builder.AddField($"Current {group.Key} Heroes", "```\n" + group.Select(h => new string[] { h.Name, Formatter.Beautify(h.BaseCost) + " gold"})
-                                                                         .ToArray()
-                                                                         .Tableify()+"\n```");
+                    builder.AddField(f => f.WithName(HelperText.LIST_FIELD_GROUPED, group.Key.ToLocalisable())
+                                           .WithRawValue(MakeTable(group)));
                 }
 
             await ReplyAsync(builder);
         }
 
-        EmbedBuilder GetBaseEmbed(Helper helper)
+        private string MakeTable(IEnumerable<Helper> helpers)
+            => "```\n" + helpers.Select(h => new[]
+                                             {
+                                                 h.ShortName.Localise(TextResource),
+                                                 new LocalisedString(HelperText.COST, h.BaseCost).Localise(TextResource)
+                                             }).ToArray()
+                                               .Tableify() + "\n```";
+
+        LocalisedEmbedBuilder GetBaseEmbed(Helper helper)
         {
-            var builder = new EmbedBuilder
+            var builder = new LocalisedEmbedBuilder
             {
-                Author = new EmbedAuthorBuilder
-                {
-                    Name = "Hero data for " + helper.Name,
-                    IconUrl = helper.ImageUrl,
-                },
-                ThumbnailUrl = helper.ImageUrl,
-                Footer = new EmbedFooterBuilder
-                {
-                    IconUrl = BotUser.GetAvatarUrl(),
-                    Text = $"{BotUser.Username} Hero tool | TT2 v{helper.FileVersion}"
-                },
+                Author = new LocalisedAuthorBuilder().WithName(HelperText.SHOW_TITLE, helper.Name).WithRawIconUrl(helper.ImageUrl),
+                Footer = new LocalisedFooterBuilder().WithText(HelperText.SHOW_FOOTER, BotUser.Username, helper.FileVersion)
+                                                     .WithRawIconUrl(BotUser.GetAvatarUrl()),
                 Timestamp = DateTime.Now,
                 Color = helper.Image.AverageColor(0.3f, 0.5f).ToDiscord(),
-            };
+            }.WithRawThumbnailUrl(helper.ImageUrl);
 
-            builder.AddInlineField("Hero id", helper.Id);
-            builder.AddInlineField("Damage type", helper.HelperType);
+            builder.AddInlineField(f => f.WithName(HelperText.SHOW_FIELD_ID).WithValue(helper.Id));
+            builder.AddInlineField(f => f.WithName(HelperText.SHOW_FIELD_TYPE).WithValue(helper.HelperType.ToLocalisable()));
 
             return builder;
         }
 
         [Call]
-        [Usage("Shows stats for a given hero on the given level")]
+        [Usage(Usage.HELPER)]
         async Task ShowHelperAsync([Dense]Helper helper, int? level = null)
         {
             var builder = GetBaseEmbed(helper);
 
             if (level == null)
             {
-                builder.AddInlineField("Base cost", Formatter.Beautify(helper.GetCost(0)));
-                builder.AddInlineField("Base damage", Formatter.Beautify(helper.GetDps(1)));
+                builder.AddInlineField(f => f.WithName(HelperText.SHOW_FIELD_BASECOST).WithValue(HelperText.COST, helper.GetCost(0)));
+                builder.AddInlineField(f => f.WithName(HelperText.SHOW_FIELD_BASEDAMAGE).WithValue(HelperText.DPS, helper.GetDps(1)));
             }
             else
             {
-                builder.AddInlineField("Cost", Formatter.Beautify(helper.GetCost(0, level ?? 1)));
-                builder.AddInlineField("Damage", Formatter.Beautify(helper.GetDps(level ?? 1)));
+                builder.AddInlineField(f => f.WithName(HelperText.SHOW_FIELD_COSTAT, level).WithValue(HelperText.COST, helper.GetCost(0, level ?? 1)));
+                builder.AddInlineField(f => f.WithName(HelperText.SHOW_FIELD_DAMAGEAT, level).WithValue(HelperText.DPS, helper.GetDps(level ?? 1)));
             }
 
             await ReplyAsync(builder);

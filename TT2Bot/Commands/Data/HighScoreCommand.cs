@@ -4,15 +4,18 @@ using System.Threading.Tasks;
 using TitanBot.Commands;
 using TitanBot.Util;
 using TT2Bot.Helpers;
+using TT2Bot.Services;
+using static TT2Bot.TT2Localisation.Commands;
+using static TT2Bot.TT2Localisation.Help;
 
 namespace TT2Bot.Commands.Data
 {
-    [Description("Shows data from the high score sheet, which can be found [here](https://docs.google.com/spreadsheets/d/13hsvWaYvp_QGFuQ0ukcgG-FlSAj2NyW8DOvPUG3YguY/pubhtml?gid=4642011cYS8TLGYU)\nAll credit to <@261814131282149377>, <@169180650203512832> and <@169915601496702977> for running the sheet!")]
+    [Description(Desc.HIGHSCORE)]
     [Alias("HS")]
     class HighScoreCommand : Command
     {
         private TT2DataService DataService { get; }
-        protected override string DelayMessage { get; } = "This might take a short while, theres a fair bit of data to download!";
+        protected override string DelayMessage { get; } = DELAYMESSAGE_DATA;
 
         public HighScoreCommand(TT2DataService dataService)
         {
@@ -20,7 +23,7 @@ namespace TT2Bot.Commands.Data
         }
 
         [Call]
-        [Usage("Shows the people in the specified range. Defaults to 1-30")]
+        [Usage(Usage.HIGHSCORE)]
         private async Task ShowSheetAsync(int? from = null, int? to = null)
         {
             var sheet = await DataService.GetHighScores();

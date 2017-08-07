@@ -1,13 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Drawing;
 using System.Linq;
+using System.Threading.Tasks;
+using TitanBot.Commands;
+using TitanBot.Formatting;
+using TitanBot.Formatting.Interfaces;
+using TT2Bot.Helpers;
+using static TT2Bot.TT2Localisation;
 
 namespace TT2Bot.Models
 {
-    class Artifact
+    class Artifact : GameEntity<int>
     {
-        public int Id => _staticData.Id;
+        public static IReadOnlyDictionary<int, string> ImageUrls { get; }
+        public static IReadOnlyDictionary<int, ArtifactTier> Tiers { get; }
+
         public int? MaxLevel { get; }
         public string TT1 { get; }
         public BonusType BonusType { get; }
@@ -16,27 +25,72 @@ namespace TT2Bot.Models
         public double CostCoef { get; }
         public double CostExpo { get; }
         public string Note { get; }
-        public string Name => _staticData.Name;
+        public LocalisedString Abbreviation => Game.Artifact.GetAbbreviation(Id);
         public string FileVersion { get; }
-        public ArtifactTier Tier => _staticData.Tier;
-        public string ImageUrl => _staticData.ImageUrl;
-        public Bitmap Image { get; }
+        public ArtifactTier Tier => Tiers.TryGetValue(Id, out var tier) ? tier : ArtifactTier.None;
+        public string ImageUrl => ImageUrls.TryGetValue(Id, out var url) ? url : null;
+        public Bitmap Image => _image.Value;
+        public Lazy<Bitmap> _image { get; }
 
-        private ArtifactStatic _staticData { get; }
-
-        internal Artifact(ArtifactStatic staticData,
-                          int? maxLevel, 
-                          string tt1, 
-                          BonusType bonusType, 
-                          double effectPerLevel, 
-                          double damageBonus, 
-                          double costCoef, 
-                          double costExpo, 
-                          string note, 
-                          Bitmap image,
-                          string fileVersion)
+        static Artifact()
         {
-            _staticData = staticData;
+            var imgurls = ImmutableDictionary.CreateBuilder<int, string>();
+            var tiers = ImmutableDictionary.CreateBuilder<int, ArtifactTier>();
+            (imgurls[1], tiers[1]) = ("http://www.cockleshell.org/static/TT2/img/a4.png", ArtifactTier.B);
+            (imgurls[2], tiers[2]) = ("http://www.cockleshell.org/static/TT2/img/a38.png", ArtifactTier.D);
+            (imgurls[3], tiers[3]) = ("http://www.cockleshell.org/static/TT2/img/a22.png", ArtifactTier.A);
+            (imgurls[4], tiers[4]) = ("http://www.cockleshell.org/static/TT2/img/a20.png", ArtifactTier.B);
+            (imgurls[5], tiers[5]) = ("http://www.cockleshell.org/static/TT2/img/a24.png", ArtifactTier.D);
+            (imgurls[6], tiers[6]) = ("http://www.cockleshell.org/static/TT2/img/a34.png", ArtifactTier.E);
+            (imgurls[7], tiers[7]) = ("http://www.cockleshell.org/static/TT2/img/a2.png", ArtifactTier.A);
+            (imgurls[8], tiers[8]) = ("http://www.cockleshell.org/static/TT2/img/a33.png", ArtifactTier.E);
+            (imgurls[9], tiers[9]) = ("http://www.cockleshell.org/static/TT2/img/a3.png", ArtifactTier.B);
+            (imgurls[10], tiers[10]) = ("http://www.cockleshell.org/static/TT2/img/a27.png", ArtifactTier.E);
+            (imgurls[11], tiers[11]) = ("http://www.cockleshell.org/static/TT2/img/a36.png", ArtifactTier.E);
+            (imgurls[12], tiers[12]) = ("http://www.cockleshell.org/static/TT2/img/a32.png", ArtifactTier.E);
+            (imgurls[13], tiers[13]) = ("http://www.cockleshell.org/static/TT2/img/a30.png", ArtifactTier.D);
+            (imgurls[14], tiers[14]) = ("http://www.cockleshell.org/static/TT2/img/a15.png", ArtifactTier.A);
+            (imgurls[15], tiers[15]) = ("http://www.cockleshell.org/static/TT2/img/a14.png", ArtifactTier.B);
+            (imgurls[16], tiers[16]) = ("http://www.cockleshell.org/static/TT2/img/a28.png", ArtifactTier.E);
+            (imgurls[17], tiers[17]) = ("http://www.cockleshell.org/static/TT2/img/a18.png", ArtifactTier.B);
+            (imgurls[18], tiers[18]) = ("http://www.cockleshell.org/static/TT2/img/a26.png", ArtifactTier.D);
+            (imgurls[19], tiers[19]) = ("http://www.cockleshell.org/static/TT2/img/a25.png", ArtifactTier.D);
+            (imgurls[20], tiers[20]) = ("http://www.cockleshell.org/static/TT2/img/a12.png", ArtifactTier.C);
+            (imgurls[21], tiers[21]) = ("http://www.cockleshell.org/static/TT2/img/a13.png", ArtifactTier.C);
+            (imgurls[22], tiers[22]) = ("http://www.cockleshell.org/static/TT2/img/a1.png", ArtifactTier.S);
+            (imgurls[23], tiers[23]) = ("http://www.cockleshell.org/static/TT2/img/a19.png", ArtifactTier.C);
+            (imgurls[24], tiers[24]) = ("http://www.cockleshell.org/static/TT2/img/a23.png", ArtifactTier.C);
+            (imgurls[25], tiers[25]) = ("http://www.cockleshell.org/static/TT2/img/a17.png", ArtifactTier.B);
+            (imgurls[26], tiers[26]) = ("http://www.cockleshell.org/static/TT2/img/a10.png", ArtifactTier.B);
+            (imgurls[27], tiers[27]) = ("http://www.cockleshell.org/static/TT2/img/a31.png", ArtifactTier.D);
+            (imgurls[28], tiers[28]) = ("http://www.cockleshell.org/static/TT2/img/a16.png", ArtifactTier.B);
+            (imgurls[29], tiers[29]) = ("http://www.cockleshell.org/static/TT2/img/a37.png", ArtifactTier.E);
+            (imgurls[31], tiers[31]) = ("http://www.cockleshell.org/static/TT2/img/a11.png", ArtifactTier.B);
+            (imgurls[32], tiers[32]) = ("http://www.cockleshell.org/static/TT2/img/a6.png", ArtifactTier.A);
+            (imgurls[33], tiers[33]) = ("http://www.cockleshell.org/static/TT2/img/a8.png", ArtifactTier.A);
+            (imgurls[34], tiers[34]) = ("http://www.cockleshell.org/static/TT2/img/a7.png", ArtifactTier.A);
+            (imgurls[35], tiers[35]) = ("http://www.cockleshell.org/static/TT2/img/a9.png", ArtifactTier.A);
+            (imgurls[36], tiers[36]) = ("http://www.cockleshell.org/static/TT2/img/a35.png", ArtifactTier.E);
+            (imgurls[37], tiers[37]) = ("http://www.cockleshell.org/static/TT2/img/a29.png", ArtifactTier.E);
+            (imgurls[38], tiers[38]) = ("http://www.cockleshell.org/static/TT2/img/a5.png", ArtifactTier.A);
+            (imgurls[39], tiers[39]) = ("http://www.cockleshell.org/static/TT2/img/a21.png", ArtifactTier.B);
+            ImageUrls = imgurls.ToImmutable();
+            Tiers = tiers.ToImmutable();
+        }
+
+        internal Artifact(int id,
+                          int? maxLevel,
+                          string tt1,
+                          BonusType bonusType,
+                          double effectPerLevel,
+                          double damageBonus,
+                          double costCoef,
+                          double costExpo,
+                          string note,
+                          string fileVersion,
+                          Func<string, ValueTask<Bitmap>> imageGetter = null)
+        {
+            Id = id;
             MaxLevel = maxLevel;
             TT1 = tt1;
             BonusType = bonusType;
@@ -45,8 +99,8 @@ namespace TT2Bot.Models
             CostCoef = costCoef;
             CostExpo = costExpo;
             Note = note;
-            Image = image;
             FileVersion = fileVersion;
+            _image = new Lazy<Bitmap>(() => imageGetter?.Invoke(ImageUrl).Result);
         }
 
         public double EffectAt(int level)
@@ -79,88 +133,13 @@ namespace TT2Bot.Models
             return BudgetArtifact(relics - cost, current + 1);
         }
 
-        public static ArtifactStatic Find(string name)
+        public override bool Matches(ITextResourceCollection textResource, string text)
         {
-            var matches = All.Where(a => a.Id.ToString() == name.ToString() ||
-                                                  a.Name.Replace(" ", "").ToLower().Contains(name.Replace(" ", "").ToLower()) ||
-                                                  a.Alias.Count(v => v.ToLower() == name.ToLower()) > 0);
-            if (matches.Count() != 1)
-                return null;
-            else
-                return matches.First();
+            var abbrevs = Abbreviation.Localise(textResource).ToLower().Split(',');
+            return base.Matches(textResource, text) || abbrevs.Any(a => a == text.Without(" ").ToLower());
         }
 
-        public static List<ArtifactStatic> All { get; } = new List<ArtifactStatic>
-        {
-            new ArtifactStatic(1, "Heroic Shield", new string[]{ "HSh" }, "http://www.cockleshell.org/static/TT2/img/a4.png", ArtifactTier.B),
-            new ArtifactStatic(2, "Stone of the Valrunes", new string[]{ "SoV", "SV" }, "http://www.cockleshell.org/static/TT2/img/a38.png", ArtifactTier.D),
-            new ArtifactStatic(3, "The Arcana Cloak", new string[]{ "tAC", "AC" }, "http://www.cockleshell.org/static/TT2/img/a22.png", ArtifactTier.A),
-            new ArtifactStatic(4, "Axe of Muerte", new string[]{ "AoM", "AM" }, "http://www.cockleshell.org/static/TT2/img/a20.png", ArtifactTier.B),
-            new ArtifactStatic(5, "Invader's Shield", new string[]{ "IS" }, "http://www.cockleshell.org/static/TT2/img/a24.png", ArtifactTier.D),
-            new ArtifactStatic(6, "Elixir of Eden", new string[]{ "EoE", "EE" }, "http://www.cockleshell.org/static/TT2/img/a34.png", ArtifactTier.E),
-            new ArtifactStatic(7, "Parchment of Foresight", new string[]{ "PoF", "PF" }, "http://www.cockleshell.org/static/TT2/img/a2.png", ArtifactTier.A),
-            new ArtifactStatic(8, "Hunter's Ointment", new string[]{ "HO" }, "http://www.cockleshell.org/static/TT2/img/a33.png", ArtifactTier.E),
-            new ArtifactStatic(9, "Laborer's Pendant", new string[]{ "LP" }, "http://www.cockleshell.org/static/TT2/img/a3.png", ArtifactTier.B),
-            new ArtifactStatic(10, "Bringer of Ragnarok", new string[]{ "BoR", "BR" }, "http://www.cockleshell.org/static/TT2/img/a27.png", ArtifactTier.E),
-            new ArtifactStatic(11, "Titan's Mask", new string[]{ "TM" }, "http://www.cockleshell.org/static/TT2/img/a36.png", ArtifactTier.E),
-            new ArtifactStatic(12, "Swamp Gauntlet", new string[]{ "SG" }, "http://www.cockleshell.org/static/TT2/img/a32.png", ArtifactTier.E),
-            new ArtifactStatic(13, "Forbidden Scroll", new string[]{ "FS" }, "http://www.cockleshell.org/static/TT2/img/a30.png", ArtifactTier.D),
-            new ArtifactStatic(14, "Aegis", new string[]{ "AG" }, "http://www.cockleshell.org/static/TT2/img/a15.png", ArtifactTier.A),
-            new ArtifactStatic(15, "Ring of Fealty", new string[]{ "RoF", "RF" }, "http://www.cockleshell.org/static/TT2/img/a14.png", ArtifactTier.B),
-            new ArtifactStatic(16, "Glacial Axe", new string[]{ "GA" }, "http://www.cockleshell.org/static/TT2/img/a28.png", ArtifactTier.E),
-            new ArtifactStatic(17, "Hero's Blade", new string[]{ "HB" }, "http://www.cockleshell.org/static/TT2/img/a18.png", ArtifactTier.B),
-            new ArtifactStatic(18, "Egg of Fortune", new string[]{ "EoF", "EF" }, "http://www.cockleshell.org/static/TT2/img/a26.png", ArtifactTier.D),
-            new ArtifactStatic(19, "Chest of Contentment", new string[]{ "CoC", "CC" }, "http://www.cockleshell.org/static/TT2/img/a25.png", ArtifactTier.D),
-            new ArtifactStatic(20, "Book of Prophecy", new string[]{ "BoP", "BP" }, "http://www.cockleshell.org/static/TT2/img/a12.png", ArtifactTier.C),
-            new ArtifactStatic(21, "Divine Chalice", new string[]{ "DC" }, "http://www.cockleshell.org/static/TT2/img/a13.png", ArtifactTier.C),
-            new ArtifactStatic(22, "Book of Shadows", new string[]{ "BoS", "BS" }, "http://www.cockleshell.org/static/TT2/img/a1.png", ArtifactTier.S),
-            new ArtifactStatic(23, "Helmet of Madness", new string[]{ "HoM", "HM" }, "http://www.cockleshell.org/static/TT2/img/a19.png", ArtifactTier.C),
-            new ArtifactStatic(24, "Staff of Radiance", new string[]{ "SoR", "SR" }, "http://www.cockleshell.org/static/TT2/img/a23.png", ArtifactTier.C),
-            new ArtifactStatic(25, "Lethe Water", new string[]{ "LW" }, "http://www.cockleshell.org/static/TT2/img/a17.png", ArtifactTier.B),
-            new ArtifactStatic(26, "Heavenly Sword", new string[]{ "HSW" }, "http://www.cockleshell.org/static/TT2/img/a10.png", ArtifactTier.B),
-            new ArtifactStatic(27, "Glove of Kuma", new string[]{ "GoK", "GK" }, "http://www.cockleshell.org/static/TT2/img/a31.png", ArtifactTier.D),
-            new ArtifactStatic(28, "Amethyst Staff", new string[]{ "AS" }, "http://www.cockleshell.org/static/TT2/img/a16.png", ArtifactTier.B),
-            new ArtifactStatic(29, "Drunken Hammer", new string[]{ "DH" }, "http://www.cockleshell.org/static/TT2/img/a37.png", ArtifactTier.E),
-            new ArtifactStatic(31, "Divine Retribution", new string[]{ "DR" }, "http://www.cockleshell.org/static/TT2/img/a11.png", ArtifactTier.B),
-            new ArtifactStatic(32, "Fruit of Eden", new string[]{ "FoE", "FE" }, "http://www.cockleshell.org/static/TT2/img/a6.png", ArtifactTier.A),
-            new ArtifactStatic(33, "The Sword of Storms", new string[]{ "tSoS", "tSS", "SS" }, "http://www.cockleshell.org/static/TT2/img/a8.png", ArtifactTier.A),
-            new ArtifactStatic(34, "Charm of the Ancient", new string[]{ "CoA", "CA" }, "http://www.cockleshell.org/static/TT2/img/a7.png", ArtifactTier.A),
-            new ArtifactStatic(35, "Blade of Damocles", new string[]{ "BoD", "BD" }, "http://www.cockleshell.org/static/TT2/img/a9.png", ArtifactTier.A),
-            new ArtifactStatic(36, "Infinity Pendulum", new string[]{ "IP" }, "http://www.cockleshell.org/static/TT2/img/a35.png", ArtifactTier.E),
-            new ArtifactStatic(37, "Oak Staff", new string[]{ "OS" }, "http://www.cockleshell.org/static/TT2/img/a29.png", ArtifactTier.E),
-            new ArtifactStatic(38, "Furies Bow", new string[]{ "FB" }, "http://www.cockleshell.org/static/TT2/img/a5.png", ArtifactTier.A),
-            new ArtifactStatic(39, "Titan Spear", new string[]{ "TS" }, "http://www.cockleshell.org/static/TT2/img/a21.png", ArtifactTier.B)
-        };
-
-        public class ArtifactStatic
-        {
-            public int Id { get; }
-            public string Name { get; }
-            public string[] Alias { get; }
-            public string ImageUrl { get; }
-            public ArtifactTier Tier { get; }
-            internal ArtifactStatic(int id, string name, string[] aliases, string url, ArtifactTier tier)
-            {
-                Id = id;
-                Name = name;
-                Alias = aliases;
-                ImageUrl = url;
-                Tier = tier;
-            }
-
-            public Artifact Build(int? maxLevel,
-                                  string tt1,
-                                  BonusType bonusType,
-                                  double effectPerLevel,
-                                  double damageBonus,
-                                  double costCoef,
-                                  double costExpo,
-                                  string note,
-                                  Bitmap image,
-                                  string fileVersion)
-            {
-                return new Artifact(this, maxLevel, tt1, bonusType, effectPerLevel, damageBonus, costCoef, costExpo, note, image, fileVersion);
-            }
-        }
+        protected override LocalisedString GetName(int id)
+            => Game.Artifact.GetName(id);
     }
 }

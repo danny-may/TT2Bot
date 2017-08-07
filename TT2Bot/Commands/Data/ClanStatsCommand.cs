@@ -7,13 +7,16 @@ using TitanBot.Commands;
 using TitanBot.Formatting;
 using TitanBot.Util;
 using TT2Bot.Helpers;
+using TT2Bot.Models;
+using static TT2Bot.TT2Localisation.Commands;
+using static TT2Bot.TT2Localisation.Help;
 
 namespace TT2Bot.Commands.Data
 {
-    [Description("Shows various information for any clan with given attributes")]
+    [Description(Desc.CLANSTATS)]
     class ClanStatsCommand : Command
-    {        
-        internal static EmbedBuilder StatsBuilder(ValueFormatter formatter, SocketSelfUser me, int clanLevel, int averageMS, int tapsPerCq, int[] attackers)
+    {
+        internal static LocalisedEmbedBuilder StatsBuilder(SocketSelfUser me, int clanLevel, int averageMS, int tapsPerCq, int[] attackers)
         {
             var absLevel = Math.Abs(clanLevel);
 
@@ -22,7 +25,7 @@ namespace TT2Bot.Commands.Data
             var nextTitanLordHp = Calculator.TitanLordHp(absLevel);
             var advanceStart = Calculator.AdvanceStart(absLevel);
 
-            var builder = new EmbedBuilder
+            var builder = new LocalisedEmbedBuilder
             {
                 Footer = new EmbedFooterBuilder
                 {
@@ -30,39 +33,37 @@ namespace TT2Bot.Commands.Data
                     Text = me.Username + "#" + me.Discriminator
                 },
                 Color = System.Drawing.Color.DarkOrange.ToDiscord(),
-                Author = new EmbedAuthorBuilder
-                {
-                    Name = $"Displaying stats for a level {clanLevel} clan",
-
-                },
                 Timestamp = DateTime.Now
             };
-            builder.AddInlineField("Current CQ", formatter.Beautify(absLevel));
-            builder.AddInlineField("Current Bonus", formatter.Beautify(currentBonus) + "%");
-            builder.AddInlineField("Next Bonus", formatter.Beautify(nextBonus) + "%");
-            builder.AddInlineField("Next Titan Lord HP", formatter.Beautify(nextTitanLordHp));
-            builder.AddInlineField("Advance start", formatter.Beautify(advanceStart * 100) + "%");
+            builder.WithTitle(ClanStatsText.TITLE, clanLevel)
+                   .AddInlineField(f => f.WithName(ClanStatsText.FIELD_CQ).WithValue(absLevel))
+                   .AddInlineField(f => f.WithName(ClanStatsText.FIELD_BONUS_CURRENT).WithValue(BonusType.AllDamage.LocaliseValue(currentBonus)))
+                   .AddInlineField(f => f.WithName(ClanStatsText.FIELD_BONUS_NEXT).WithValue(BonusType.AllDamage.LocaliseValue(nextBonus)))
+                   .AddInlineField(f => f.WithName(ClanStatsText.FIELD_HP).WithValue(nextTitanLordHp))
+                   .AddInlineField(f => f.WithName(ClanStatsText.FIELD_ADVSTART).WithValue(advanceStart));
             attackers = attackers.Count() == 0 ? new int[] { 20, 30, 40, 50 } : attackers;
-            builder.AddField($"Requirements per boss (assuming MS {averageMS} + {tapsPerCq} taps)", string.Join("\n", attackers.Select(num =>
-            {
-                var dmgpp = nextTitanLordHp / num;
-                var attacks = Calculator.AttacksNeeded(absLevel, num, averageMS, tapsPerCq);
-                var dia = Calculator.TotalAttackCost(attacks);
-                return $"Attackers: {num} | Damage/person: {formatter.Beautify(dmgpp)} | Attacks: {formatter.Beautify(attacks)} | Diamonds: {formatter.Beautify(dia)}";
-            })));
+            LocalisedString[] rows = attackers.Select(num =>
+                                    {
+                                        var dmgpp = nextTitanLordHp / num;
+                                        var attacks = Calculator.AttacksNeeded(absLevel, num, averageMS, tapsPerCq);
+                                        var dia = Calculator.TotalAttackCost(attacks);
+                                        return (LocalisedString)(ClanStatsText.FIELD_ATTACKERS_ROW, num, dmgpp, attacks, dia);
+                                    }).ToArray();
+            builder.AddField(f => f.WithName((ClanStatsText.FIELD_ATTACKERS, averageMS, tapsPerCq))
+                                   .WithValues("\n", rows));
 
             return builder;
         }
 
         [Call]
-        [Usage("Shows data about a clan with the given level")]
+        [Usage(Usage.CLANSTATS)]
         async Task ShowStatsAsync(int clanLevel,
-            [CallFlag('s', "stage", "Average max stage to use")] int averageMs = 4000,
-            [CallFlag('t', "taps", "Average taps to use")] int tapsPerCQ = 500,
-            [CallFlag('a', "attackers", "Number of attackers to use (array)")]int[] attackers = null)
+            [CallFlag('s', "stage", Flag.CLANSTATS_S)] int averageMs = 4000,
+            [CallFlag('t', "taps", Flag.CLANSTATS_T)] int tapsPerCQ = 500,
+            [CallFlag('a', "attackers", Flag.CLANSTATS_A)]int[] attackers = null)
         {
             attackers = attackers ?? new int[] { 20, 30, 40, 50 };
-            await ReplyAsync(StatsBuilder(Formatter, BotUser, clanLevel, averageMs, tapsPerCQ, attackers));
+            await ReplyAsync(StatsBuilder(BotUser, clanLevel, averageMs, tapsPerCQ, attackers));
         }
     }
 }
