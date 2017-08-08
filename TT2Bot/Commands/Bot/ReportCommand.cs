@@ -36,7 +36,7 @@ namespace TT2Bot.Commands.Bot
             .AddField("Bug report", message)
             .AddInlineField(Guild?.Name ?? Author.Username, Guild?.Id ?? Author.Id)
             .AddInlineField(Channel.Name, Channel.Id);
-            await Reply(bugChannel).WithEmbedable(builder)
+            await Reply(bugChannel).WithEmbedable((Embedable)builder)
                                    .SendAsync();
             await ReplyAsync(ReportText.SENT, ReplyType.Success);
         }

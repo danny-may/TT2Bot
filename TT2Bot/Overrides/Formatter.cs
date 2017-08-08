@@ -10,19 +10,19 @@ namespace TT2Bot.Overrides
     class Formatter : ValueFormatter
     {
         
-        public static readonly FormattingType Scientific = 1;
+        public static readonly FormatType Scientific = 1;
         private static readonly string Alphabet = "abcdefghijklmnopqrstuvwxyz";
         private static readonly string[] PostFixes = new string[] { "", "K", "M", "B", "T" };
 
         public Formatter()
         {
+            Register(Scientific);
+
             Add<int>(i => BeautifyMetric(i), (Scientific, i => BeautifyScientific(i)));
             Add<long>(l => BeautifyMetric(l), (Scientific, i => BeautifyScientific(i)));
             Add<Percentage>(p => p.ToString());
             Add<double>(BeautifyMetric, (Scientific, BeautifyScientific));
             Add<TimeSpan>(Beautify);
-
-            Names.Add((Scientific, "Scientific"));
         }
 
         public string Beautify(TimeSpan value)

@@ -11,6 +11,12 @@ namespace TT2Bot.Models
 
         protected abstract LocalisedString GetName(TId id);
 
+        protected static string Imgur(string imageId)
+            => $"http://i.imgur.com/{imageId}.png";
+
+        protected static string Cockleshell(string id)
+            => $"http://www.cockleshell.org/static/TT2/img/{id}.png";
+
         public virtual bool Matches(ITextResourceCollection textResource, string text)
         {
             var name = Name.Localise(textResource).ToLower();

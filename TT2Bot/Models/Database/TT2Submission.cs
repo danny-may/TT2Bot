@@ -1,5 +1,7 @@
 ﻿using System;
+using TitanBot.Formatting;
 using TitanBot.Storage;
+using static TT2Bot.TT2Localisation.Enums.SubmissionTypeText;
 
 namespace TT2Bot.Models
 {
@@ -23,6 +25,20 @@ namespace TT2Bot.Models
             Bug = 0,
             Suggestion = 1,
             Question = 2
+        }
+    }
+
+    static class SubmissionTypeMethods
+    {
+        public static LocalisedString ToLocalisable(this TT2Submission.SubmissionType type)
+        {
+            switch (type)
+            {
+                case TT2Submission.SubmissionType.Bug: return (LocalisedString)BUG;
+                case TT2Submission.SubmissionType.Question: return (LocalisedString)QUESTION;
+                case TT2Submission.SubmissionType.Suggestion: return (LocalisedString)SUGGESTION;
+            }
+            return (RawString)type.ToString();
         }
     }
 }

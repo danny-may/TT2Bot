@@ -18,7 +18,7 @@ namespace TT2Bot.Commands.Data
     class EquipmentsCommand : Command
     {
         private TT2DataService DataService { get; }
-        protected override string DelayMessage { get; } = DELAYMESSAGE_DATA;
+        protected override LocalisedString DelayMessage => (LocalisedString)DELAYMESSAGE_DATA;
 
         public EquipmentsCommand(TT2DataService dataService)
         {

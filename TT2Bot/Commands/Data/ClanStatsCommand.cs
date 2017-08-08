@@ -46,9 +46,9 @@ namespace TT2Bot.Commands.Data
                                         var dmgpp = nextTitanLordHp / num;
                                         var attacks = Calculator.AttacksNeeded(absLevel, num, averageMS, tapsPerCq);
                                         var dia = Calculator.TotalAttackCost(attacks);
-                                        return (LocalisedString)(ClanStatsText.FIELD_ATTACKERS_ROW, num, dmgpp, attacks, dia);
+                                        return new LocalisedString(ClanStatsText.FIELD_ATTACKERS_ROW, num, dmgpp, attacks, dia);
                                     }).ToArray();
-            builder.AddField(f => f.WithName((ClanStatsText.FIELD_ATTACKERS, averageMS, tapsPerCq))
+            builder.AddField(f => f.WithName(ClanStatsText.FIELD_ATTACKERS, averageMS, tapsPerCq)
                                    .WithValues("\n", rows));
 
             return builder;

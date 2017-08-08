@@ -5,13 +5,16 @@ using System.Threading.Tasks;
 using TitanBot;
 using TitanBot.Dependencies;
 using TitanBot.Formatting;
+using TitanBot.Formatting.Interfaces;
 using TitanBot.Logging;
+using TitanBot.Replying;
 using TitanBot.Settings;
 using TitanBot.TypeReaders;
 using TT2Bot.Models;
 using TT2Bot.Overrides;
 using TT2Bot.Services;
 using TT2Bot.TypeReaders;
+using static TT2Bot.TT2Localisation.Settings;
 
 namespace TT2Bot
 {
@@ -41,30 +44,26 @@ namespace TT2Bot
 
         private void RegisterSettings(ISettingManager settingManager)
         {
-            Func<string, string> strLengthValidator = ((string s) => s.Length < 500 ? null : "You cannot have more than 500 characters for this setting");
+            Func<string, ILocalisable<string>> strLengthValidator = ((string s) => s.Length < 500 ? null : new LocalisedString(STRING_TOOLONG, ReplyType.Error));
             settingManager.GetEditorCollection<TitanLordSettings>(SettingScope.Guild)
                           .WithName("TitanLord")
-                          .WithDescription("These are the settings surrounding the `t$titanlord` command")
-                          .WithNotes("There are several format strings you can use to have live data in your message.\n" +
-                                     "Use `%USER%` to include the user who started the timer\n" +
-                                     "Use `%TIME%` to include how long until the titan lord is up\n" +
-                                     "Use `%ROUND%` for the round number\n" +
-                                     "Use `%CQ%` for the current CQ number\n" +
-                                     "Use `%COMPLETE%` for the time the titan lord will be up (UTC time)\n" +
-                                     "Alternatively `%COMPLETE+timezone%` can be used to define the timezone, e.g. `%COMPLETE+6%`, minus can also be used but timezone has to be a number from 0 to 12")
+                          .WithDescription(Desc.GUILD_TITANLORD)
+                          .WithNotes(Notes.GUILD_TITANLORD)
                           .AddSetting(s => s.TimerText, b => b.SetValidator(strLengthValidator))
                           .AddSetting(s => s.InXText, b => b.SetValidator(strLengthValidator))
                           .AddSetting(s => s.NowText, b => b.SetValidator(strLengthValidator))
                           .AddSetting(s => s.RoundText, b => b.SetValidator(strLengthValidator))
                           .AddSetting(s => s.PinTimer)
                           .AddSetting(s => s.RoundPings)
-                          .AddSetting<int, TimeSpan>(s => s.PrePings, b => (int)b.TotalSeconds, b => b.SetViewer(i => new TimeSpan(0, 0, i).ToString()))
-                          .AddSetting(s => s.CQ, b => b.SetName("ClanQuest").SetValidator(v => v > 0 ? null : "Your clan quest cannot be negative"))
+                          .AddSetting<int, TimeSpan>(s => s.PrePings, b => (int)b.TotalSeconds, b => b.SetViewer(i => new RawString("{0}", new TimeSpan(0, 0, i))))
+                          .AddSetting(s => s.CQ, b => b.SetName("ClanQuest")
+                                                       .SetAlias("CQ")
+                                                       .SetValidator(v => v > 0 ? null : new LocalisedString(CQ_TOOLOW, ReplyType.Error)))
                           .AddSetting<IMessageChannel>(s => s.Channel, b => b.SetName("TimerChannel"));
 
             settingManager.GetEditorCollection<TT2GlobalSettings>(SettingScope.Global)
                           .WithName("TT2")
-                          .WithDescription("These are the global settings for titanbot")
+                          .WithDescription(Desc.GLOBAL_TT2)
                           .AddSetting<IMessageChannel>(s => s.BotBugChannel)
                           .AddSetting<IMessageChannel>(s => s.BotSuggestChannel)
                           .AddSetting<IMessageChannel>(s => s.GHFeedbackChannel)
@@ -73,7 +72,7 @@ namespace TT2Bot
 
             settingManager.GetEditorCollection<TT2GlobalSettings.DataFileVersions>(SettingScope.Global)
                           .WithName("FileVersions")
-                          .WithDescription("These are the versions used for the data commands")
+                          .WithDescription(Desc.GLOBAL_DATAFILE)
                           .AddSetting(s => s.Artifact)
                           .AddSetting(s => s.Equipment)
                           .AddSetting(s => s.Helper)

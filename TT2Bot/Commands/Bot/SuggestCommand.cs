@@ -36,7 +36,7 @@ namespace TT2Bot.Commands.Bot
             .AddField("Suggestion", message)
             .AddInlineField(Guild?.Name ?? Author.Username, Guild?.Id ?? Author.Id)
             .AddInlineField(Channel.Name, Channel.Id);
-            await Reply(suggestionChannel).WithEmbedable(builder)
+            await Reply(suggestionChannel).WithEmbedable((Embedable)builder)
                                           .SendAsync();
             await ReplyAsync(SuggestText.SENT, ReplyType.Success);
         }

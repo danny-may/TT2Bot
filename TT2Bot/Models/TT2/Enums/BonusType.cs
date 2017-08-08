@@ -23,6 +23,7 @@ namespace TT2Bot.Models
         ChestAmount,
         ChestChance,
         ClanQTEDamage,
+        ClanDamage,
         CritBoostSkillDuration,
         CritBoostSkillAmount,
         CritBoostSkillMana,
@@ -138,21 +139,21 @@ namespace TT2Bot.Models
                 case BonusType.HelperBoostSkillDuration:
                 case BonusType.ShadowCloneSkillDuration:
                 case BonusType.TapBoostSkillDuration:
-                    return (FORMATSECONDS, (int)value);
+                    return new LocalisedString(FORMATSECONDS, (int)value);
                 case BonusType.BurstDamageSkillMana:
                 case BonusType.CritBoostSkillMana:
                 case BonusType.HandOfMidasSkillMana:
                 case BonusType.HelperBoostSkillMana:
                 case BonusType.ShadowCloneSkillMana:
                 case BonusType.TapBoostSkillMana:
-                    return (FORMATMANA, (int)value);
+                    return new LocalisedString(FORMATMANA, (int)value);
                 case BonusType.HelperUpgradeCost:
-                    return (FORMATDISCOUNT, (int)(value * 100));
+                    return new LocalisedString(FORMATDISCOUNT, (int)(value * 100));
                 case BonusType.DoubleFairyChance:
                 case BonusType.CritChance:
                 case BonusType.Goldx10Chance:
                 case BonusType.ChestChance:
-                    return (FORMATCHANCE, value * 100);
+                    return new LocalisedString(FORMATCHANCE, value * 100);
                 case BonusType.HSArtifactDamage:
                 case BonusType.MeleeHelperDamage:
                 case BonusType.SpellHelperDamage:
@@ -178,15 +179,15 @@ namespace TT2Bot.Models
                 case BonusType.SlashBoost:
                 case BonusType.ArmorBoost:
                 case BonusType.AuraBoost:
-                    return (FORMATMULTIPLY, value + 1);
+                    return new LocalisedString(FORMATMULTIPLY, value + 1);
                 case BonusType.SplashDamage:
                 case BonusType.ManaRegen:
                 case BonusType.ManaPoolCap:
-                    return (FORMATADD, value);
+                    return new LocalisedString(FORMATADD, value);
                 case BonusType.None:
-                    return (FORMATNONE, value);
+                    return new LocalisedString(FORMATNONE, value);
                 default:
-                    return (FORMATDEFAULT, (int)(value * 100));
+                    return new LocalisedString(FORMATDEFAULT, (int)(value * 100));
             }
         }
     }

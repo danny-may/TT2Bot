@@ -13,7 +13,26 @@ namespace TT2Bot.Models
     class Pet : GameEntity<int>
     {
         public static IReadOnlyDictionary<int, string> ImageUrls { get; }
-        
+            = new Dictionary<int, string>
+            {
+                { 1,  Cockleshell("p9") },
+                { 2,  Cockleshell("p7") },
+                { 3,  Cockleshell("p2") },
+                { 4,  Cockleshell("p5") },
+                { 5,  Cockleshell("p1") },
+                { 6,  Cockleshell("p12") },
+                { 7,  Cockleshell("p8") },
+                { 8,  Cockleshell("p6") },
+                { 9,  Cockleshell("p3") },
+                { 10,  Cockleshell("p4") },
+                { 11,  Cockleshell("p0") },
+                { 12,  Cockleshell("p13") },
+                { 13,  Cockleshell("p10") },
+                { 14,  Cockleshell("p11") },
+                { 15,  Cockleshell("p15") },
+                { 16,  Cockleshell("p14") }
+            }.ToImmutableDictionary();
+
         public double DamageBase { get; }
         public Dictionary<int, double> IncreaseRanges { get; }
         public BonusType BonusType { get; }
@@ -23,29 +42,6 @@ namespace TT2Bot.Models
         public string ImageUrl => ImageUrls.TryGetValue(Id, out var url) ? url : null;
         public Bitmap Image => _image.Value;
         public Lazy<Bitmap> _image { get; }
-
-        static Pet()
-        {
-            ImageUrls = new Dictionary<int, string>
-            {
-                { 1,  "http://www.cockleshell.org/static/TT2/img/p9.png" },
-                { 2,  "http://www.cockleshell.org/static/TT2/img/p7.png" },
-                { 3,  "http://www.cockleshell.org/static/TT2/img/p2.png" },
-                { 4,  "http://www.cockleshell.org/static/TT2/img/p5.png" },
-                { 5,  "http://www.cockleshell.org/static/TT2/img/p1.png" },
-                { 6,  "http://www.cockleshell.org/static/TT2/img/p12.png" },
-                { 7,  "http://www.cockleshell.org/static/TT2/img/p8.png" },
-                { 8,  "http://www.cockleshell.org/static/TT2/img/p6.png" },
-                { 9,  "http://www.cockleshell.org/static/TT2/img/p3.png" },
-                { 10,  "http://www.cockleshell.org/static/TT2/img/p4.png" },
-                { 11,  "http://www.cockleshell.org/static/TT2/img/p0.png" },
-                { 12,  "http://www.cockleshell.org/static/TT2/img/p13.png" },
-                { 13,  "http://www.cockleshell.org/static/TT2/img/p10.png" },
-                { 14,  "http://www.cockleshell.org/static/TT2/img/p11.png" },
-                { 15,  "http://www.cockleshell.org/static/TT2/img/p15.png" },
-                { 16,  "http://www.cockleshell.org/static/TT2/img/p14.png" }
-            }.ToImmutableDictionary();
-        }
 
         public Pet(int id, 
                     double damageBase, 

@@ -6,6 +6,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using TitanBot;
 using TitanBot.Commands;
+using TitanBot.Formatting;
 using TitanBot.Replying;
 using TT2Bot.Models;
 using static TT2Bot.TT2Localisation.Commands;
@@ -14,12 +15,12 @@ using static TT2Bot.TT2Localisation.Help;
 namespace TT2Bot.Commands.Clan
 {
     [Description(Desc.SUBMIT)]
-    [RequireGuild(169160979744161793)]
+    [RequireGuild(169160979744161793, 312312366391885824)]
     class SubmitCommand : TT2Command
     {
         private IMessageChannel SubmissionChannel => (Client.GetChannel(TT2Global.GHFeedbackChannel) as IMessageChannel);
 
-        EmbedBuilder GetSubmissionMessage(TT2Submission submission)
+        Embedable GetSubmissionMessage(TT2Submission submission)
         {
             var color = System.Drawing.Color.Pink.ToDiscord();
             switch (submission.Type)
@@ -42,17 +43,14 @@ namespace TT2Bot.Commands.Clan
 
             var builder = new EmbedBuilder
             {
-                Author = new EmbedAuthorBuilder
-                {
-                    IconUrl = replier.GetAvatarUrl(),
-                    Name = $"{submitter?.ToString() ?? "Unknown User"} ({submission.Submitter})"
-                },
                 Color = color,
                 Title = $"{submission.Type} #{submission.Id}: {submission.Title}",
                 Description = submission.Description,
                 Timestamp = submission.SubmissionTime
             };
 
+            if (submitter != null)
+                builder.WithAuthor(submitter);
             if (submission.Reddit != null)
                 builder.AddField("Reddit link", submission.Reddit);
             if (submission.ImageUrl != null)
@@ -128,7 +126,7 @@ namespace TT2Bot.Commands.Clan
                 submission.Message = message.Id;
                 await Database.Upsert(submission);
 
-                await ReplyAsync(SubmitText.SUCCESS, ReplyType.Success);
+                await ReplyAsync(SubmitText.SUCCESS, ReplyType.Success, type.ToLocalisable());
             }
         }
 
@@ -208,7 +206,7 @@ namespace TT2Bot.Commands.Clan
 
             var submitter = Client.GetUser(submission.Submitter);
             if (submitter != null && !alreadyReplied && !quiet)
-                await Reply(await submitter.GetOrCreateDMChannelAsync(), submitter).WithMessage(SubmitText.REPLY_ALERT, ReplyType.Info, submission.Type, submission.Title, reply, Author)
+                await Reply(await submitter.GetOrCreateDMChannelAsync(), submitter).WithMessage(new LocalisedString(SubmitText.REPLY_ALERT, ReplyType.Info, submission.Type, submission.Title, reply, Author))
                                                                         .SendAsync();
 
             await ReplyAsync(SubmitText.REPLY_SUCCESS, ReplyType.Success);

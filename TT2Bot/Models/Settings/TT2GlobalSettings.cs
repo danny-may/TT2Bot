@@ -7,9 +7,9 @@
         public ulong BotSuggestChannel { get; set; }
         public ulong GHFeedbackChannel { get; set; }
         public DataFileVersions FileVersions { get; set; } = new DataFileVersions();
-        public string DefaultVersion { get; set; } = "1.4";
+        public string DefaultVersion { get; set; } = "1.7";
 
-        internal class DataFileVersions
+        public class DataFileVersions
         {
             public string Artifact { get; set; }
             public string Pet { get; set; }

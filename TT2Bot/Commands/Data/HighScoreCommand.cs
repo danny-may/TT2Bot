@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using TitanBot.Commands;
+using TitanBot.Formatting;
 using TT2Bot.Services;
 using static TT2Bot.TT2Localisation.Commands;
 using static TT2Bot.TT2Localisation.Help;
@@ -13,7 +14,7 @@ namespace TT2Bot.Commands.Data
     class HighScoreCommand : Command
     {
         private TT2DataService DataService { get; }
-        protected override string DelayMessage { get; } = DELAYMESSAGE_DATA;
+        protected override LocalisedString DelayMessage => (LocalisedString)DELAYMESSAGE_DATA;
 
         public HighScoreCommand(TT2DataService dataService)
         {

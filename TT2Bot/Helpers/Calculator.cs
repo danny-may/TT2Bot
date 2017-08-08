@@ -12,8 +12,7 @@ namespace TT2Bot.Helpers
             => Math.Pow(10, 5) * (15 + 9 * (Math.Pow(Math.Min(clanQuest - 1, 650), 0.9) * Math.Pow(Math.Max(((double)clanQuest - 1) / 650, 1), 1.4)));
 
         public static double ClanBonus(int clanQuest)
-            => 100 *
-               Math.Pow(1.1, Math.Min(clanQuest, 200)) *
+            => Math.Pow(1.1, Math.Min(clanQuest, 200)) *
                Math.Pow(1.05, Math.Max(clanQuest - 200, 0));
 
         public static int AttackCost(int attackNo)

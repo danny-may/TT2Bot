@@ -13,6 +13,8 @@ namespace TT2Bot
                                                .Concat(Game.Defaults)
                                                .Concat(Enums.Defaults)
                                                .Concat(Types.Defaults)
+                                               .Concat(FormatTypes.GetDefaults)
+                                               .Concat(Settings.Defaults)
                                                .ToImmutableDictionary();
 
         

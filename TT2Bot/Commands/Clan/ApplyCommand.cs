@@ -5,6 +5,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using TitanBot.Commands;
 using TitanBot.Formatting;
+using TitanBot.Formatting.Interfaces;
+using TitanBot.Models;
 using TitanBot.Replying;
 using TT2Bot.Models;
 using static TT2Bot.TT2Localisation.Commands;
@@ -124,10 +126,7 @@ namespace TT2Bot.Commands.Clan
                 Author = LocalisedAuthorBuilder.FromUser(Author),
                 Color = System.Drawing.Color.SkyBlue.ToDiscord(),
                 Description = (RawString)current.Message,
-                Footer = new LocalisedFooterBuilder
-                {
-                    Text = (current.GuildId == null ? ApplyText.VIEW_FOOTER_GLOBAL : ApplyText.VIEW_FOOTER_GUILD, current.ApplyTime, current.EditTime)
-                }
+                Footer = new LocalisedFooterBuilder().WithText(current.GuildId == null ? ApplyText.VIEW_FOOTER_GLOBAL : ApplyText.VIEW_FOOTER_GUILD, current.ApplyTime, current.EditTime)
             }.WithTitle(ApplyText.VIEW_TITLE)
              .AddInlineField(f => f.WithName(MAXSTAGE).WithValue(player.MaxStage))
              .AddInlineField(f => f.WithName(RELICS).WithValue(player.Relics))
@@ -209,6 +208,16 @@ namespace TT2Bot.Commands.Clan
             var applications = GetRegistrations(Guild.Id, null, isGlobal);
             var players = GetPlayers(applications.Select(a => a.UserId).ToArray());
 
+            var table = MakeTable(players, applications, new Range<int> { From = from, To = to });
+
+            if (table.Length <= 1)
+                await ReplyAsync(ApplyText.LIST_NONE, ReplyType.Error);
+            else
+                await ReplyAsync(ApplyText.LIST_FORMAT, new DynamicString(tr => table.Select(r => r.Localise(tr).Split(',')).ToArray().Tableify()));
+        }
+
+        private ILocalisable<string>[] MakeTable(IEnumerable<PlayerData> players, IEnumerable<Registration> applications, Range<int> range)
+        {
             var paired = applications.Join(players, a => a.UserId, p => p.Id, (a, p) => (Application: a, Player: p));
 
             var ignore = GuildSettings.Get<RegistrationSettings>().IgnoreList;
@@ -217,37 +226,31 @@ namespace TT2Bot.Commands.Clan
                                        .ThenByDescending(a => Math.Round(Math.Sqrt(a.Player.Relics), 0))
                                        .ThenByDescending(a => a.Player.AttacksPerWeek)
                                        .ThenBy(a => a.Application.EditTime)
-                                       .Skip(from);
+                                       .Skip(range.From);
 
-            var table = new List<string[]> { };
-            table.Add(TextResource.GetResource(ApplyText.LIST_TABLEHEADERS).Split(','));
-            var pos = from + 1;
+            var table = new List<LocalisedString> { };
+            table.Add((LocalisedString)ApplyText.LIST_TABLEHEADERS);
+            var pos = range.From + 1;
             foreach (var app in paired)
             {
                 var user = Client.GetUser(app.Application.UserId);
                 if (user == null)
                     continue;
-                table.Add(TextResource.Format(ApplyText.LIST_ROW, pos++.ToString(),
-                                                                user,
-                                                                user.Id,
-                                                                app.Player.MaxStage,
-                                                                app.Application.Images?.Length ?? 0,
-                                                                app.Player.Relics,
-                                                                app.Player.AttacksPerWeek,
-                                                                app.Player.TapsPerCQ,
-                                                                (DateTime.Now - app.Application.EditTime).Days,
-                                                                app.Application.GuildId == null ? "-g" : ""
-                                                                ).Split(','));
-                if (table.Count == to - from)
+                table.Add(new LocalisedString(ApplyText.LIST_ROW, pos++.ToString(),
+                                                                  user,
+                                                                  user.Id,
+                                                                  app.Player.MaxStage,
+                                                                  app.Application.Images?.Length ?? 0,
+                                                                  app.Player.Relics,
+                                                                  app.Player.AttacksPerWeek,
+                                                                  app.Player.TapsPerCQ,
+                                                                  (DateTime.Now - app.Application.EditTime).Days,
+                                                                  app.Application.GuildId == null ? "-g" : ""));
+                if (table.Count == range.To - range.From)
                     break;
             }
 
-            var text = table.ToArray().Tableify();
-
-            if (table.Count == 1)
-                await ReplyAsync(ApplyText.LIST_NONE, ReplyType.Error);
-            else
-                await ReplyAsync(ApplyText.LIST_FORMAT, text);
+            return table.ToArray();
         }
 
         [Call("Clear")]

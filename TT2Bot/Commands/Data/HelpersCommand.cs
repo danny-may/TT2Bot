@@ -14,13 +14,12 @@ using static TT2Bot.TT2Localisation.Help;
 namespace TT2Bot.Commands.Data
 {
     [Description(Desc.HELPER)]
-    [RequireOwner]
     [Alias("Helper")]
     [Name("Hero")]
     class HelpersCommand : Command
     {
         private TT2DataService DataService { get; }
-        protected override string DelayMessage { get; } = DELAYMESSAGE_DATA;
+        protected override LocalisedString DelayMessage => (LocalisedString)DELAYMESSAGE_DATA;
 
         public HelpersCommand(TT2DataService dataService)
         {
@@ -43,22 +42,22 @@ namespace TT2Bot.Commands.Data
              .WithDescription(HelperText.LIST_DESCRIPTION);
 
             if (shouldGroup)
-                builder.AddField(f => f.WithName(HelperText.LIST_FIELD_ALL).WithRawValue(MakeTable(helpers)));
+                builder.AddField(f => f.WithName(HelperText.LIST_FIELD_ALL).WithValue(tr => MakeTable(tr, helpers)));
             else
                 foreach (var group in helpers.GroupBy(h => h.HelperType))
                 {
                     builder.AddField(f => f.WithName(HelperText.LIST_FIELD_GROUPED, group.Key.ToLocalisable())
-                                           .WithRawValue(MakeTable(group)));
+                                           .WithValue(tr => MakeTable(tr, group)));
                 }
 
             await ReplyAsync(builder);
         }
 
-        private string MakeTable(IEnumerable<Helper> helpers)
+        private string MakeTable(ITextResourceCollection textResource, IEnumerable<Helper> helpers)
             => "```\n" + helpers.Select(h => new[]
                                              {
-                                                 h.ShortName.Localise(TextResource),
-                                                 new LocalisedString(HelperText.COST, h.BaseCost).Localise(TextResource)
+                                                 h.ShortName.Localise(textResource),
+                                                 new LocalisedString(HelperText.COST, h.BaseCost).Localise(textResource)
                                              }).ToArray()
                                                .Tableify() + "\n```";
 
@@ -88,7 +87,7 @@ namespace TT2Bot.Commands.Data
             if (level == null)
             {
                 builder.AddInlineField(f => f.WithName(HelperText.SHOW_FIELD_BASECOST).WithValue(HelperText.COST, helper.GetCost(0)));
-                builder.AddInlineField(f => f.WithName(HelperText.SHOW_FIELD_BASEDAMAGE).WithValue(HelperText.DPS, helper.GetDps(1)));
+                builder.AddInlineField(f => f.WithName(HelperText.SHOW_FIELD_BASEDAMAGE).WithValue(HelperText.DPS, helper.BaseDamage));
             }
             else
             {

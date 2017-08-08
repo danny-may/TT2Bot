@@ -17,7 +17,7 @@ namespace TT2Bot.Commands.Data
     class ArtifactsCommand : Command
     {
         private TT2DataService DataService { get; }
-        protected override string DelayMessage => DELAYMESSAGE_DATA;
+        protected override LocalisedString DelayMessage => (LocalisedString)DELAYMESSAGE_DATA;
 
         public ArtifactsCommand(TT2DataService dataService)
         {
@@ -51,12 +51,12 @@ namespace TT2Bot.Commands.Data
         {
             var builder = new LocalisedEmbedBuilder
             {
-                Title = (ArtifactText.SHOW_TITLE, artifact.Name),
                 Footer = new LocalisedFooterBuilder().WithText(ArtifactText.SHOW_FOOTER, Author.Username, artifact.FileVersion)
                                                      .WithRawIconUrl(BotUser.GetAvatarUrl()),
                 Timestamp = DateTime.Now,
                 Color = artifact.Image?.AverageColor(0.3f, 0.5f).ToDiscord(),
-            }.WithRawThumbnailUrl(artifact.ImageUrl);
+            }.WithTitle(ArtifactText.SHOW_TITLE, artifact.Name)
+             .WithRawThumbnailUrl(artifact.ImageUrl);
 
             builder.AddInlineField(f => f.WithName(ArtifactText.SHOW_IDTITLE).WithValue(artifact.Id))
                    .AddInlineField(f => f.WithName(ArtifactText.SHOW_TIERTITLE).WithValue(ArtifactText.SHOW_TEIRVALUE, artifact.Tier))
@@ -88,22 +88,22 @@ namespace TT2Bot.Commands.Data
                        .AddInlineField(f => f.WithName(ArtifactText.SHOW_BONUSPERLVL).WithValue(BonusType.ArtifactDamage.LocaliseValue(artifact.DamageBonus)))
                        .AddInlineField(f => f.WithName(ArtifactText.SHOW_COSTCOEF).WithValue(artifact.CostCoef))
                        .AddInlineField(f => f.WithName(ArtifactText.SHOW_COSTEXPO).WithValue(artifact.CostExpo))
-                       .AddInlineField((ArtifactText.SHOW_COSTOFLVL, 1), (ArtifactText.SHOW_COST, artifact.CostOfLevel(2)));
+                       .AddInlineField(f => f.WithName(ArtifactText.SHOW_COSTOFLVL, 1).WithValue(ArtifactText.SHOW_COST, artifact.CostOfLevel(2)));
             }
             else
             {
                 var startLevel = Math.Min(from ?? 0, to ?? 1).Clamp(0, artifact.MaxLevel ?? int.MaxValue);
                 var endLevel = Math.Max(from ?? 0, to ?? 1).Clamp(0, artifact.MaxLevel ?? int.MaxValue);
 
-                builder.AddField((LocalisedString)ArtifactText.SHOW_BONUSTYPE, artifact.BonusType.ToLocalisable())
-                       .AddInlineField((ArtifactText.SHOW_EFFECTAT, startLevel), artifact.BonusType.LocaliseValue(artifact.EffectAt(startLevel)))
-                       .AddInlineField((ArtifactText.SHOW_EFFECTAT, endLevel), artifact.BonusType.LocaliseValue(artifact.EffectAt(endLevel)))
-                       .AddField((LocalisedString)ArtifactText.SHOW_BONUSTYPE, BonusType.ArtifactDamage.ToLocalisable())
-                       .AddInlineField((ArtifactText.SHOW_EFFECTAT, startLevel), BonusType.ArtifactDamage.LocaliseValue(artifact.DamageAt(startLevel)))
-                       .AddInlineField((ArtifactText.SHOW_EFFECTAT, endLevel), BonusType.ArtifactDamage.LocaliseValue(artifact.DamageAt(endLevel)))
-                       .AddField((ArtifactText.SHOW_LVLRANGE, startLevel, endLevel), (ArtifactText.SHOW_COST, artifact.CostToLevel(startLevel + 1, endLevel)))
-                       .AddInlineField((ArtifactText.SHOW_COSTOFLVL, startLevel), (ArtifactText.SHOW_COST, artifact.CostOfLevel(startLevel + 1)))
-                       .AddInlineField((ArtifactText.SHOW_COSTOFLVL, endLevel), (ArtifactText.SHOW_COST, artifact.CostOfLevel(endLevel)));
+                builder.AddField(f => f.WithName(ArtifactText.SHOW_BONUSTYPE).WithValue(artifact.BonusType.ToLocalisable()))
+                       .AddInlineField(f => f.WithName(ArtifactText.SHOW_EFFECTAT, startLevel).WithValue(artifact.BonusType.LocaliseValue(artifact.EffectAt(startLevel))))
+                       .AddInlineField(f => f.WithName(ArtifactText.SHOW_EFFECTAT, endLevel).WithValue(artifact.BonusType.LocaliseValue(artifact.EffectAt(endLevel))))
+                       .AddField(f => f.WithName(ArtifactText.SHOW_BONUSTYPE).WithValue(BonusType.ArtifactDamage.ToLocalisable()))
+                       .AddInlineField(f => f.WithName(ArtifactText.SHOW_EFFECTAT, startLevel).WithValue(BonusType.ArtifactDamage.LocaliseValue(artifact.DamageAt(startLevel))))
+                       .AddInlineField(f => f.WithName(ArtifactText.SHOW_EFFECTAT, endLevel).WithValue(BonusType.ArtifactDamage.LocaliseValue(artifact.DamageAt(endLevel))))
+                       .AddField(f => f.WithName(ArtifactText.SHOW_LVLRANGE, startLevel, endLevel).WithValue(ArtifactText.SHOW_COST, artifact.CostToLevel(startLevel + 1, endLevel)))
+                       .AddInlineField(f => f.WithName(ArtifactText.SHOW_COSTOFLVL, startLevel).WithValue(ArtifactText.SHOW_COST, artifact.CostOfLevel(startLevel + 1)))
+                       .AddInlineField(f => f.WithName(ArtifactText.SHOW_COSTOFLVL, endLevel).WithValue(ArtifactText.SHOW_COST, artifact.CostOfLevel(endLevel)));
             }
             
             await ReplyAsync(builder);

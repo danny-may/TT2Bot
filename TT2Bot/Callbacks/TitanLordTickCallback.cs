@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using System;
 using TitanBot.Contexts;
+using TitanBot.Formatting;
 using TitanBot.Scheduling;
 using TT2Bot.Helpers;
 using TT2Bot.Models;
@@ -22,7 +23,7 @@ namespace TT2Bot.Callbacks
             if (data.MessageId != 0)
             {
                 var message = messageChannel?.GetMessageAsync(data.MessageId)?.Result as IUserMessage;
-                context.Replier.Modify(message, context.Author).ChangeMessage(settings.TimerText.Contextualise(settings.CQ, 
+                context.Replier.Modify(message, context.Author).ChangeMessage((RawString)settings.TimerText.Contextualise(settings.CQ, 
                                                                                                                context.Record, 
                                                                                                                eventTime, 
                                                                                                                context.GeneralGuildSetting.DateTimeFormat)).Modify();
@@ -32,7 +33,7 @@ namespace TT2Bot.Callbacks
             {
                 var delta = (context.Record.EndTime - eventTime).Add(new TimeSpan(0, 0, -ping));
                 if (delta < context.Record.Interval && delta >= new TimeSpan())
-                    context.Replier.Reply(messageChannel, context.Author).WithMessage(settings.InXText.Contextualise(settings.CQ,
+                    context.Replier.Reply(messageChannel, context.Author).WithMessage((RawString)settings.InXText.Contextualise(settings.CQ,
                                                                                                                      context.Record,
                                                                                                                      eventTime,
                                                                                                                      context.GeneralGuildSetting.DateTimeFormat)).Send();
@@ -55,7 +56,7 @@ namespace TT2Bot.Callbacks
             }
 
             if (!wasCancelled)
-                context.Replier.Reply(messageChannel, context.Author).WithMessage(settings.NowText.Contextualise(settings.CQ, 
+                context.Replier.Reply(messageChannel, context.Author).WithMessage((RawString)settings.NowText.Contextualise(settings.CQ, 
                                                                                                                  context.Record, 
                                                                                                                  context.Record.EndTime, 
                                                                                                                  context.GeneralGuildSetting.DateTimeFormat)).Send();

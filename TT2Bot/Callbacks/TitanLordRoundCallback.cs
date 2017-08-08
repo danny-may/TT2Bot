@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using System;
 using TitanBot.Contexts;
+using TitanBot.Formatting;
 using TitanBot.Scheduling;
 using TT2Bot.Helpers;
 using TT2Bot.Models;
@@ -27,7 +28,7 @@ namespace TT2Bot.Callbacks
             var messageChannel = context.Client.GetChannel(data.MessageChannelId) as IMessageChannel;
 
             if (settings.RoundPings)
-                context.Replier.Reply(messageChannel, context.Author).WithMessage(settings.RoundText.Contextualise(settings.CQ, 
+                context.Replier.Reply(messageChannel, context.Author).WithMessage((RawString)settings.RoundText.Contextualise(settings.CQ, 
                                                                                                                    context.Record, 
                                                                                                                    eventTime, 
                                                                                                                    context.GeneralGuildSetting.DateTimeFormat)).Send();

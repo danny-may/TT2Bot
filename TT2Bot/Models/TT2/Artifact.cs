@@ -13,7 +13,89 @@ namespace TT2Bot.Models
     class Artifact : GameEntity<int>
     {
         public static IReadOnlyDictionary<int, string> ImageUrls { get; }
+            = new Dictionary<int, string>
+            {
+                { 1, Cockleshell("a4") },
+                { 2, Cockleshell("a38") },
+                { 3, Cockleshell("a22") },
+                { 4, Cockleshell("a20") },
+                { 5, Cockleshell("a24") },
+                { 6, Cockleshell("a34") },
+                { 7, Cockleshell("a2") },
+                { 8, Cockleshell("a33") },
+                { 9, Cockleshell("a3") },
+                { 10, Cockleshell("a27") },
+                { 11, Cockleshell("a36") },
+                { 12, Cockleshell("a32") },
+                { 13, Cockleshell("a30") },
+                { 14, Cockleshell("a15") },
+                { 15, Cockleshell("a14") },
+                { 16, Cockleshell("a28") },
+                { 17, Cockleshell("a18") },
+                { 18, Cockleshell("a26") },
+                { 19, Cockleshell("a25") },
+                { 20, Cockleshell("a12") },
+                { 21, Cockleshell("a13") },
+                { 22, Cockleshell("a1") },
+                { 23, Cockleshell("a19") },
+                { 24, Cockleshell("a23") },
+                { 25, Cockleshell("a17") },
+                { 26, Cockleshell("a10") },
+                { 27, Cockleshell("a31") },
+                { 28, Cockleshell("a16") },
+                { 29, Cockleshell("a37") },
+                { 31, Cockleshell("a11") },
+                { 32, Cockleshell("a6") },
+                { 33, Cockleshell("a8") },
+                { 34, Cockleshell("a7") },
+                { 35, Cockleshell("a9") },
+                { 36, Cockleshell("a35") },
+                { 37, Cockleshell("a29") },
+                { 38, Cockleshell("a5") },
+                { 39, Cockleshell("a21") }
+            }.ToImmutableDictionary();
         public static IReadOnlyDictionary<int, ArtifactTier> Tiers { get; }
+            = new Dictionary<int, ArtifactTier>
+            {
+                { 1, ArtifactTier.B },
+                { 2, ArtifactTier.D },
+                { 3, ArtifactTier.A },
+                { 4, ArtifactTier.B },
+                { 5, ArtifactTier.D },
+                { 6, ArtifactTier.E },
+                { 7, ArtifactTier.A },
+                { 8, ArtifactTier.E },
+                { 9, ArtifactTier.B },
+                { 10, ArtifactTier.E },
+                { 11, ArtifactTier.E },
+                { 12, ArtifactTier.E },
+                { 13, ArtifactTier.D },
+                { 14, ArtifactTier.A },
+                { 15, ArtifactTier.B },
+                { 16, ArtifactTier.E },
+                { 17, ArtifactTier.B },
+                { 18, ArtifactTier.D },
+                { 19, ArtifactTier.D },
+                { 20, ArtifactTier.C },
+                { 21, ArtifactTier.C },
+                { 22, ArtifactTier.S },
+                { 23, ArtifactTier.C },
+                { 24, ArtifactTier.C },
+                { 25, ArtifactTier.B },
+                { 26, ArtifactTier.B },
+                { 27, ArtifactTier.D },
+                { 28, ArtifactTier.B },
+                { 29, ArtifactTier.E },
+                { 31, ArtifactTier.B },
+                { 32, ArtifactTier.A },
+                { 33, ArtifactTier.A },
+                { 34, ArtifactTier.A },
+                { 35, ArtifactTier.A },
+                { 36, ArtifactTier.E },
+                { 37, ArtifactTier.E },
+                { 38, ArtifactTier.A },
+                { 39, ArtifactTier.B }
+            }.ToImmutableDictionary();
 
         public int? MaxLevel { get; }
         public string TT1 { get; }
@@ -29,53 +111,7 @@ namespace TT2Bot.Models
         public string ImageUrl => ImageUrls.TryGetValue(Id, out var url) ? url : null;
         public Bitmap Image => _image.Value;
         public Lazy<Bitmap> _image { get; }
-
-        static Artifact()
-        {
-            var imgurls = ImmutableDictionary.CreateBuilder<int, string>();
-            var tiers = ImmutableDictionary.CreateBuilder<int, ArtifactTier>();
-            (imgurls[1], tiers[1]) = ("http://www.cockleshell.org/static/TT2/img/a4.png", ArtifactTier.B);
-            (imgurls[2], tiers[2]) = ("http://www.cockleshell.org/static/TT2/img/a38.png", ArtifactTier.D);
-            (imgurls[3], tiers[3]) = ("http://www.cockleshell.org/static/TT2/img/a22.png", ArtifactTier.A);
-            (imgurls[4], tiers[4]) = ("http://www.cockleshell.org/static/TT2/img/a20.png", ArtifactTier.B);
-            (imgurls[5], tiers[5]) = ("http://www.cockleshell.org/static/TT2/img/a24.png", ArtifactTier.D);
-            (imgurls[6], tiers[6]) = ("http://www.cockleshell.org/static/TT2/img/a34.png", ArtifactTier.E);
-            (imgurls[7], tiers[7]) = ("http://www.cockleshell.org/static/TT2/img/a2.png", ArtifactTier.A);
-            (imgurls[8], tiers[8]) = ("http://www.cockleshell.org/static/TT2/img/a33.png", ArtifactTier.E);
-            (imgurls[9], tiers[9]) = ("http://www.cockleshell.org/static/TT2/img/a3.png", ArtifactTier.B);
-            (imgurls[10], tiers[10]) = ("http://www.cockleshell.org/static/TT2/img/a27.png", ArtifactTier.E);
-            (imgurls[11], tiers[11]) = ("http://www.cockleshell.org/static/TT2/img/a36.png", ArtifactTier.E);
-            (imgurls[12], tiers[12]) = ("http://www.cockleshell.org/static/TT2/img/a32.png", ArtifactTier.E);
-            (imgurls[13], tiers[13]) = ("http://www.cockleshell.org/static/TT2/img/a30.png", ArtifactTier.D);
-            (imgurls[14], tiers[14]) = ("http://www.cockleshell.org/static/TT2/img/a15.png", ArtifactTier.A);
-            (imgurls[15], tiers[15]) = ("http://www.cockleshell.org/static/TT2/img/a14.png", ArtifactTier.B);
-            (imgurls[16], tiers[16]) = ("http://www.cockleshell.org/static/TT2/img/a28.png", ArtifactTier.E);
-            (imgurls[17], tiers[17]) = ("http://www.cockleshell.org/static/TT2/img/a18.png", ArtifactTier.B);
-            (imgurls[18], tiers[18]) = ("http://www.cockleshell.org/static/TT2/img/a26.png", ArtifactTier.D);
-            (imgurls[19], tiers[19]) = ("http://www.cockleshell.org/static/TT2/img/a25.png", ArtifactTier.D);
-            (imgurls[20], tiers[20]) = ("http://www.cockleshell.org/static/TT2/img/a12.png", ArtifactTier.C);
-            (imgurls[21], tiers[21]) = ("http://www.cockleshell.org/static/TT2/img/a13.png", ArtifactTier.C);
-            (imgurls[22], tiers[22]) = ("http://www.cockleshell.org/static/TT2/img/a1.png", ArtifactTier.S);
-            (imgurls[23], tiers[23]) = ("http://www.cockleshell.org/static/TT2/img/a19.png", ArtifactTier.C);
-            (imgurls[24], tiers[24]) = ("http://www.cockleshell.org/static/TT2/img/a23.png", ArtifactTier.C);
-            (imgurls[25], tiers[25]) = ("http://www.cockleshell.org/static/TT2/img/a17.png", ArtifactTier.B);
-            (imgurls[26], tiers[26]) = ("http://www.cockleshell.org/static/TT2/img/a10.png", ArtifactTier.B);
-            (imgurls[27], tiers[27]) = ("http://www.cockleshell.org/static/TT2/img/a31.png", ArtifactTier.D);
-            (imgurls[28], tiers[28]) = ("http://www.cockleshell.org/static/TT2/img/a16.png", ArtifactTier.B);
-            (imgurls[29], tiers[29]) = ("http://www.cockleshell.org/static/TT2/img/a37.png", ArtifactTier.E);
-            (imgurls[31], tiers[31]) = ("http://www.cockleshell.org/static/TT2/img/a11.png", ArtifactTier.B);
-            (imgurls[32], tiers[32]) = ("http://www.cockleshell.org/static/TT2/img/a6.png", ArtifactTier.A);
-            (imgurls[33], tiers[33]) = ("http://www.cockleshell.org/static/TT2/img/a8.png", ArtifactTier.A);
-            (imgurls[34], tiers[34]) = ("http://www.cockleshell.org/static/TT2/img/a7.png", ArtifactTier.A);
-            (imgurls[35], tiers[35]) = ("http://www.cockleshell.org/static/TT2/img/a9.png", ArtifactTier.A);
-            (imgurls[36], tiers[36]) = ("http://www.cockleshell.org/static/TT2/img/a35.png", ArtifactTier.E);
-            (imgurls[37], tiers[37]) = ("http://www.cockleshell.org/static/TT2/img/a29.png", ArtifactTier.E);
-            (imgurls[38], tiers[38]) = ("http://www.cockleshell.org/static/TT2/img/a5.png", ArtifactTier.A);
-            (imgurls[39], tiers[39]) = ("http://www.cockleshell.org/static/TT2/img/a21.png", ArtifactTier.B);
-            ImageUrls = imgurls.ToImmutable();
-            Tiers = tiers.ToImmutable();
-        }
-
+        
         internal Artifact(int id,
                           int? maxLevel,
                           string tt1,

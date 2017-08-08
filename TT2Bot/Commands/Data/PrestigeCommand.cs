@@ -32,19 +32,19 @@ namespace TT2Bot.Commands.Data
 
             List<LocalisedString> description = new List<LocalisedString>();
             if (bosLevel > 0)
-                description.Add((PrestigeText.DESCRIPTION_BOS, bosLevel));
+                description.Add(new LocalisedString(PrestigeText.DESCRIPTION_BOS, bosLevel));
             if (clanLevel > 0)
-                description.Add((PrestigeText.DESCRIPTION_CLAN, clanLevel));
+                description.Add(new LocalisedString(PrestigeText.DESCRIPTION_CLAN, clanLevel));
             if (ipLevel > 0)
-                description.Add((PrestigeText.DESCRIPTION_IP, ipLevel));
+                description.Add(new LocalisedString(PrestigeText.DESCRIPTION_IP, ipLevel));
 
             var builder = new LocalisedEmbedBuilder
             {
-                Title = (PrestigeText.TITLE, stage),
                 Description = LocalisedString.Join("\n", description.ToArray()),
                 Color = System.Drawing.Color.Gold.ToDiscord(),
                 Footer = new LocalisedFooterBuilder().WithText(PrestigeText.FOOTER).WithRawIconUrl(BotUser.GetAvatarUrl())
             }
+            .WithTitle(PrestigeText.TITLE, stage)
             .AddInlineField(f => f.WithName(PrestigeText.FIELD_STARTINGSTAGE).WithValue(startingStage))
             .AddInlineField(f => f.WithName(PrestigeText.FIELD_RELICS).WithValue(PrestigeText.FIELD_RELICS_VALUE, baseRelics, totalRelics - baseRelics, totalRelics))
             .AddInlineField(f => f.WithName(PrestigeText.FIELD_ENEMIES).WithValue(PrestigeText.FIELD_ENEMIES_VALUE, enemiesToKill, stage - startingStage))
