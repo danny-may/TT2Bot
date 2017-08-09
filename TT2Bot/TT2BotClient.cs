@@ -1,5 +1,6 @@
 ﻿using Discord;
 using System;
+using System.Collections.Generic;
 using System.Reflection;
 using System.Threading.Tasks;
 using TitanBot;
@@ -34,6 +35,14 @@ namespace TT2Bot
 
             RegisterSettings(_client.SettingsManager);
             RegisterTypeReaders(_client.TypeReaders, _client.DependencyFactory);
+
+            _client.SettingsManager.Migrate(new Dictionary<string, Type>
+            {
+                { "TitanBot.Settings.GeneralSettings", typeof(GeneralGuildSetting) },
+                { typeof(TitanLordSettings).ToString(), typeof(TitanLordSettings) },
+                { typeof(RegistrationSettings).ToString(), typeof(RegistrationSettings) }
+
+            });
         }
 
         private void MapDependencies(IDependencyFactory factory)
