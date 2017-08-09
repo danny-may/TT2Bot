@@ -29,10 +29,18 @@ namespace TT2Bot.Helpers
             var matches = regex.Matches(msg);
             if (matches.Count <= 0)
                 return msg;
-            
-            var timeZoneOffset = TimeZone.CurrentTimeZone.GetUtcOffset(eventTime);  // There might be a better way of getting UTC time of a DateTime
+
+            var timeZone = TimeZone.CurrentTimeZone;
+            var timeZoneOffset = timeZone.GetUtcOffset(eventTime);  // There might be a better way of getting UTC time of a DateTime
             var utcEventTime = eventTime.Add(-timeZoneOffset);                      // but have not found one, and this will make it independant of
                                                                                     // where this code is run from.
+
+            // Take Daylight Savings into account
+            if (timeZone.IsDaylightSavingTime(eventTime))
+            {
+                utcEventTime = utcEventTime.AddHours(1);
+            }
+
             // Replace for all matches of %COMPLETE%
             foreach (Match match in matches)
             {
