@@ -12,8 +12,15 @@ using TT2Bot.Models;
 using static TT2Bot.TT2Localisation.Commands;
 using static TT2Bot.TT2Localisation.Help;
 
+#pragma warning disable 1587
+/// <summary>
+/// Old command used for the official server.
+/// Archived because of lack of usage.
+/// </summary>
+#pragma warning restore 1587
 namespace TT2Bot.Commands.Clan
 {
+    [DoNotInstall]
     [Description(Desc.SUBMIT)]
     [RequireGuild(169160979744161793, 312312366391885824)]
     class SubmitCommand : TT2Command
