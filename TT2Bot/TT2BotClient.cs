@@ -28,7 +28,7 @@ namespace TT2Bot
         public TT2BotClient()
         {
             _client = new BotClient(MapDependencies);
-            _client.TextResourceManager.RequireKeys(TT2Localisation.Defaults);
+            _client.TextResourceManager.RegisterKeys(TT2Localisation.Defaults);
             _client.InstallHandlers(Assembly.GetExecutingAssembly());
             _client.CommandService.Install(_client.DefaultCommands);
             _client.CommandService.Install(Assembly.GetExecutingAssembly());

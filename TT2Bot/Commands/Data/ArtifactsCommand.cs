@@ -34,7 +34,7 @@ namespace TT2Bot.Commands.Data
             {
                 Color = System.Drawing.Color.LightBlue.ToDiscord(),
                 Footer = new LocalisedFooterBuilder().WithRawIconUrl(BotUser.GetAvatarUrl())
-                                                     .WithText(ArtifactText.LIST_FOOTER),
+                                                     .WithText(ArtifactText.LIST_FOOTER, BotUser.Username),
                 Timestamp = DateTime.Now
             }.WithTitle(ArtifactText.LIST_TITLE)
              .WithDescription(ArtifactText.LIST_DESCRIPTION);
