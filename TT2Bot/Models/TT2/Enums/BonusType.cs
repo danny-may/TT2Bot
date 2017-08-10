@@ -139,16 +139,16 @@ namespace TT2Bot.Models
                 case BonusType.HelperBoostSkillDuration:
                 case BonusType.ShadowCloneSkillDuration:
                 case BonusType.TapBoostSkillDuration:
-                    return new LocalisedString(FORMATSECONDS, (int)value);
+                    return new LocalisedString(FORMATSECONDS, Math.Round(value));
                 case BonusType.BurstDamageSkillMana:
                 case BonusType.CritBoostSkillMana:
                 case BonusType.HandOfMidasSkillMana:
                 case BonusType.HelperBoostSkillMana:
                 case BonusType.ShadowCloneSkillMana:
                 case BonusType.TapBoostSkillMana:
-                    return new LocalisedString(FORMATMANA, (int)value);
+                    return new LocalisedString(FORMATMANA, Math.Round(value));
                 case BonusType.HelperUpgradeCost:
-                    return new LocalisedString(FORMATDISCOUNT, (int)(value * 100));
+                    return new LocalisedString(FORMATDISCOUNT, value * 100);
                 case BonusType.DoubleFairyChance:
                 case BonusType.CritChance:
                 case BonusType.Goldx10Chance:
@@ -187,7 +187,7 @@ namespace TT2Bot.Models
                 case BonusType.None:
                     return new LocalisedString(FORMATNONE, value);
                 default:
-                    return new LocalisedString(FORMATDEFAULT, (int)(value * 100));
+                    return new LocalisedString(FORMATDEFAULT, value * 100);
             }
         }
     }

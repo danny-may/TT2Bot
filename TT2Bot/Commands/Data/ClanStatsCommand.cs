@@ -36,8 +36,8 @@ namespace TT2Bot.Commands.Data
             };
             builder.WithTitle(ClanStatsText.TITLE, clanLevel)
                    .AddInlineField(f => f.WithName(ClanStatsText.FIELD_CQ).WithValue(absLevel))
-                   .AddInlineField(f => f.WithName(ClanStatsText.FIELD_BONUS_CURRENT).WithValue(BonusType.AllDamage.LocaliseValue(currentBonus)))
-                   .AddInlineField(f => f.WithName(ClanStatsText.FIELD_BONUS_NEXT).WithValue(BonusType.AllDamage.LocaliseValue(nextBonus)))
+                   .AddInlineField(f => f.WithName(ClanStatsText.FIELD_BONUS_CURRENT).WithValue(BonusType.ClanDamage.LocaliseValue(currentBonus)))
+                   .AddInlineField(f => f.WithName(ClanStatsText.FIELD_BONUS_NEXT).WithValue(BonusType.ClanDamage.LocaliseValue(nextBonus)))
                    .AddInlineField(f => f.WithName(ClanStatsText.FIELD_HP).WithValue(nextTitanLordHp))
                    .AddInlineField(f => f.WithName(ClanStatsText.FIELD_ADVSTART).WithValue(advanceStart));
             attackers = attackers.Count() == 0 ? new int[] { 20, 30, 40, 50 } : attackers;
