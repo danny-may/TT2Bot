@@ -15,8 +15,12 @@ namespace TT2Bot.Commands.Data
     [Description(Desc.CLANSTATS)]
     class ClanStatsCommand : Command
     {
-        internal static LocalisedEmbedBuilder StatsBuilder(SocketSelfUser me, int clanLevel, int averageMS, int tapsPerCq, int[] attackers)
+        internal static LocalisedEmbedBuilder StatsBuilder(SocketSelfUser me, int clanLevel, int? avgMS = null, int? tpCQ = null, int[] attackers = null)
         {
+            attackers = attackers ?? new int[] { 20, 30, 40, 50 };
+            var averageMS = avgMS ?? 4000;
+            var tapsPerCq = tpCQ ?? 600;
+
             var absLevel = Math.Abs(clanLevel);
 
             var currentBonus = Calculator.ClanBonus(absLevel);
@@ -57,11 +61,10 @@ namespace TT2Bot.Commands.Data
         [Call]
         [Usage(Usage.CLANSTATS)]
         async Task ShowStatsAsync(int clanLevel,
-            [CallFlag('s', "stage", Flag.CLANSTATS_S)] int averageMs = 4000,
-            [CallFlag('t', "taps", Flag.CLANSTATS_T)] int tapsPerCQ = 500,
+            [CallFlag('s', "stage", Flag.CLANSTATS_S)] int? averageMs = null,
+            [CallFlag('t', "taps", Flag.CLANSTATS_T)] int? tapsPerCQ = null,
             [CallFlag('a', "attackers", Flag.CLANSTATS_A)]int[] attackers = null)
         {
-            attackers = attackers ?? new int[] { 20, 30, 40, 50 };
             await ReplyAsync(StatsBuilder(BotUser, clanLevel, averageMs, tapsPerCQ, attackers));
         }
     }

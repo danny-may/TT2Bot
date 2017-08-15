@@ -26,11 +26,11 @@ namespace TT2Bot.Commands.Clan
         // Since TimeSpans are counting down from when they are created,
         // these arrays have been made from which the timespans will be
         // initialized from during runtime.
-        private static readonly TimeSpan BossUptime = new TimeSpan( 24, 0, 0 );
-        private static readonly TimeSpan BossDelay = new TimeSpan( 6, 0, 0);
-        private static readonly TimeSpan BossRound = new TimeSpan( 1, 0, 0 );
-        private static readonly TimeSpan AttackTime = new TimeSpan( 0, 0, 30 );
-        private static readonly TimeSpan UpdateDelay = new TimeSpan( 0, 0, 10 );
+        private static readonly TimeSpan BossUptime = new TimeSpan(24, 0, 0);
+        private static readonly TimeSpan BossDelay = new TimeSpan(6, 0, 0);
+        private static readonly TimeSpan BossRound = new TimeSpan(1, 0, 0);
+        private static readonly TimeSpan AttackTime = new TimeSpan(0, 0, 30);
+        private static readonly TimeSpan UpdateDelay = new TimeSpan(0, 0, 10);
 
         [Call("In")]
         [Usage(Usage.TITANLORD_IN)]
@@ -122,7 +122,7 @@ namespace TT2Bot.Commands.Clan
         [Call("Info")]
         [Usage(Usage.TITANLORD_INFO)]
         private async Task TitanLordInfoAsync()
-            => await ReplyAsync(ClanStatsCommand.StatsBuilder(BotUser, TitanLordSettings.CQ, 4000, 500, new int[] { 20, 30, 40, 50 }));
+            => await ReplyAsync(ClanStatsCommand.StatsBuilder(BotUser, TitanLordSettings.CQ));
 
         [Call("Stop")]
         [Usage(Usage.TITANLORD_STOP)]
@@ -163,12 +163,12 @@ namespace TT2Bot.Commands.Clan
 
         private (ulong TickTimer, ulong RoundTimer) StartTimers(DateTime from, TitanLordTimerData data)
             => (
-                Scheduler.Queue<TitanLordTickCallback>(Author.Id, Guild.Id, from, 
+                Scheduler.Queue<TitanLordTickCallback>(Author.Id, Guild.Id, from,
                     UpdateDelay, from.Add(BossDelay),
                     channel: Channel.Id,
                     message: Message.Id,
                     data: JsonConvert.SerializeObject(data)),
-                Scheduler.Queue<TitanLordRoundCallback>(Author.Id, Guild.Id, 
+                Scheduler.Queue<TitanLordRoundCallback>(Author.Id, Guild.Id,
                     from.Add(BossDelay + BossRound + AttackTime),  // Uuurgh, I promise it makes sense though
                     BossRound + AttackTime,
                     from.Add(BossUptime + BossDelay),
