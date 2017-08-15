@@ -29,7 +29,7 @@ namespace TT2Bot
                         { FIELD_BONUS_NEXT, "Next Bonus" },
                         { FIELD_HP, "Next Titan Lord HP" },
                         { FIELD_ADVSTART, "Advance start" },
-                        { FIELD_ATTACKERS, "Requirements per boss (assuming MS {0} + {0} taps)" },
+                        { FIELD_ATTACKERS, "Requirements per boss (assuming MS {0} + {1} taps)" },
                         { FIELD_ATTACKERS_ROW, "Attackers: {0} | Damage/person: {1} | Attacks: {2} | Diamonds: {3}" }
                     }.ToImmutableDictionary();
             }
