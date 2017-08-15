@@ -33,7 +33,7 @@ namespace TT2Bot.Callbacks
             foreach (var ping in settings.PrePings)
             {
                 var delta = (context.Record.EndTime - eventTime).Add(new TimeSpan(0, 0, -ping));
-                if (delta < context.Record.Interval && delta >= new TimeSpan())
+                if (delta < context.Record.Interval + context.Delay && delta >= new TimeSpan())
                     context.Replier.Reply(messageChannel, context.Author).WithMessage((RawString)settings.InXText.Contextualise(settings.CQ,
                                                                                                                      context.Record,
                                                                                                                      eventTime,
