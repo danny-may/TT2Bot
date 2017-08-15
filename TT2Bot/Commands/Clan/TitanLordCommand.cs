@@ -87,6 +87,7 @@ namespace TT2Bot.Commands.Clan
             };
 
             StartTimers(startTime, data);
+            StartTimers(startTime, data);
 
             await ReplyAsync(TitanLordText.TIMER_SET, ReplyType.Success, time);
         }
@@ -131,6 +132,19 @@ namespace TT2Bot.Commands.Clan
             CancelCurrent();
 
             await ReplyAsync(TitanLordText.STOP_SUCCESS, ReplyType.Success);
+        }
+
+        [Call("Tidy")]
+        [RequireOwner]
+        async Task TidyAsync()
+        {
+            var tlrcname = JsonConvert.SerializeObject(typeof(TitanLordRoundCallback));
+            var tltcname = JsonConvert.SerializeObject(typeof(TitanLordTickCallback));
+
+            Scheduler.Cancel(r =>
+            {
+                return r.Callback == tlrcname && Scheduler.GetMostRecent<TitanLordRoundCallback>(r.GuildId, null) != r;
+            });
         }
 
         private Embedable NewBoss(TimeSpan time)
