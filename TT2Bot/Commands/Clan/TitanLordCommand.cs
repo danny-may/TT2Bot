@@ -87,7 +87,6 @@ namespace TT2Bot.Commands.Clan
             };
 
             StartTimers(startTime, data);
-            StartTimers(startTime, data);
 
             await ReplyAsync(TitanLordText.TIMER_SET, ReplyType.Success, time);
         }
