@@ -64,7 +64,7 @@ namespace TT2Bot.Commands.Clan
             if (ticks.Length == 0)
             {
                 var mostRecent = Scheduler.GetMostRecent<TitanLordTickCallback>(Guild.Id, null);
-                if (mostRecent != null && mostRecent.EndTime > mostRecent.StartTime.Add(BossDelay))
+                if (mostRecent != null && mostRecent.CompleteTime >= mostRecent.EndTime)
                     await Reply(tlChannel).WithEmbedable(NewBoss(time)).SendAsync();
             }
 
@@ -140,10 +140,7 @@ namespace TT2Bot.Commands.Clan
             var tlrcname = JsonConvert.SerializeObject(typeof(TitanLordRoundCallback));
             var tltcname = JsonConvert.SerializeObject(typeof(TitanLordTickCallback));
 
-            Scheduler.Cancel(r =>
-            {
-                return r.Callback == tlrcname && Scheduler.GetMostRecent<TitanLordRoundCallback>(r.GuildId, null) != r;
-            });
+            Scheduler.Cancel(r => r.Callback == tlrcname && Scheduler.GetMostRecent<TitanLordRoundCallback>(r.GuildId, null) != r);
         }
 
         private Embedable NewBoss(TimeSpan time)
