@@ -17,7 +17,7 @@ namespace TT2Bot.Commands.Data
     {
         internal static LocalisedEmbedBuilder StatsBuilder(SocketSelfUser me, int clanLevel, int? avgMS = null, int? tpCQ = null, int[] attackers = null)
         {
-            attackers = attackers ?? new int[] { 20, 30, 40, 50 };
+            attackers = (attackers?.Count() ?? 0) == 0 ? new int[] { 20, 30, 40, 50 } : attackers;
             var averageMS = avgMS ?? 4000;
             var tapsPerCq = tpCQ ?? 600;
 
@@ -44,7 +44,6 @@ namespace TT2Bot.Commands.Data
                    .AddInlineField(f => f.WithName(ClanStatsText.FIELD_BONUS_NEXT).WithValue(BonusType.ClanDamage.LocaliseValue(nextBonus)))
                    .AddInlineField(f => f.WithName(ClanStatsText.FIELD_HP).WithValue(nextTitanLordHp))
                    .AddInlineField(f => f.WithName(ClanStatsText.FIELD_ADVSTART).WithValue(advanceStart));
-            attackers = attackers.Count() == 0 ? new int[] { 20, 30, 40, 50 } : attackers;
             LocalisedString[] rows = attackers.Select(num =>
                                     {
                                         var dmgpp = nextTitanLordHp / num;
