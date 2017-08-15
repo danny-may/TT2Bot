@@ -23,9 +23,10 @@ namespace TT2Bot.Callbacks
             if (data.MessageId != 0)
             {
                 var message = messageChannel?.GetMessageAsync(data.MessageId)?.Result as IUserMessage;
-                context.Replier.Modify(message, context.Author).ChangeMessage((RawString)settings.TimerText.Contextualise(settings.CQ, 
-                                                                                                               context.Record, 
-                                                                                                               eventTime, 
+                if (message != null)
+                    context.Replier.Modify(message, context.Author).ChangeMessage((RawString)settings.TimerText.Contextualise(settings.CQ,
+                                                                                                               context.Record,
+                                                                                                               eventTime,
                                                                                                                context.GeneralGuildSetting.DateTimeFormat)).Modify();
             }
 
@@ -55,10 +56,10 @@ namespace TT2Bot.Callbacks
                 message?.DeleteAsync().Wait();
             }
 
-            if (!wasCancelled)
-                context.Replier.Reply(messageChannel, context.Author).WithMessage((RawString)settings.NowText.Contextualise(settings.CQ, 
-                                                                                                                 context.Record, 
-                                                                                                                 context.Record.EndTime, 
+            if (!wasCancelled && context.Author != null && messageChannel != null)
+                context.Replier.Reply(messageChannel, context.Author).WithMessage((RawString)settings.NowText.Contextualise(settings.CQ,
+                                                                                                                 context.Record,
+                                                                                                                 context.Record.EndTime,
                                                                                                                  context.GeneralGuildSetting.DateTimeFormat)).Send();
         }
     }

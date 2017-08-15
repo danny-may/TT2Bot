@@ -20,7 +20,6 @@ namespace TT2Bot.Handlers
 
         private async Task MessageRecieved(SocketMessage msg)
         {
-            await Logger.LogAsync(TitanBot.Logging.LogSeverity.Verbose, LogType.Message, msg.ToString(), "MessageHandler");
             if (!(msg is SocketUserMessage message))
                 return;
             for (int i = 0; i < message.Content.Length - 1; i++)

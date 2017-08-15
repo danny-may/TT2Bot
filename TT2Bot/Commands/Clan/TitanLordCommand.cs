@@ -63,7 +63,7 @@ namespace TT2Bot.Commands.Clan
 
             if (ticks.Length == 0)
             {
-                var mostRecent = Scheduler.GetMostRecent<TitanLordTickCallback>(Guild.Id);
+                var mostRecent = Scheduler.GetMostRecent<TitanLordTickCallback>(Guild.Id, null);
                 if (mostRecent != null && mostRecent.EndTime > mostRecent.StartTime.Add(BossDelay))
                     await Reply(tlChannel).WithEmbedable(NewBoss(time)).SendAsync();
             }
@@ -112,7 +112,7 @@ namespace TT2Bot.Commands.Clan
         [Usage(Usage.TITANLORD_WHEN)]
         private async Task TitanLordWhenAsync()
         {
-            var current = Scheduler.GetMostRecent<TitanLordTickCallback>(Guild.Id);
+            var current = Scheduler.GetMostRecent<TitanLordTickCallback>(Guild.Id, null);
             if (current == null || current.EndTime < DateTime.Now)
                 await ReplyAsync(TitanLordText.WHEN_NORUNNING, ReplyType.Info);
             else
@@ -142,7 +142,7 @@ namespace TT2Bot.Commands.Clan
             var clanBonus = Calculator.ClanBonus(TitanLordSettings.CQ);
             var advStart = Calculator.AdvanceStart(TitanLordSettings.CQ);
 
-            var latestTimer = Scheduler.GetMostRecent<TitanLordTickCallback>(Guild.Id);
+            var latestTimer = Scheduler.GetMostRecent<TitanLordTickCallback>(Guild.Id, null);
 
             var builder = new LocalisedEmbedBuilder
             {
@@ -159,7 +159,7 @@ namespace TT2Bot.Commands.Clan
         }
 
         private (ISchedulerRecord[] Ticks, ISchedulerRecord[] Rounds) CancelCurrent()
-            => (Scheduler.Complete<TitanLordTickCallback>(Guild.Id, null), Scheduler.Complete<TitanLordRoundCallback>(Guild.Id, null));
+            => (Scheduler.Cancel<TitanLordTickCallback>(Guild.Id, null), Scheduler.Cancel<TitanLordRoundCallback>(Guild.Id, null));
 
         private (ulong TickTimer, ulong RoundTimer) StartTimers(DateTime from, TitanLordTimerData data)
             => (

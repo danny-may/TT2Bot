@@ -21,17 +21,17 @@ namespace TT2Bot.Callbacks
         {
             if (context.Guild == null)
                 return;
-            
+
             var data = JsonConvert.DeserializeObject<TitanLordTimerData>(context.Record.Data);
             var settings = context.GuildSettings.Get<TitanLordSettings>();
 
             var messageChannel = context.Client.GetChannel(data.MessageChannelId) as IMessageChannel;
 
-            if (settings.RoundPings)
-                context.Replier.Reply(messageChannel, context.Author).WithMessage((RawString)settings.RoundText.Contextualise(settings.CQ, 
-                                                                                                                   context.Record, 
-                                                                                                                   eventTime, 
+            if (settings.RoundPings && messageChannel != null && context.Author != null)
+                context.Replier.Reply(messageChannel, context.Author).WithMessage((RawString)settings.RoundText.Contextualise(settings.CQ,
+                                                                                                                   context.Record,
+                                                                                                                   eventTime,
                                                                                                                    context.GeneralGuildSetting.DateTimeFormat)).Send();
-            }
+        }
     }
 }
