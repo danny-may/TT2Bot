@@ -65,7 +65,7 @@ namespace TT2Bot.Commands.Clan
             {
                 var mostRecent = Scheduler.GetMostRecent<TitanLordTickCallback>(Guild.Id, null);
                 if (mostRecent != null && mostRecent.CompleteTime >= mostRecent.EndTime)
-                    await Reply(tlChannel).WithEmbedable(NewBoss(time)).SendAsync();
+                    await Reply(tlChannel).WithEmbedable(NewBoss(mostRecent, time)).SendAsync();
             }
 
             var timer = await Reply(tlChannel).WithMessage((LocalisedString)TitanLordText.TIMER_LOADING)
@@ -133,17 +133,7 @@ namespace TT2Bot.Commands.Clan
             await ReplyAsync(TitanLordText.STOP_SUCCESS, ReplyType.Success);
         }
 
-        [Call("Tidy")]
-        [RequireOwner]
-        async Task TidyAsync()
-        {
-            var tlrcname = JsonConvert.SerializeObject(typeof(TitanLordRoundCallback));
-            var tltcname = JsonConvert.SerializeObject(typeof(TitanLordTickCallback));
-
-            Scheduler.Cancel(r => r.Callback == tlrcname && Scheduler.GetMostRecent<TitanLordRoundCallback>(r.GuildId, null) != r);
-        }
-
-        private Embedable NewBoss(TimeSpan time)
+        private Embedable NewBoss(ISchedulerRecord latestTimer, TimeSpan time)
         {
             GuildSettings.Edit<TitanLordSettings>(s => s.CQ++);
 
@@ -151,8 +141,6 @@ namespace TT2Bot.Commands.Clan
             var bossHp = Calculator.TitanLordHp(TitanLordSettings.CQ);
             var clanBonus = Calculator.ClanBonus(TitanLordSettings.CQ);
             var advStart = Calculator.AdvanceStart(TitanLordSettings.CQ);
-
-            var latestTimer = Scheduler.GetMostRecent<TitanLordTickCallback>(Guild.Id, null);
 
             var builder = new LocalisedEmbedBuilder
             {
