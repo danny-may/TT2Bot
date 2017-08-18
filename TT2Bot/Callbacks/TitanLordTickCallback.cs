@@ -11,7 +11,7 @@ namespace TT2Bot.Callbacks
 {
     class TitanLordTickCallback : ISchedulerCallback
     {
-        public void Handle(ISchedulerContext context, DateTime eventTime)
+        public void Handle(ISchedulerContext context)
         {
             if (context.Guild == null)
                 return;
@@ -19,25 +19,32 @@ namespace TT2Bot.Callbacks
             var data = JsonConvert.DeserializeObject<TitanLordTimerData>(context.Record.Data);
             var settings = context.GuildSettings.Get<TitanLordSettings>();
 
+            var actualTime = context.Record.EndTime.AddTicks(-((context.Record.EndTime - context.CycleTime + context.Delay).Ticks / context.Record.Interval.Ticks) * context.Record.Interval.Ticks);
+
             var messageChannel = context.Client.GetChannel(data.MessageChannelId) as IMessageChannel;
+
+            if (messageChannel == null || context.Author == null)
+                return;
+
             if (data.MessageId != 0)
             {
-                var message = messageChannel?.GetMessageAsync(data.MessageId)?.Result as IUserMessage;
-                if (message != null)
+                if (messageChannel?.GetMessageAsync(data.MessageId)?.Result is IUserMessage message)
                     context.Replier.Modify(message, context.Author).ChangeMessage((RawString)settings.TimerText.Contextualise(settings.CQ,
                                                                                                                context.Record,
-                                                                                                               eventTime,
+                                                                                                               actualTime,
                                                                                                                context.GeneralGuildSetting.DateTimeFormat)).Modify();
             }
 
             foreach (var ping in settings.PrePings)
             {
-                var delta = (context.Record.EndTime - eventTime).Add(new TimeSpan(0, 0, -ping));
-                if (delta < context.Record.Interval + context.Delay && delta >= new TimeSpan())
+                var pingTime = context.Record.EndTime.AddTicks(-ping * TimeSpan.TicksPerSecond);
+                if (pingTime.Between(context.CycleTime, context.CycleTime + context.Delay + context.Record.Interval))
+                {
                     context.Replier.Reply(messageChannel, context.Author).WithMessage((RawString)settings.InXText.Contextualise(settings.CQ,
                                                                                                                      context.Record,
-                                                                                                                     eventTime,
+                                                                                                                     pingTime,
                                                                                                                      context.GeneralGuildSetting.DateTimeFormat)).Send();
+                }
             }
         }
 
@@ -50,13 +57,16 @@ namespace TT2Bot.Callbacks
             var settings = context.GuildSettings.Get<TitanLordSettings>();
 
             var messageChannel = context.Client.GetChannel(data.MessageChannelId) as IMessageChannel;
+            if (messageChannel == null || context.Author == null)
+                return;
+
             if (data.MessageId != 0)
             {
                 var message = messageChannel?.GetMessageAsync(data.MessageId)?.Result as IUserMessage;
                 message?.DeleteAsync().Wait();
             }
 
-            if (!wasCancelled && context.Author != null && messageChannel != null)
+            if (!wasCancelled)
                 context.Replier.Reply(messageChannel, context.Author).WithMessage((RawString)settings.NowText.Contextualise(settings.CQ,
                                                                                                                  context.Record,
                                                                                                                  context.Record.EndTime,

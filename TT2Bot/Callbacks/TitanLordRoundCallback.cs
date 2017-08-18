@@ -1,6 +1,5 @@
 ﻿using Discord;
 using Newtonsoft.Json;
-using System;
 using TitanBot.Contexts;
 using TitanBot.Formatting;
 using TitanBot.Scheduling;
@@ -14,10 +13,10 @@ namespace TT2Bot.Callbacks
         public void Complete(ISchedulerContext context, bool wasCancelled)
         {
             if (!wasCancelled)
-                Handle(context, context.Record.EndTime);
+                Handle(context);
         }
 
-        public void Handle(ISchedulerContext context, DateTime eventTime)
+        public void Handle(ISchedulerContext context)
         {
             if (context.Guild == null)
                 return;
@@ -30,7 +29,7 @@ namespace TT2Bot.Callbacks
             if (settings.RoundPings && messageChannel != null && context.Author != null)
                 context.Replier.Reply(messageChannel, context.Author).WithMessage((RawString)settings.RoundText.Contextualise(settings.CQ,
                                                                                                                    context.Record,
-                                                                                                                   eventTime,
+                                                                                                                   context.CycleTime,
                                                                                                                    context.GeneralGuildSetting.DateTimeFormat)).Send();
         }
     }
