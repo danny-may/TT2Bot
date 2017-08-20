@@ -5,11 +5,11 @@ namespace TT2Bot
 {
     public static partial class TT2Localisation
     {
-        public static partial class Commands
+        public static partial class CommandText
         {
             public static class TitanLordText
             {
-                private const string BASE_PATH = Commands.BASE_PATH + "TITANLORD_";
+                public const string BASE_PATH = CommandText.BASE_PATH + "TITANLORD_";
 
                 public const string TIMER_TOOLONG = BASE_PATH + nameof(TIMER_TOOLONG);
                 public const string TIMER_LOADING = BASE_PATH + nameof(TIMER_LOADING);

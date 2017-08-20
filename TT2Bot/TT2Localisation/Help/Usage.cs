@@ -9,7 +9,7 @@ namespace TT2Bot
         {
             public static class Usage
             {
-                private const string BASE_PATH = Help.BASE_PATH + "USAGE_";
+                public const string BASE_PATH = Help.BASE_PATH + "USAGE_";
 
                 public const string REPORT = BASE_PATH + nameof(REPORT);
                 public const string SUGGEST = BASE_PATH + nameof(SUGGEST);

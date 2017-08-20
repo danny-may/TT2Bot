@@ -9,7 +9,7 @@ namespace TT2Bot
         {
             public static class BonusTypeText
             {
-                private const string BASE_PATH = Enums.BASE_PATH + "BONUSTYPE_";
+                public const string BASE_PATH = Enums.BASE_PATH + "BONUSTYPE_";
 
                 public const string ALLDAMAGE = BASE_PATH + nameof(ALLDAMAGE);
                 public const string ALLHELPERDAMAGE = BASE_PATH + nameof(ALLHELPERDAMAGE);

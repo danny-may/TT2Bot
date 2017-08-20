@@ -5,11 +5,11 @@ namespace TT2Bot
 {
     public static partial class TT2Localisation
     {
-        public static partial class Commands
+        public static partial class CommandText
         {
             public static class ApplyText
             {
-                private const string BASE_PATH = Commands.BASE_PATH + "APPLY_";
+                public const string BASE_PATH = CommandText.BASE_PATH + "APPLY_";
 
                 public const string APPLICATION_SUCCESSFUL_GLOBAL = BASE_PATH + nameof(APPLICATION_SUCCESSFUL_GLOBAL);
                 public const string APPLICATION_SUCCESSFUL_GUILD = BASE_PATH + nameof(APPLICATION_SUCCESSFUL_GUILD);

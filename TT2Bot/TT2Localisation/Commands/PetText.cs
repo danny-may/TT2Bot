@@ -5,11 +5,11 @@ namespace TT2Bot
 {
     public static partial class TT2Localisation
     {
-        public static partial class Commands
+        public static partial class CommandText
         {
             public static class PetText
             {
-                private const string BASE_PATH = Commands.BASE_PATH + "PET_";
+                public const string BASE_PATH = CommandText.BASE_PATH + "PET_";
 
                 public const string SHOW_TITLE = BASE_PATH + nameof(SHOW_TITLE);
                 public const string SHOW_FOOTER = BASE_PATH + nameof(SHOW_FOOTER);

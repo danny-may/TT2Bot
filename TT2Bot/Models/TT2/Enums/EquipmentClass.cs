@@ -15,7 +15,7 @@ namespace TT2Bot.Models
         Slash
     }
 
-    public static class EquipmentClasseMethods
+    public static class EquipmentClassMethods
     {
         public static LocalisedString ToLocalisable(this EquipmentClass equipClass)
         {

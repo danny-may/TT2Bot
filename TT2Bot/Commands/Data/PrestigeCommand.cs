@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using TitanBot.Commands;
 using TitanBot.Formatting;
 using TT2Bot.Helpers;
-using static TT2Bot.TT2Localisation.Commands;
+using static TT2Bot.TT2Localisation.CommandText;
 using static TT2Bot.TT2Localisation.Help;
 
 namespace TT2Bot.Commands.Data

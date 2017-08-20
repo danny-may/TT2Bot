@@ -9,7 +9,7 @@ namespace TT2Bot
         {
             public static class EquipmentClassText
             {
-                private const string BASE_PATH = Enums.BASE_PATH + "EQUIPMENTCLASS_";
+                public const string BASE_PATH = Enums.BASE_PATH + "EQUIPMENTCLASS_";
 
                 public const string NONE = BASE_PATH + nameof(NONE);
                 public const string WEAPON = BASE_PATH + nameof(WEAPON);
@@ -42,7 +42,7 @@ namespace TT2Bot
 
             public static class EquipmentRarityText
             {
-                private const string BASE_PATH = Enums.BASE_PATH + "EQUIPMENTRARITY_";
+                public const string BASE_PATH = Enums.BASE_PATH + "EQUIPMENTRARITY_";
 
                 public const string REMOVED = BASE_PATH + nameof(REMOVED);
                 public const string COMMON = BASE_PATH + nameof(COMMON);
@@ -61,7 +61,7 @@ namespace TT2Bot
 
             public static class EquipmentSourceText
             {
-                private const string BASE_PATH = Enums.BASE_PATH + "EQUIPMENTSOURCE_";
+                public const string BASE_PATH = Enums.BASE_PATH + "EQUIPMENTSOURCE_";
 
                 public const string DEFAULT = BASE_PATH + nameof(DEFAULT);
                 public const string VALENTINES = BASE_PATH + nameof(VALENTINES);

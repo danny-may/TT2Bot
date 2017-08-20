@@ -11,11 +11,9 @@ using TitanBot.Logging;
 using TitanBot.Replying;
 using TitanBot.Settings;
 using TitanBot.TypeReaders;
+using TT2Bot.GameEntity.Base;
 using TT2Bot.Models;
-using TT2Bot.Models.TT2;
 using TT2Bot.Overrides;
-using TT2Bot.Services;
-using TT2Bot.TypeReaders;
 using static TT2Bot.TT2Localisation.Settings;
 
 namespace TT2Bot
@@ -29,11 +27,11 @@ namespace TT2Bot
         public TT2BotClient()
         {
             _client = new BotClient(MapDependencies);
-            _client.TextResourceManager.RegisterKeys(TT2Localisation.Defaults);
             _client.InstallHandlers(Assembly.GetExecutingAssembly());
             _client.CommandService.Install(_client.DefaultCommands);
             _client.CommandService.Install(Assembly.GetExecutingAssembly());
 
+            RegisterTextResources(_client.TextResourceManager);
             RegisterSettings(_client.SettingsManager);
             RegisterTypeReaders(_client.TypeReaders, _client.DependencyFactory);
 
@@ -44,6 +42,12 @@ namespace TT2Bot
                 { typeof(RegistrationSettings).ToString(), typeof(RegistrationSettings) }
 
             });
+        }
+
+        private void RegisterTextResources(ITextResourceManager textResourceManager)
+        {
+            textResourceManager.RegisterKeys(TT2Localisation.Defaults);
+            textResourceManager.RegisterKeys(GameEntityLocalisation.Defaults);
         }
 
         private void MapDependencies(IDependencyFactory factory)
@@ -92,11 +96,7 @@ namespace TT2Bot
 
         private void RegisterTypeReaders(ITypeReaderCollection typeReaders, IDependencyFactory factory)
         {
-            var dataService = factory.GetOrStore<TT2DataService>();
-            typeReaders.AddTypeReader<Artifact>(new ArtifactTypeReader(dataService));
-            typeReaders.AddTypeReader<Pet>(new PetTypeReader(dataService));
-            typeReaders.AddTypeReader<Equipment>(new EquipmentTypeReader(dataService));
-            typeReaders.AddTypeReader<Helper>(new HelperTypeReader(dataService));
+            GameEntityTypeReader.RegisterReaders(typeReaders, factory);
         }
 
         public async Task StartAsync(Func<string, string> getToken)
