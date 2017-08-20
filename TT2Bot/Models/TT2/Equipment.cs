@@ -7,12 +7,45 @@ using System.Threading.Tasks;
 using TitanBot.Formatting;
 using static TT2Bot.TT2Localisation;
 
-namespace TT2Bot.Models
+namespace TT2Bot.Models.TT2
 {
     class Equipment : GameEntity<string>
     {
-        public static IReadOnlyDictionary<string, string> ImageUrls { get; }
-            = new Dictionary<string, string>
+        public LocalisedString Abbreviation => Game.Equipment.GetAbbreviation(Id);
+        public EquipmentClass Class { get; }
+        public BonusType BonusType { get; }
+        public EquipmentRarity Rarity { get; }
+        public double BonusBase { get; }
+        public double BonusIncrease { get; }
+        public EquipmentSource Source { get; }
+        public string ImageUrl => ImageUrls.TryGetValue(Id.ToUpper(), out var url) ? url : _defaultImages[0];
+        public Bitmap Image => _image.Value;
+        private Lazy<Bitmap> _image { get; }
+
+        internal Equipment(string id,
+                           EquipmentClass eClass,
+                           BonusType bonusType,
+                           EquipmentRarity rarity,
+                           double bonusBase,
+                           double bonusIncrease,
+                           EquipmentSource source,
+                           string fileVersion,
+                           Func<string, ValueTask<Bitmap>> imageGetter = null)
+        {
+            Id = id;
+            Class = eClass;
+            BonusType = bonusType;
+            Rarity = rarity;
+            BonusBase = bonusBase;
+            BonusIncrease = bonusIncrease;
+            Source = source;
+            FileVersion = fileVersion;
+            _image = new Lazy<Bitmap>(() => imageGetter?.Invoke(ImageUrl).Result);
+        }
+
+        static Equipment()
+        {
+            ImageUrls = new Dictionary<string, string>
             {
                 { "AURA_BATS", Imgur("6JQGW3V") },
                 { "AURA_BIRD", Imgur("iIC7MeB") },
@@ -146,38 +179,6 @@ namespace TT2Bot.Models
                 { "HAT_VALENTINES", Imgur("KNAkgcU") },
                 { "WEAPON_VALENTINES", Imgur("LnE4Erc") }
             }.ToImmutableDictionary();
-
-        public LocalisedString Abbreviation => Game.Equipment.GetAbbreviation(Id);
-        public EquipmentClass Class { get; }
-        public BonusType BonusType { get; }
-        public EquipmentRarity Rarity { get; }
-        public double BonusBase { get; }
-        public double BonusIncrease { get; }
-        public EquipmentSource Source { get; }
-        public string ImageUrl => ImageUrls.TryGetValue(Id.ToUpper(), out var url) ? url : _defaultImages[0];
-        public string FileVersion { get; }
-        public Bitmap Image => _image.Value;
-        public Lazy<Bitmap> _image { get; }
-
-        internal Equipment(string id, 
-                           EquipmentClass eClass, 
-                           BonusType bonusType, 
-                           EquipmentRarity rarity, 
-                           double bonusBase, 
-                           double bonusIncrease, 
-                           EquipmentSource source, 
-                           string fileVersion,
-                           Func<string, ValueTask<Bitmap>> imageGetter = null)
-        {
-            Id = id;
-            Class = eClass;
-            BonusType = bonusType;
-            Rarity = rarity;
-            BonusBase = bonusBase;
-            BonusIncrease = bonusIncrease;
-            Source = source;
-            FileVersion = fileVersion;
-            _image = new Lazy<Bitmap>(() => imageGetter?.Invoke(ImageUrl).Result);
         }
 
         public double BonusOnLevel(int level)

@@ -8,52 +8,10 @@ using TitanBot.Formatting;
 using TT2Bot.Helpers;
 using static TT2Bot.TT2Localisation;
 
-namespace TT2Bot.Models
+namespace TT2Bot.Models.TT2
 {
     class Artifact : GameEntity<int>
     {
-        public static IReadOnlyDictionary<int, string> ImageUrls { get; }
-            = new Dictionary<int, string>
-            {
-                { 1, Cockleshell("a4") },
-                { 2, Cockleshell("a38") },
-                { 3, Cockleshell("a22") },
-                { 4, Cockleshell("a20") },
-                { 5, Cockleshell("a24") },
-                { 6, Cockleshell("a34") },
-                { 7, Cockleshell("a2") },
-                { 8, Cockleshell("a33") },
-                { 9, Cockleshell("a3") },
-                { 10, Cockleshell("a27") },
-                { 11, Cockleshell("a36") },
-                { 12, Cockleshell("a32") },
-                { 13, Cockleshell("a30") },
-                { 14, Cockleshell("a15") },
-                { 15, Cockleshell("a14") },
-                { 16, Cockleshell("a28") },
-                { 17, Cockleshell("a18") },
-                { 18, Cockleshell("a26") },
-                { 19, Cockleshell("a25") },
-                { 20, Cockleshell("a12") },
-                { 21, Cockleshell("a13") },
-                { 22, Cockleshell("a1") },
-                { 23, Cockleshell("a19") },
-                { 24, Cockleshell("a23") },
-                { 25, Cockleshell("a17") },
-                { 26, Cockleshell("a10") },
-                { 27, Cockleshell("a31") },
-                { 28, Cockleshell("a16") },
-                { 29, Cockleshell("a37") },
-                { 31, Cockleshell("a11") },
-                { 32, Cockleshell("a6") },
-                { 33, Cockleshell("a8") },
-                { 34, Cockleshell("a7") },
-                { 35, Cockleshell("a9") },
-                { 36, Cockleshell("a35") },
-                { 37, Cockleshell("a29") },
-                { 38, Cockleshell("a5") },
-                { 39, Cockleshell("a21") }
-            }.ToImmutableDictionary();
         public static IReadOnlyDictionary<int, ArtifactTier> Tiers { get; }
             = new Dictionary<int, ArtifactTier>
             {
@@ -106,12 +64,11 @@ namespace TT2Bot.Models
         public double CostExpo { get; }
         public string Note { get; }
         public LocalisedString Abbreviation => Game.Artifact.GetAbbreviation(Id);
-        public string FileVersion { get; }
         public ArtifactTier Tier => Tiers.TryGetValue(Id, out var tier) ? tier : ArtifactTier.None;
         public string ImageUrl => ImageUrls.TryGetValue(Id, out var url) ? url : null;
         public Bitmap Image => _image.Value;
-        public Lazy<Bitmap> _image { get; }
-        
+        private Lazy<Bitmap> _image { get; }
+
         internal Artifact(int id,
                           int? maxLevel,
                           string tt1,
@@ -135,6 +92,51 @@ namespace TT2Bot.Models
             Note = note;
             FileVersion = fileVersion;
             _image = new Lazy<Bitmap>(() => imageGetter?.Invoke(ImageUrl).Result);
+        }
+
+        static Artifact()
+        {
+            ImageUrls = new Dictionary<int, string>
+            {
+                { 1, Cockleshell("a4") },
+                { 2, Cockleshell("a38") },
+                { 3, Cockleshell("a22") },
+                { 4, Cockleshell("a20") },
+                { 5, Cockleshell("a24") },
+                { 6, Cockleshell("a34") },
+                { 7, Cockleshell("a2") },
+                { 8, Cockleshell("a33") },
+                { 9, Cockleshell("a3") },
+                { 10, Cockleshell("a27") },
+                { 11, Cockleshell("a36") },
+                { 12, Cockleshell("a32") },
+                { 13, Cockleshell("a30") },
+                { 14, Cockleshell("a15") },
+                { 15, Cockleshell("a14") },
+                { 16, Cockleshell("a28") },
+                { 17, Cockleshell("a18") },
+                { 18, Cockleshell("a26") },
+                { 19, Cockleshell("a25") },
+                { 20, Cockleshell("a12") },
+                { 21, Cockleshell("a13") },
+                { 22, Cockleshell("a1") },
+                { 23, Cockleshell("a19") },
+                { 24, Cockleshell("a23") },
+                { 25, Cockleshell("a17") },
+                { 26, Cockleshell("a10") },
+                { 27, Cockleshell("a31") },
+                { 28, Cockleshell("a16") },
+                { 29, Cockleshell("a37") },
+                { 31, Cockleshell("a11") },
+                { 32, Cockleshell("a6") },
+                { 33, Cockleshell("a8") },
+                { 34, Cockleshell("a7") },
+                { 35, Cockleshell("a9") },
+                { 36, Cockleshell("a35") },
+                { 37, Cockleshell("a29") },
+                { 38, Cockleshell("a5") },
+                { 39, Cockleshell("a21") }
+            }.ToImmutableDictionary();
         }
 
         public double EffectAt(int level)

@@ -8,12 +8,41 @@ using TitanBot.Formatting;
 using TT2Bot.Models.General;
 using static TT2Bot.TT2Localisation;
 
-namespace TT2Bot.Models
+namespace TT2Bot.Models.TT2
 {
     class Pet : GameEntity<int>
     {
-        public static IReadOnlyDictionary<int, string> ImageUrls { get; }
-            = new Dictionary<int, string>
+        public double DamageBase { get; }
+        public Dictionary<int, double> IncreaseRanges { get; }
+        public BonusType BonusType { get; }
+        public double BonusBase { get; }
+        public double BonusIncrement { get; }
+        public string ImageUrl => ImageUrls.TryGetValue(Id, out var url) ? url : null;
+        public Bitmap Image => _image.Value;
+        private Lazy<Bitmap> _image { get; }
+
+        public Pet(int id,
+                    double damageBase,
+                    Dictionary<int, double> increaseRanges,
+                    BonusType bonusType,
+                    double bonusBase,
+                    double bonusIncrement,
+                    string version,
+                    Func<string, ValueTask<Bitmap>> imageGetter = null)
+        {
+            Id = id;
+            DamageBase = damageBase;
+            IncreaseRanges = increaseRanges;
+            BonusType = bonusType;
+            BonusBase = bonusBase;
+            BonusIncrement = bonusIncrement;
+            FileVersion = FileVersion;
+            _image = new Lazy<Bitmap>(() => imageGetter?.Invoke(ImageUrl).Result);
+        }
+
+        static Pet()
+        {
+            ImageUrls = new Dictionary<int, string>
             {
                 { 1,  Cockleshell("p9") },
                 { 2,  Cockleshell("p7") },
@@ -32,34 +61,6 @@ namespace TT2Bot.Models
                 { 15,  Cockleshell("p15") },
                 { 16,  Cockleshell("p14") }
             }.ToImmutableDictionary();
-
-        public double DamageBase { get; }
-        public Dictionary<int, double> IncreaseRanges { get; }
-        public BonusType BonusType { get; }
-        public double BonusBase { get; }
-        public double BonusIncrement { get; }
-        public string FileVersion { get; }
-        public string ImageUrl => ImageUrls.TryGetValue(Id, out var url) ? url : null;
-        public Bitmap Image => _image.Value;
-        public Lazy<Bitmap> _image { get; }
-
-        public Pet(int id, 
-                    double damageBase, 
-                    Dictionary<int, double> increaseRanges, 
-                    BonusType bonusType, 
-                    double bonusBase, 
-                    double bonusIncrement, 
-                    string version,
-                    Func<string, ValueTask<Bitmap>> imageGetter = null)
-        {
-            Id = id;
-            DamageBase = damageBase;
-            IncreaseRanges = increaseRanges;
-            BonusType = bonusType;
-            BonusBase = bonusBase;
-            BonusIncrement = bonusIncrement;
-            FileVersion = FileVersion;
-            _image = new Lazy<Bitmap>(() => imageGetter?.Invoke(ImageUrl).Result);
         }
 
         public double DamageOnLevel(int level)

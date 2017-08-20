@@ -197,6 +197,7 @@
     <Compile Include="Commands\Data\HighScoreCommand.cs" />
     <Compile Include="Commands\Data\PetsCommand.cs" />
     <Compile Include="Commands\Data\PrestigeCommand.cs" />
+    <Compile Include="Commands\Data\SkillTreeCommand.cs" />
     <Compile Include="Commands\Games\EeveeCommand.cs" />
     <Compile Include="Commands\TT2Command.cs" />
     <Compile Include="Handlers\MessageHandler.cs" />
@@ -205,9 +206,10 @@
     <Compile Include="Helpers\TitanLordExtensions.cs" />
     <Compile Include="Models\General\Percentage.cs" />
     <Compile Include="Models\TT2\GameEntity.cs" />
-    <Compile Include="Models\TT2\ImprovementCollection.cs" />
+    <Compile Include="Models\TT2\Skill.cs" />
     <Compile Include="Services\ServiceAreas\HelperService.cs" />
     <Compile Include="Services\ServiceAreas\HelperSkillService.cs" />
+    <Compile Include="Services\ServiceAreas\SkillTreeService.cs" />
     <Compile Include="Services\ServiceAreas\PetService.cs" />
     <Compile Include="Services\ServiceAreas\ArtifactService.cs" />
     <Compile Include="Services\ServiceAreas\EquipmentService.cs" />
@@ -235,6 +237,7 @@
     <Compile Include="TT2Localisation\Game\Game.cs" />
     <Compile Include="TT2Localisation\Game\Helper.cs" />
     <Compile Include="TT2Localisation\Game\HelperSkill.cs" />
+    <Compile Include="TT2Localisation\Game\SkillTree.cs" />
     <Compile Include="TT2Localisation\Game\Pet.cs" />
     <Compile Include="TT2Localisation\Help\Desc.cs" />
     <Compile Include="TT2Localisation\Help\Flag.cs" />
@@ -260,7 +263,7 @@
     <Compile Include="Models\TT2\Equipment.cs" />
     <Compile Include="Models\TT2\Helper.cs" />
     <Compile Include="Models\TT2\HelperSkill.cs" />
-    <Compile Include="Models\TT2\HighScoreSheet.cs" />
+    <Compile Include="Models\General\HighScoreSheet.cs" />
     <Compile Include="Models\TT2\Pet.cs" />
     <Compile Include="Overrides\Formatter.cs" />
     <Compile Include="Overrides\Logger.cs" />
@@ -276,6 +279,7 @@
     <Compile Include="TypeReaders\EquipmentTypeReader.cs" />
     <Compile Include="TypeReaders\GameEntityTypeReader.cs" />
     <Compile Include="TypeReaders\HelperTypeReader.cs" />
+    <Compile Include="TypeReaders\SkillTreeTypeReader.cs" />
     <Compile Include="TypeReaders\PetTypeReader.cs" />
   </ItemGroup>
   <ItemGroup>

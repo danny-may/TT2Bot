@@ -1,7 +1,7 @@
 ﻿using TitanBot.Formatting;
 using static TT2Bot.TT2Localisation;
 
-namespace TT2Bot.Models
+namespace TT2Bot.Models.TT2
 {
     class HelperSkill : GameEntity<int>
     {
@@ -9,7 +9,6 @@ namespace TT2Bot.Models
         public BonusType BonusType { get; }
         public double Magnitude { get; }
         public int RequiredLevel { get; }
-        public string FileVersion { get; }
 
         public HelperSkill(int skillId, int helperId, BonusType bonusType, double magnitude, int requiredLevel, string fileVersion)
         {

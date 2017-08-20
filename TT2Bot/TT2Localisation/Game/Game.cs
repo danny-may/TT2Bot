@@ -16,6 +16,7 @@ namespace TT2Bot
                                                   .Concat(Pet.Defaults)
                                                   .Concat(Helper.Defaults)
                                                   .Concat(HelperSkill.Defaults)
+                                                  .Concat(SkillTree.Defaults)
                                                   .ToImmutableDictionary();
         }
     }

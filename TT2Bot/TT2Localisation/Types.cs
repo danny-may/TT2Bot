@@ -2,6 +2,7 @@
 using System.Collections.Immutable;
 using TT2Bot.Models;
 using TT2Bot.Models.General;
+using TT2Bot.Models.TT2;
 
 namespace TT2Bot
 {

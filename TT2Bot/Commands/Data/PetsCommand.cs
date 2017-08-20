@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using TitanBot.Commands;
 using TitanBot.Formatting;
 using TT2Bot.Models;
+using TT2Bot.Models.TT2;
 using TT2Bot.Services;
 using static TT2Bot.TT2Localisation.Commands;
 using static TT2Bot.TT2Localisation.Help;
@@ -42,7 +43,7 @@ namespace TT2Bot.Commands.Data
         [Usage(Usage.PET)]
         async Task ShowPetAsync(Pet pet, int? level = null)
         {
-            
+
             var builder = GetBaseEmbed(pet);
 
             if (level == null)

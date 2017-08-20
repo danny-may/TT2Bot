@@ -8,12 +8,52 @@ using TitanBot.Formatting;
 using TT2Bot.Helpers;
 using static TT2Bot.TT2Localisation;
 
-namespace TT2Bot.Models
+namespace TT2Bot.Models.TT2
 {
     class Helper : GameEntity<int>
     {
-        private static IReadOnlyDictionary<int, string> ImageUrls { get; }
-            = new Dictionary<int, string>
+        private static float HelperInefficency = 0.023f;
+        private static int HelperInefficencySlowdown = 34;
+        private static float DmgScaleDown = 0.1f;
+
+        public int Order { get; }
+        public LocalisedString ShortName => Game.Helper.GetShortName(Id);
+        public HelperType HelperType { get; }
+        public double BaseCost { get; }
+        public double BaseDamage { get; }
+        public double Efficency { get; }
+        public IReadOnlyList<HelperSkill> Skills { get; }
+        public bool IsInGame { get; }
+        public string ImageUrl => ImageUrls.TryGetValue(Id, out var url) ? url : null;
+        public Bitmap Image => _image.Value;
+        private Lazy<Bitmap> _image { get; }
+
+        public Helper(int id,
+                      int order,
+                      HelperType type,
+                      double baseCost,
+                      List<HelperSkill> skills,
+                      bool isInGame,
+                      string version,
+                      Func<string, ValueTask<Bitmap>> imageGetter = null)
+        {
+            Id = id;
+            Order = order;
+            HelperType = type;
+            BaseCost = baseCost;
+            Skills = skills.AsReadOnly();
+            IsInGame = isInGame;
+            FileVersion = version;
+            _image = new Lazy<Bitmap>(() => imageGetter?.Invoke(ImageUrl).Result);
+
+
+            Efficency = Math.Pow(1f - HelperInefficency * Math.Min(Order, HelperInefficencySlowdown), Math.Min(Order, HelperInefficencySlowdown));
+            BaseDamage = Efficency * DmgScaleDown * BaseCost;
+        }
+
+        static Helper()
+        {
+            ImageUrls = new Dictionary<int, string>
             {
                 { 1,  Imgur("hvV0TIq") },
                 { 2,  Imgur("vfwJHOr") },
@@ -53,45 +93,6 @@ namespace TT2Bot.Models
                 { 36, Imgur("OMSXN8J") },
                 { 37, Imgur("NGotVYA") },
             }.ToImmutableDictionary();
-
-        private static float HelperInefficency = 0.023f;
-        private static int HelperInefficencySlowdown = 34;
-        private static float DmgScaleDown = 0.1f;
-
-        public int Order { get; }
-        public LocalisedString ShortName => Game.Helper.GetShortName(Id);
-        public HelperType HelperType { get; }
-        public double BaseCost { get; }
-        public double BaseDamage { get; }
-        public double Efficency { get; }
-        public IReadOnlyList<HelperSkill> Skills { get; }
-        public bool IsInGame { get; }
-        public string FileVersion { get; }
-        public string ImageUrl => ImageUrls.TryGetValue(Id, out var url) ? url : null;
-        public Bitmap Image => _image.Value;
-        private Lazy<Bitmap> _image { get; }
-
-        public Helper(int id, 
-                      int order, 
-                      HelperType type, 
-                      double baseCost, 
-                      List<HelperSkill> skills, 
-                      bool isInGame, 
-                      string version, 
-                      Func<string, ValueTask<Bitmap>> imageGetter = null)
-        {
-            Id = id;
-            Order = order;
-            HelperType = type;
-            BaseCost = baseCost;
-            Skills = skills.AsReadOnly();
-            IsInGame = isInGame;
-            FileVersion = version;
-            _image = new Lazy<Bitmap>(() => imageGetter?.Invoke(ImageUrl).Result);
-
-
-            Efficency = Math.Pow(1f - HelperInefficency * Math.Min(Order, HelperInefficencySlowdown), Math.Min(Order, HelperInefficencySlowdown));
-            BaseDamage = Efficency * DmgScaleDown * BaseCost;
         }
 
         public double GetDps(int level)

@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using TitanBot.Commands;
 using TitanBot.Formatting;
 using TT2Bot.Models;
+using TT2Bot.Models.TT2;
 using TT2Bot.Services;
 using static TT2Bot.TT2Localisation.Commands;
 using static TT2Bot.TT2Localisation.Help;
@@ -124,7 +125,7 @@ namespace TT2Bot.Commands.Data
             }
             else
             {
-                builder.AddField(f => f.WithName(EquipmentText.SHOW_FIELD_BONUSAT, level, level*10).WithValue(equipment.BonusType.LocaliseValue(equipment.BonusOnLevel((int)(10 * level)))));
+                builder.AddField(f => f.WithName(EquipmentText.SHOW_FIELD_BONUSAT, level, level * 10).WithValue(equipment.BonusType.LocaliseValue(equipment.BonusOnLevel((int)(10 * level)))));
                 builder.AddField(f => f.WithName(TitanBot.TBLocalisation.NOTES).WithValue(EquipmentText.SHOW_FIELD_NOTE));
             }
 

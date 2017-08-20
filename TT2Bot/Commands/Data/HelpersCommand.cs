@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using TitanBot.Commands;
 using TitanBot.Formatting;
 using TT2Bot.Models;
+using TT2Bot.Models.TT2;
 using TT2Bot.Services;
 using static TT2Bot.TT2Localisation.Commands;
 using static TT2Bot.TT2Localisation.Help;
@@ -28,7 +29,7 @@ namespace TT2Bot.Commands.Data
 
         [Call("List")]
         [Usage(Usage.HELPER_LIST)]
-        
+
         async Task ListHelpersAsync([CallFlag('g', "group", Flag.HELPER_G)]bool shouldGroup = false)
         {
             var helpers = (await DataService.Helpers.GetAll())?.Where(h => h.IsInGame).OrderBy(h => h.Order);

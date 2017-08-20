@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using TitanBot.Commands;
 using TitanBot.Formatting;
 using TT2Bot.Models;
+using TT2Bot.Models.TT2;
 using TT2Bot.Services;
 using static TT2Bot.TT2Localisation.Commands;
 using static TT2Bot.TT2Localisation.Help;
@@ -71,7 +72,7 @@ namespace TT2Bot.Commands.Data
         {
             relics = relics.Clamp(0, double.MaxValue);
             currentLevel = currentLevel.Clamp(0, artifact.MaxLevel ?? int.MaxValue);
-            return ShowArtifactAsync(artifact, currentLevel, artifact.BudgetArtifact(relics, currentLevel ));
+            return ShowArtifactAsync(artifact, currentLevel, artifact.BudgetArtifact(relics, currentLevel));
         }
 
         [Call]
@@ -105,7 +106,7 @@ namespace TT2Bot.Commands.Data
                        .AddInlineField(f => f.WithName(ArtifactText.SHOW_COSTOFLVL, startLevel).WithValue(ArtifactText.SHOW_COST, artifact.CostOfLevel(startLevel + 1)))
                        .AddInlineField(f => f.WithName(ArtifactText.SHOW_COSTOFLVL, endLevel).WithValue(ArtifactText.SHOW_COST, artifact.CostOfLevel(endLevel)));
             }
-            
+
             await ReplyAsync(builder);
         }
     }

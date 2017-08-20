@@ -5,12 +5,13 @@ using System.Threading.Tasks;
 using TitanBot.Downloader;
 using TitanBot.Settings;
 using TT2Bot.Models;
+using TT2Bot.Models.TT2;
 using TT2Bot.Services.ServiceAreas;
 
 namespace TT2Bot.Services
 {
     class TT2DataService
-    { 
+    {
         private IDownloader WebClient { get; }
         private ISettingManager Settings { get; }
         public static readonly string GHStatic = "https://s3.amazonaws.com/tt2-static/info_files/";
@@ -21,6 +22,7 @@ namespace TT2Bot.Services
         public GameEntityService<Pet, int> Pets { get; }
         public GameEntityService<HelperSkill, int> HelperSkills { get; }
         public GameEntityService<Helper, int> Helpers { get; }
+        public GameEntityService<Skill, string> SkillTree { get; }
 
         public TT2DataService(IDownloader client, ISettingManager settings)
         {
@@ -32,6 +34,7 @@ namespace TT2Bot.Services
             Pets = new PetService(GlobalSettings, WebClient);
             HelperSkills = new HelperSkillService(GlobalSettings, WebClient);
             Helpers = new HelperService(GlobalSettings, WebClient, HelperSkills);
+            SkillTree = new SkillTreeService(GlobalSettings, WebClient);
         }
 
         private TT2GlobalSettings GlobalSettings()

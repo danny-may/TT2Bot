@@ -1,10 +1,12 @@
 ﻿using Csv;
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Threading.Tasks;
 using TitanBot.Downloader;
 using TT2Bot.Models;
+using TT2Bot.Models.TT2;
 
 namespace TT2Bot.Services.ServiceAreas
 {
@@ -13,7 +15,7 @@ namespace TT2Bot.Services.ServiceAreas
         protected abstract string FilePath { get; }
         protected abstract string FileVersion { get; }
         protected string CachedRaw { get; private set; }
-        protected TResource[] CachedObjects { get; private set; }
+        protected List<TResource> CachedObjects { get; private set; }
 
         protected TT2GlobalSettings Settings => _settings();
         private Func<TT2GlobalSettings> _settings { get; }
@@ -36,12 +38,12 @@ namespace TT2Bot.Services.ServiceAreas
 
         public virtual async ValueTask<TResource[]> GetAll()
         {
-            if (CachedObjects == null || CachedObjects.Length == 0)
+            if (CachedObjects == null || CachedObjects.Count == 0)
                 await DeferredUpdate();
             else
                 DeferredUpdate().DontWait();
 
-            return CachedObjects;
+            return CachedObjects.ToArray();
         }
 
         protected virtual async Task DeferredUpdate()
@@ -55,9 +57,11 @@ namespace TT2Bot.Services.ServiceAreas
             if (data == null || data == CachedRaw)
                 return;
 
+            CachedObjects = new List<TResource>();
+
             var objects = CsvReader.ReadFromText(data).Select(r => Build(r, version));
             CachedRaw = data;
-            CachedObjects = objects.ToArray();
+            CachedObjects.AddRange(objects);
         }
 
         protected ValueTask<Bitmap> GetImage(string url)

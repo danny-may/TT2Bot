@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using TitanBot.Downloader;
 using TT2Bot.Models;
+using TT2Bot.Models.TT2;
 
 namespace TT2Bot.Services.ServiceAreas
 {

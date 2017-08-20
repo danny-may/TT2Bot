@@ -1,13 +1,19 @@
-﻿using TitanBot.Formatting;
+﻿using System.Collections.Generic;
+using System.Collections.Immutable;
+using TitanBot.Formatting;
 using TitanBot.Formatting.Interfaces;
 using TT2Bot.Helpers;
 
-namespace TT2Bot.Models
+namespace TT2Bot.Models.TT2
 {
     public abstract class GameEntity<TId> : ILocalisable<string>
     {
         public TId Id { get; protected set; }
         public LocalisedString Name => GetName(Id);
+        public string FileVersion { get; protected set; }
+
+        public static IReadOnlyDictionary<TId, string> ImageUrls { get; protected set; }
+            = new Dictionary<TId, string>().ToImmutableDictionary();
 
         protected abstract LocalisedString GetName(TId id);
 

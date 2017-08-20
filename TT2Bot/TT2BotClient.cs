@@ -12,6 +12,7 @@ using TitanBot.Replying;
 using TitanBot.Settings;
 using TitanBot.TypeReaders;
 using TT2Bot.Models;
+using TT2Bot.Models.TT2;
 using TT2Bot.Overrides;
 using TT2Bot.Services;
 using TT2Bot.TypeReaders;

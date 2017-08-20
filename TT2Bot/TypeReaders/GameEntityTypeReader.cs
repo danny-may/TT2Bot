@@ -3,12 +3,12 @@ using System.Threading.Tasks;
 using TitanBot;
 using TitanBot.Contexts;
 using TitanBot.TypeReaders;
-using TT2Bot.Models;
+using TT2Bot.Models.TT2;
 using TT2Bot.Services.ServiceAreas;
 
 namespace TT2Bot.TypeReaders
 {
-    abstract class GameEntityTypeReader<TEntity, TId> : TypeReader 
+    abstract class GameEntityTypeReader<TEntity, TId> : TypeReader
         where TEntity : GameEntity<TId>
     {
         protected abstract GameEntityService<TEntity, TId> Service { get; }
