@@ -24,6 +24,6 @@ namespace TT2Bot.GameEntity.Commands
         [Call]
         [Usage(Usage.HELPER)]
         async Task ShowHelperAsync([Dense]Helper helper, int? from = null, int? to = null)
-            => await ReplyAsync(new HelperEmbedable(Context, helper, from, to));
+            => await ReplyAsync(new HelperSingleEmbedable(Context, helper, from, to));
     }
 }

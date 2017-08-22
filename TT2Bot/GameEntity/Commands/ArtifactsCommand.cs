@@ -32,6 +32,6 @@ namespace TT2Bot.GameEntity.Commands
         [Call]
         [Usage(Usage.ARTIFACT)]
         async Task ShowArtifactAsync([Dense]Artifact artifact, int? from = null, int? to = null)
-            => await ReplyAsync(new ArtifactEmbedable(Context, artifact, from ?? 1, to ?? 1));
+            => await ReplyAsync(new ArtifactSingleEmbedable(Context, artifact, from ?? 1, to ?? 1));
     }
 }

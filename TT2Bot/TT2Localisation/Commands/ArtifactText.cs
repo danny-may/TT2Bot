@@ -9,7 +9,7 @@ namespace TT2Bot
         {
             public static class ArtifactText
             {
-                public const string BASE_PATH = CommandText.BASE_PATH + "REPORT_";
+                public const string BASE_PATH = CommandText.BASE_PATH + "ARTIFACT_";
 
                 public const string LIST_TITLE = BASE_PATH + nameof(LIST_TITLE);
                 public const string LIST_DESCRIPTION = BASE_PATH + nameof(LIST_DESCRIPTION);

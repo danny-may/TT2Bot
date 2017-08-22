@@ -1,4 +1,4 @@
-﻿namespace TT2Bot.Models
+﻿namespace TT2Bot.GameEntity.Enums
 {
     public enum ArtifactTier
     {

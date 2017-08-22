@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Collections.Immutable;
 using TT2Bot.GameEntity.Entities;
-using TT2Bot.Models;
+using TT2Bot.GameEntity.Enums;
 using TT2Bot.Models.General;
 
 namespace TT2Bot

@@ -6,6 +6,7 @@ using TitanBot.Formatting;
 using TitanBot.Formatting.Interfaces;
 using TT2Bot.GameEntity.Base;
 using TT2Bot.GameEntity.Entities;
+using TT2Bot.GameEntity.Enums;
 using TT2Bot.Models;
 using static TT2Bot.TT2Localisation.CommandText;
 
@@ -27,7 +28,7 @@ namespace TT2Bot.GameEntity.Embedables
         protected override IEnumerable<Equipment> AllEntities
             => base.AllEntities.OrderBy(e => e.BonusBase).ThenBy(e => e.BonusIncrease).ToList();
 
-        private Dictionary<LocalisedString, Equipment[]> GroupEquipment()
+        private Dictionary<ILocalisable<string>, Equipment[]> GroupEquipment()
         {
             if (string.IsNullOrWhiteSpace(GroupName))
                 return null;

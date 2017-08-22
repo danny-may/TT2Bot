@@ -25,6 +25,10 @@ namespace TT2Bot
                 public const string SHOW_FIELD_BONUSAT = BASE_PATH + nameof(SHOW_FIELD_BONUSAT);
                 public const string SHOW_FIELD_INACTIVEDAMAGEAT = BASE_PATH + nameof(SHOW_FIELD_INACTIVEDAMAGEAT);
                 public const string SHOW_FIELD_INACTIVEBONUSAT = BASE_PATH + nameof(SHOW_FIELD_INACTIVEBONUSAT);
+                public const string LIST_DESCRIPTION = BASE_PATH + nameof(LIST_DESCRIPTION);
+                public const string LIST_FOOTER = BASE_PATH + nameof(LIST_FOOTER);
+                public const string LIST_TITLE = BASE_PATH + nameof(LIST_TITLE);
+                public const string LIST_ROW_TITLE = BASE_PATH + nameof(LIST_ROW_TITLE);
 
                 public static IReadOnlyDictionary<string, string> Defaults { get; }
                     = new Dictionary<string, string>
@@ -42,7 +46,9 @@ namespace TT2Bot
                         { SHOW_FIELD_DAMAGEAT, "Damage at lvl {0}" },
                         { SHOW_FIELD_BONUSAT, "Bonus at lvl {0}" },
                         { SHOW_FIELD_INACTIVEDAMAGEAT, "Inactive Damage at lvl {0}" },
-                        { SHOW_FIELD_INACTIVEBONUSAT, "Inactive bonus at lvl {0}" },
+                        { LIST_DESCRIPTION, "All Pets" },
+                        { LIST_FOOTER, "{0} Pet tool" },
+                        { LIST_TITLE, "Pet listing" }
                     }.ToImmutableDictionary();
             }
         }

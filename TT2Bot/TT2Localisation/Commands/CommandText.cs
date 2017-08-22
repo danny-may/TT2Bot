@@ -41,6 +41,7 @@ namespace TT2Bot
                  .Concat(PetText.Defaults)
                  .Concat(PrestigeText.Defaults)
                  .Concat(HelperText.Defaults)
+                 .Concat(SkillText.Defaults)
                  .ToImmutableDictionary();
         }
     }

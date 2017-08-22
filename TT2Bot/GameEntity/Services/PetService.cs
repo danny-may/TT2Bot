@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using TitanBot.Downloader;
 using TT2Bot.GameEntity.Base;
 using TT2Bot.GameEntity.Entities;
+using TT2Bot.GameEntity.Enums;
+using TT2Bot.Helpers;
 using TT2Bot.Models;
 
 namespace TT2Bot.Services.ServiceAreas
@@ -19,7 +21,7 @@ namespace TT2Bot.Services.ServiceAreas
         {
             var incrementRange = new Dictionary<int, double> { };
 
-            int.TryParse(serverData[0].Substring(3), out int id);
+            int.TryParse(serverData[0].Without("Pet"), out int id);
             double.TryParse(serverData[1], out double damageBase);
             double.TryParse(serverData[2], out double inc1to40);
             double.TryParse(serverData[3], out double inc41to80);

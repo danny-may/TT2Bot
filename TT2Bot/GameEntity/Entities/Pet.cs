@@ -6,8 +6,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using TitanBot.Formatting;
 using TT2Bot.GameEntity.Base;
+using TT2Bot.GameEntity.Enums;
 using TT2Bot.GameEntity.Localisation;
-using TT2Bot.Models;
 using TT2Bot.Models.General;
 
 namespace TT2Bot.GameEntity.Entities
@@ -15,6 +15,7 @@ namespace TT2Bot.GameEntity.Entities
     class Pet : GameEntity<int>
     {
         public override LocalisedString Name => Localisation.GetName(Id);
+        public override LocalisedString Abbreviations => null;
         public double DamageBase { get; }
         public Dictionary<int, double> IncreaseRanges { get; }
         public BonusType BonusType { get; }
@@ -93,7 +94,7 @@ namespace TT2Bot.GameEntity.Entities
                 {
                         { TOSTRING, "{0} ({1})" },
                         { UNABLE_DOWNLOAD, "I could not download any pet data. Please try again later." },
-                        { MULTIPLE_MATCHES, "There were more than 1 pets that matched `{0}`" },
+                        { MULTIPLE_MATCHES, "There were more than 1 pets that matched `{2}`. Try being more specific, or use `{0}{1}` for a list of all pets" },
                         { GetName(1).Key, "Nova" },
                         { GetName(2).Key, "Toto" },
                         { GetName(3).Key, "Cerberus" },

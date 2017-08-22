@@ -6,9 +6,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using TitanBot.Formatting;
 using TT2Bot.GameEntity.Base;
+using TT2Bot.GameEntity.Enums;
 using TT2Bot.GameEntity.Localisation;
-using TT2Bot.Helpers;
-using TT2Bot.Models;
 
 namespace TT2Bot.GameEntity.Entities
 {
@@ -20,7 +19,7 @@ namespace TT2Bot.GameEntity.Entities
 
         public int Order { get; }
         public override LocalisedString Name => Localisation.GetName(Id);
-        public LocalisedString ShortName => Localisation.GetShortName(Id);
+        public override LocalisedString Abbreviations => Localisation.GetShortName(Id);
         public HelperType HelperType { get; }
         public double BaseCost { get; }
         public double BaseDamage { get; }
@@ -114,9 +113,6 @@ namespace TT2Bot.GameEntity.Entities
             return Enumerable.Range(level, count).Sum(l => GetCost(l));
         }
 
-        public override bool Matches(ITextResourceCollection textResource, string text)
-            => base.Matches(textResource, text.Without(",", " "));
-
         public static class Localisation
         {
             public const string BASE_PATH = EntityLocalisation.BASE_PATH + "HELPER_";
@@ -132,7 +128,7 @@ namespace TT2Bot.GameEntity.Entities
                 = new Dictionary<string, string>
                 {
                         { UNABLE_DOWNLOAD, "I could not download any hero data. Please try again later." },
-                        { MULTIPLE_MATCHES, "There were more than 1 heroes that matched `{0}`" },
+                        { MULTIPLE_MATCHES, "There were more than 1 heroes that matched `{2}`. Try being more specific, or use `{0}{1}` for a list of all heros" },
                         { GetName(1).Key, "Zato the Blind Staff Master" },    { GetShortName(1).Key, "Zato" },
                         { GetName(2).Key, "Lance, Knight of Cobalt Steel" },  { GetShortName(2).Key, "Lance" },
                         { GetName(3).Key, "Maddie, Shadow Thief" },           { GetShortName(3).Key, "Maddie" },

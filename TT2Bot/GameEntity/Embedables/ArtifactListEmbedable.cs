@@ -6,7 +6,7 @@ using TitanBot.Formatting;
 using TitanBot.Formatting.Interfaces;
 using TT2Bot.GameEntity.Base;
 using TT2Bot.GameEntity.Entities;
-using TT2Bot.Models;
+using TT2Bot.GameEntity.Enums;
 using static TT2Bot.TT2Localisation.CommandText;
 
 namespace TT2Bot.GameEntity.Embedables

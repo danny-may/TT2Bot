@@ -2,8 +2,8 @@
 using System.Collections.Immutable;
 using TitanBot.Formatting;
 using TT2Bot.GameEntity.Base;
+using TT2Bot.GameEntity.Enums;
 using TT2Bot.GameEntity.Localisation;
-using TT2Bot.Models;
 
 namespace TT2Bot.GameEntity.Entities
 {
@@ -11,6 +11,7 @@ namespace TT2Bot.GameEntity.Entities
     {
         public int HelperId { get; }
         public override LocalisedString Name => Localisation.GetName(Id);
+        public override LocalisedString Abbreviations => null;
         public BonusType BonusType { get; }
         public double Magnitude { get; }
         public int RequiredLevel { get; }
@@ -39,7 +40,7 @@ namespace TT2Bot.GameEntity.Entities
                 = new Dictionary<string, string>
                 {
                         { UNABLE_DOWNLOAD, "I could not download any hero skill data. Please try again later." },
-                        { MULTIPLE_MATCHES, "There were more than 1 hero skills that matched `{0}`" },
+                        { MULTIPLE_MATCHES, "There were more than 1 hero skills that matched `{2}`. Try being more specific, or use `{0}{1}` for a list of all hero skills" },
                         { GetName(1).Key, "Nature's Presence" },
                         { GetName(2).Key, "Lightning Rage" },
                         { GetName(3).Key, "Executioner's Breath" },

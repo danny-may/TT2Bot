@@ -29,7 +29,7 @@ namespace TT2Bot.GameEntity.Base
         protected override LocalisedEmbedBuilder GetBaseEmbed()
         {
             var builder = base.GetBaseEmbed();
-            builder.WithColor(Entity.Image?.AverageColor(MinBrightness, MinSaturation).ToDiscord())
+            builder.WithColor((Entity.Image?.AverageColor(MinBrightness, MinSaturation) ?? System.Drawing.Color.LightBlue).ToDiscord())
                    .WithRawThumbnailUrl(Entity.ImageUrl);
             builder.Author?.WithRawIconUrl(Entity.ImageUrl);
             return builder;

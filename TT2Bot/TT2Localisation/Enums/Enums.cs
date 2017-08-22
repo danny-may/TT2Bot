@@ -16,6 +16,7 @@ namespace TT2Bot
                                                   .Concat(EquipmentSourceText.Defaults)
                                                   .Concat(HelperTypeText.Defaults)
                                                   .Concat(SubmissionTypeText.Defaults)
+                                                  .Concat(SkillCategoryText.Defaults)
                                                   .ToImmutableDictionary();
         }
     }

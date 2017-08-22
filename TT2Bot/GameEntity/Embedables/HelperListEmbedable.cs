@@ -6,6 +6,7 @@ using TitanBot.Formatting;
 using TitanBot.Formatting.Interfaces;
 using TT2Bot.GameEntity.Base;
 using TT2Bot.GameEntity.Entities;
+using TT2Bot.GameEntity.Enums;
 using TT2Bot.Models;
 using static TT2Bot.TT2Localisation.CommandText;
 
@@ -39,7 +40,7 @@ namespace TT2Bot.GameEntity.Embedables
         private string MakeTable(ITextResourceCollection textResource, IEnumerable<Helper> helpers)
             => "```\n" + helpers.Select(h => new[]
                                              {
-                                                 h.ShortName.Localise(textResource),
+                                                 h.Abbreviations.Localise(textResource),
                                                  new LocalisedString(HelperText.COST, h.BaseCost).Localise(textResource)
                                              }).ToArray()
                                                .Tableify() + "\n```";

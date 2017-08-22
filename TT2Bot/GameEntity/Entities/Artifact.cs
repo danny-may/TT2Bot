@@ -6,59 +6,27 @@ using System.Linq;
 using System.Threading.Tasks;
 using TitanBot.Formatting;
 using TT2Bot.GameEntity.Base;
+using TT2Bot.GameEntity.Enums;
 using TT2Bot.GameEntity.Localisation;
-using TT2Bot.Helpers;
 using TT2Bot.Models;
 
 namespace TT2Bot.GameEntity.Entities
 {
     class Artifact : GameEntity<int>
     {
-        public static IReadOnlyDictionary<int, ArtifactTier> Tiers { get; }
-            = new Dictionary<int, ArtifactTier>
+        public static IReadOnlyDictionary<ArtifactTier, ImmutableArray<int>> Tiers { get; }
+            = new Dictionary<ArtifactTier, int[]>
             {
-                { 1, ArtifactTier.B },
-                { 2, ArtifactTier.D },
-                { 3, ArtifactTier.A },
-                { 4, ArtifactTier.B },
-                { 5, ArtifactTier.D },
-                { 6, ArtifactTier.E },
-                { 7, ArtifactTier.A },
-                { 8, ArtifactTier.E },
-                { 9, ArtifactTier.B },
-                { 10, ArtifactTier.E },
-                { 11, ArtifactTier.E },
-                { 12, ArtifactTier.E },
-                { 13, ArtifactTier.D },
-                { 14, ArtifactTier.A },
-                { 15, ArtifactTier.B },
-                { 16, ArtifactTier.E },
-                { 17, ArtifactTier.B },
-                { 18, ArtifactTier.D },
-                { 19, ArtifactTier.D },
-                { 20, ArtifactTier.C },
-                { 21, ArtifactTier.C },
-                { 22, ArtifactTier.S },
-                { 23, ArtifactTier.C },
-                { 24, ArtifactTier.C },
-                { 25, ArtifactTier.B },
-                { 26, ArtifactTier.B },
-                { 27, ArtifactTier.D },
-                { 28, ArtifactTier.B },
-                { 29, ArtifactTier.E },
-                { 31, ArtifactTier.B },
-                { 32, ArtifactTier.A },
-                { 33, ArtifactTier.A },
-                { 34, ArtifactTier.A },
-                { 35, ArtifactTier.A },
-                { 36, ArtifactTier.E },
-                { 37, ArtifactTier.E },
-                { 38, ArtifactTier.A },
-                { 39, ArtifactTier.B }
-            }.ToImmutableDictionary();
+                { ArtifactTier.S, new [] { 22 } },
+                { ArtifactTier.A, new [] { 3, 7, 14, 32, 33, 34, 35, 38} },
+                { ArtifactTier.B, new [] { 1, 4, 9, 15, 17, 25, 26, 28, 31, 39} },
+                { ArtifactTier.C, new [] { 20, 21, 23, 24} },
+                { ArtifactTier.D, new [] { 2, 5, 13, 18, 19, 27} },
+                { ArtifactTier.E, new [] { 6, 8, 10, 11, 12, 16, 29, 36, 37} }
+            }.ToImmutableDictionary(k => k.Key, v => v.Value.ToImmutableArray());
 
         public override LocalisedString Name => Localisation.GetName(Id);
-        public LocalisedString Abbreviation => Localisation.GetAbbreviation(Id);
+        public override LocalisedString Abbreviations => Localisation.GetAbbreviation(Id);
         public string TT1 { get; }
         public BonusType BonusType { get; }
         public double EffectPerLevel { get; }
@@ -66,7 +34,7 @@ namespace TT2Bot.GameEntity.Entities
         public double CostCoef { get; }
         public double CostExpo { get; }
         public string Note { get; }
-        public ArtifactTier Tier => Tiers.TryGetValue(Id, out var tier) ? tier : ArtifactTier.None;
+        public ArtifactTier Tier => Tiers.FirstOrDefault(t => t.Value.Contains(Id)).Key;
 
         internal Artifact(int id,
                           int? maxLevel,
@@ -168,11 +136,19 @@ namespace TT2Bot.GameEntity.Entities
             return BudgetArtifact(relics - cost, current + 1);
         }
 
-        public override bool Matches(ITextResourceCollection textResource, string text)
-        {
-            var abbrevs = Abbreviation.Localise(textResource).ToLower().Split(',');
-            return base.Matches(textResource, text) || abbrevs.Any(a => a == text.Without(" ").ToLower());
-        }
+        //public override double MatchCertainty(ITextResourceCollection textResource, string text)
+        //{
+        //    var abbrevs = Abbreviations.Localise(textResource).ToLower().Split(',');
+        //    return new List<double>
+        //    {
+        //        base.MatchCertainty(textResource, text),
+        //        abbrevs.Any(a => a.ToLower() == text.ToLower()) ?  0.85 : 0,
+        //        abbrevs.Any(a => a.ToLower().StartsWith(text.ToLower())) ?  0.65 : 0,
+        //        abbrevs.Any(a => a.ToLower().Contains(text.ToLower())) ?  0.45 : 0,
+        //        abbrevs.Any(a => a.ToLower().Without(" ") == text.ToLower().Without(" ")) ?  0.25 : 0,
+        //        abbrevs.Any(a => a.ToLower().Without(" ").StartsWith(text.ToLower().Without(" "))) ?  0.05 : 0
+        //    }.Max();
+        //}
 
         public static class Localisation
         {
@@ -189,7 +165,7 @@ namespace TT2Bot.GameEntity.Entities
                 = new Dictionary<string, string>
                 {
                         { UNABLE_DOWNLOAD, "I could not download any artifact data. Please try again later." },
-                        { MULTIPLE_MATCHES, "There were more than 1 artifacts that matched `{0}`" },
+                        { MULTIPLE_MATCHES, "There were more than 1 artifacts that matched `{2}`. Try being more specific, or use `{0}{1}` for a list of all artifacts" },
                         { GetName(1).Key,  "Heroic Shield"},          { GetAbbreviation(1).Key,  "HSH" },
                         { GetName(2).Key,  "Stone of the Valrunes"},  { GetAbbreviation(2).Key,  "SOV,SV" },
                         { GetName(3).Key,  "The Arcana Cloak"},       { GetAbbreviation(3).Key,  "TAC,AC" },

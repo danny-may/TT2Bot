@@ -5,17 +5,17 @@ using TitanBot.Formatting;
 using TitanBot.Formatting.Interfaces;
 using TT2Bot.GameEntity.Base;
 using TT2Bot.GameEntity.Entities;
-using TT2Bot.Models;
+using TT2Bot.GameEntity.Enums;
 using static TT2Bot.TT2Localisation.CommandText;
 
 namespace TT2Bot.GameEntity.Embedables
 {
-    class HelperEmbedable : GameEntitySingleEmbedable<Helper>
+    class HelperSingleEmbedable : GameEntitySingleEmbedable<Helper>
     {
-        protected override ILocalisable<string> Footer => new LocalisedString(HelperText.LIST_FOOTER, BotUser.Username, Entity.FileVersion);
+        protected override ILocalisable<string> Footer => new LocalisedString(HelperText.SHOW_FOOTER, BotUser.Username, Entity.FileVersion);
         protected override ILocalisable<string> Title => new LocalisedString(HelperText.SHOW_TITLE, Entity.Name);
 
-        public HelperEmbedable(ICommandContext context, Helper entity, int? from, int? to) : base(context, entity, from, to) { }
+        public HelperSingleEmbedable(ICommandContext context, Helper entity, int? from, int? to) : base(context, entity, from, to) { }
 
         protected override LocalisedEmbedBuilder GetBaseEmbed()
             => base.GetBaseEmbed().AddInlineField(f => f.WithName(HelperText.SHOW_FIELD_ID).WithValue(Entity.Id))

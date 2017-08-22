@@ -22,6 +22,6 @@ namespace TT2Bot.GameEntity.Commands
         [Call]
         [Usage(Usage.EQUIPMENT)]
         async Task ShowEquipmentAsync([Dense]Equipment equipment, double? level = null)
-            => await ReplyAsync(new EquipmentEmbedable(Context, equipment, level));
+            => await ReplyAsync(new EquipmentSingleEmbedable(Context, equipment, level));
     }
 }

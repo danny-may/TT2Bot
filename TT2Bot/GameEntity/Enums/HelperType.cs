@@ -1,7 +1,8 @@
 ﻿using TitanBot.Formatting;
+using TitanBot.Formatting.Interfaces;
 using static TT2Bot.TT2Localisation.Enums.HelperTypeText;
 
-namespace TT2Bot.Models
+namespace TT2Bot.GameEntity.Enums
 {
     public enum HelperType
     {
@@ -13,7 +14,7 @@ namespace TT2Bot.Models
 
     public static class HelperTypeMethods
     {
-        public static LocalisedString ToLocalisable(this HelperType helperType)
+        public static ILocalisable<string> ToLocalisable(this HelperType helperType)
         {
             switch (helperType)
             {

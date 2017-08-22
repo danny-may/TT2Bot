@@ -37,12 +37,17 @@ namespace TT2Bot.GameEntity.Base
             if (entities == null || entities.Length == 0)
                 return TypeReaderResponse.FromError(UNABLE_DOWNLOAD, value, typeof(TEntity));
 
-            var matches = entities.Where(e => e.Matches(context.TextResource, value)).ToArray();
-            if (matches.Length == 0)
+            var matchCertainties = entities.GroupBy(e => e.MatchCertainty(context.TextResource, value)).ToArray();
+
+            var matches = matchCertainties.OrderByDescending(g => g.Key)
+                                          .FirstOrDefault();
+            var matchCount = matches?.Count();
+
+            if (matches == null || matchCount == 0 || matches.Key == 0)
                 return TypeReaderResponse.FromError(TBLocalisation.Logic.TYPEREADER_UNABLETOREAD, value, typeof(TEntity));
-            else if (matches.Length > 1)
+            else if (matchCount > 1)
                 return TypeReaderResponse.FromError(MULTIPLE_MATCHES, value, typeof(TEntity));
-            return TypeReaderResponse.FromSuccess(matches[0]);
+            return TypeReaderResponse.FromSuccess(matches.First());
         }
     }
 }

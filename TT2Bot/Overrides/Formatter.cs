@@ -9,7 +9,7 @@ namespace TT2Bot.Overrides
 {
     class Formatter : ValueFormatter
     {
-        
+
         public static readonly FormatType Scientific = 1;
         private static readonly string Alphabet = "abcdefghijklmnopqrstuvwxyz";
         private static readonly string[] PostFixes = new string[] { "", "K", "M", "B", "T" };
@@ -20,7 +20,7 @@ namespace TT2Bot.Overrides
 
             Add<int>(i => BeautifyMetric(i), (Scientific, i => BeautifyScientific(i)));
             Add<long>(l => BeautifyMetric(l), (Scientific, i => BeautifyScientific(i)));
-            Add<Percentage>(p => p.ToString());
+            Add<Percentage>(p => BeautifyMetric(p), (Scientific, p => BeautifyScientific(p)));
             Add<double>(BeautifyMetric, (Scientific, BeautifyScientific));
             Add<TimeSpan>(Beautify);
         }
@@ -56,6 +56,8 @@ namespace TT2Bot.Overrides
                 return sign + "∞";
 
             value = Math.Abs(value);
+            if (value < 1)
+                return $"{sign}{value:0.###}";
             var exponent = (int)Math.Floor(Math.Log10(value));
             double mantissa;
             string postfix;
@@ -69,7 +71,7 @@ namespace TT2Bot.Overrides
                 mantissa = value / Math.Pow(10, exponent);
                 postfix = "+e" + exponent;
             }
-            return sign + mantissa.ToString("0.###") + postfix;
+            return $"{sign}{mantissa:0.###}{postfix}";
         }
 
         private string BeautifyMetric(double value)
@@ -83,6 +85,8 @@ namespace TT2Bot.Overrides
                 return sign + "∞";
 
             value = Math.Abs(value);
+            if (value < 1)
+                return $"{sign}{value:0.###}";
             var exponent = (int)Math.Floor(Math.Log10(value));
             double mantissa;
             string postfix;
@@ -97,7 +101,7 @@ namespace TT2Bot.Overrides
                 postfix = Alphabet[(exponent / 3 - (PostFixes.Length)) / 26].ToString() +
                           Alphabet[(exponent / 3 - (PostFixes.Length)) % 26].ToString();
             }
-            return sign + mantissa.ToString("0.###") + postfix;            
+            return $"{sign}{mantissa:0.###}{postfix}";
         }
     }
 }

@@ -3,6 +3,8 @@ using System;
 using TitanBot.Downloader;
 using TT2Bot.GameEntity.Base;
 using TT2Bot.GameEntity.Entities;
+using TT2Bot.GameEntity.Enums;
+using TT2Bot.GameEntity.Enums.EntityId;
 using TT2Bot.Models;
 
 namespace TT2Bot.GameEntity.Services
@@ -16,7 +18,7 @@ namespace TT2Bot.GameEntity.Services
 
         protected override Equipment Build(ICsvLine serverData, string version)
         {
-            var id = serverData[0];
+            Enum.TryParse(serverData[0], out EquipmentId id);
             Enum.TryParse(serverData[1], out EquipmentClass eClass);
             Enum.TryParse(serverData[2], out BonusType bonusType);
             Enum.TryParse(serverData[3], out EquipmentRarity rarity);
