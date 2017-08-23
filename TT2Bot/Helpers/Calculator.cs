@@ -9,7 +9,8 @@ namespace TT2Bot.Helpers
         private static int[] BossAttackCosts { get; } = new int[] { 0, 5, 25, 50, 75, 100, 125, 150 };
 
         public static double TitanLordHp(int clanQuest)
-            => Math.Pow(10, 5) * (15 + 9 * (Math.Pow(Math.Min(clanQuest - 1, 650), 0.9) * Math.Pow(Math.Max(((double)clanQuest - 1) / 650, 1), 1.4)));
+            //=> Math.Pow(10, 5) * (15 + 9 * (Math.Pow(Math.Min(clanQuest - 1, 650), 0.9) * Math.Pow(Math.Max(((double)clanQuest - 1) / 650, 1), 1.4)));
+            => Math.Pow(10, 5) * Math.Pow(clanQuest, Math.Pow(clanQuest, 0.031));
 
         public static double ClanBonus(int clanQuest)
             => Math.Pow(1.1, Math.Min(clanQuest, 200)) *
