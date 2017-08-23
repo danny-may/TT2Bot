@@ -25,6 +25,7 @@ namespace TT2Bot
                 public const string HIGHSCORE = BASE_PATH + nameof(HIGHSCORE);
                 public const string PETS = BASE_PATH + nameof(PETS);
                 public const string PRESTIGE = BASE_PATH + nameof(PRESTIGE);
+                public const string SKILL = BASE_PATH + nameof(SKILL);
 
                 public static IReadOnlyDictionary<string, string> Defaults { get; }
                     = new Dictionary<string, string>
@@ -43,6 +44,7 @@ namespace TT2Bot
                         { HIGHSCORE, "Shows data from the high score sheet, which can be found [here](https://docs.google.com/spreadsheets/d/13hsvWaYvp_QGFuQ0ukcgG-FlSAj2NyW8DOvPUG3YguY/pubhtml?gid=4642011cYS8TLGYU)\nAll credit to <@261814131282149377>, <@169180650203512832> and <@169915601496702977> for running the sheet!" },
                         { PETS, "Displays data about any pet" },
                         { PRESTIGE, "Shows you exactly what prestiging at a given point will mean for you" },
+                        { SKILL, "Shows you various information about the skills available ingame" }
                     }.ToImmutableDictionary();
             }
         }

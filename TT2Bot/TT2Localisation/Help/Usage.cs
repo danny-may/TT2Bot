@@ -54,6 +54,8 @@ namespace TT2Bot
                 public const string PET = BASE_PATH + nameof(PET);
                 public const string PET_LIST = BASE_PATH + nameof(PET_LIST);
                 public const string PRESTIGE = BASE_PATH + nameof(PRESTIGE);
+                public const string SKILL = BASE_PATH + nameof(SKILL);
+                public const string SKILL_SHOW = BASE_PATH + nameof(SKILL_SHOW);
 
                 public static IReadOnlyDictionary<string, string> Defaults { get; }
                 = new Dictionary<string, string>
@@ -100,9 +102,11 @@ namespace TT2Bot
                     { HIGHSCORE, "Shows the people in the specified range. Defaults to 1-30" },
                     { PET, "Shows stats for a given pet on the given level" },
                     { PET_LIST, "Lists all pets available" },
-                    { PRESTIGE, "Shows various stats about prestiging on the given stage" }
+                    { PRESTIGE, "Shows various stats about prestiging on the given stage" },
+                    { SKILL, "Lists all available skills currently in the game" },
+                    { SKILL_SHOW, "Shows you all the relevant information about the given skill" }
                 }.ToImmutableDictionary();
-            }           
+            }
         }
     }
 }
