@@ -6,7 +6,7 @@ using TitanBot.Commands;
 using TitanBot.Formatting;
 using TitanBot.Replying;
 using TT2Bot.Models;
-using static TT2Bot.TT2Localisation.Commands;
+using static TT2Bot.TT2Localisation.CommandText;
 using static TT2Bot.TT2Localisation.Help;
 
 namespace TT2Bot.Commands.Clan
@@ -45,7 +45,7 @@ namespace TT2Bot.Commands.Clan
         [Usage(Usage.EXCUSE_ADD)]
         public async Task AddExcuseAsync([Dense]string text)
         {
-            var excuse = new Models.Excuse
+            var excuse = new Excuse
             {
                 CreatorId = Author.Id,
                 ExcuseText = text,

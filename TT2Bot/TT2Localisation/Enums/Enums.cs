@@ -8,7 +8,7 @@ namespace TT2Bot
     {
         public static partial class Enums
         {
-            private const string BASE_PATH = "ENUM_";
+            public const string BASE_PATH = "ENUM_";
             public static IReadOnlyDictionary<string, string> Defaults { get; }
                 = new Dictionary<string, string>().Concat(BonusTypeText.Defaults)
                                                   .Concat(EquipmentClassText.Defaults)
@@ -16,6 +16,7 @@ namespace TT2Bot
                                                   .Concat(EquipmentSourceText.Defaults)
                                                   .Concat(HelperTypeText.Defaults)
                                                   .Concat(SubmissionTypeText.Defaults)
+                                                  .Concat(SkillCategoryText.Defaults)
                                                   .ToImmutableDictionary();
         }
     }

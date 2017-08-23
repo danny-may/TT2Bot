@@ -28,7 +28,7 @@ namespace TT2Bot.Helpers
             => (int)Math.Ceiling((TitanLordHp(clanLevel) / attackers) / (Math.Max(50, maxStage) * tapsPerAttack + Math.Max(50, maxStage) * 90 * 2));
 
         public static int RelicsEarned(int stage, int bosLevel)
-            => (int)Math.Floor((1 + (double)bosLevel * 0.05) * Math.Pow((((double)stage - 75) / 14), 1.75));
+            => (int)Math.Floor((1 + bosLevel * 0.05) * Math.Pow((((double)stage - 75) / 14), 1.75));
 
         public static int TitansOnStage(int stage, int ipLevel)
             => Math.Max(1, (stage / 1000) * 4 + 10 - ipLevel);

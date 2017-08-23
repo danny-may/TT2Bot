@@ -176,7 +176,7 @@
       <HintPath>..\packages\System.Xml.XPath.XDocument.4.3.0\lib\net46\System.Xml.XPath.XDocument.dll</HintPath>
     </Reference>
     <Reference Include="TitanBot, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Titansmasher.TitanBot.3.3.1001\lib\net461\TitanBot.dll</HintPath>
+      <HintPath>..\packages\Titansmasher.TitanBot.3.3.1003\lib\net461\TitanBot.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -189,31 +189,53 @@
     <Compile Include="Commands\Clan\SubmitCommand.cs" />
     <Compile Include="Commands\Clan\TitanLordCommand.cs" />
     <Compile Include="Commands\CommandTemplate.cs" />
-    <Compile Include="Commands\Data\ArtifactsCommand.cs" />
+    <Compile Include="GameEntity\Base\Embedable\GameEntitySingleEmbedable.cs" />
+    <Compile Include="GameEntity\Commands\ArtifactsCommand.cs" />
     <Compile Include="Commands\Data\ClaimCommand.cs" />
     <Compile Include="Commands\Data\ClanStatsCommand.cs" />
-    <Compile Include="Commands\Data\EquipmentsCommand.cs" />
-    <Compile Include="Commands\Data\HelpersCommand.cs" />
+    <Compile Include="GameEntity\Commands\EquipmentsCommand.cs" />
+    <Compile Include="GameEntity\Commands\HelpersCommand.cs" />
     <Compile Include="Commands\Data\HighScoreCommand.cs" />
-    <Compile Include="Commands\Data\PetsCommand.cs" />
+    <Compile Include="GameEntity\Commands\PetsCommand.cs" />
     <Compile Include="Commands\Data\PrestigeCommand.cs" />
+    <Compile Include="GameEntity\Commands\SkillTreeCommand.cs" />
     <Compile Include="Commands\Games\EeveeCommand.cs" />
+    <Compile Include="GameEntity\Base\GameEntityCommand.cs" />
+    <Compile Include="GameEntity\Base\Embedable\GameEntityListEmbedable.cs" />
+    <Compile Include="GameEntity\Base\GameEntityLocalisation.cs" />
+    <Compile Include="GameEntity\Embedables\PetListEmbedable.cs" />
+    <Compile Include="GameEntity\Embedables\HelperSingleEmbedable.cs" />
+    <Compile Include="GameEntity\Embedables\ArtifactSingleEmbedable.cs" />
+    <Compile Include="GameEntity\Base\Embedable\GameEntityEmbedable.cs" />
     <Compile Include="Commands\TT2Command.cs" />
+    <Compile Include="GameEntity\Embedables\HelperListEmbedable.cs" />
+    <Compile Include="GameEntity\Embedables\ArtifactListEmbedable.cs" />
+    <Compile Include="GameEntity\Embedables\EquipmentSingleEmbedable.cs" />
+    <Compile Include="GameEntity\Embedables\EquipmentListEmbedable.cs" />
+    <Compile Include="GameEntity\Embedables\PetSingleEmbedable.cs" />
+    <Compile Include="GameEntity\Embedables\SkillTreeSingleEmbedable.cs" />
+    <Compile Include="GameEntity\Embedables\SkillTreeListEmbedable.cs" />
+    <Compile Include="GameEntity\Localisation\EntityLocalisation.cs" />
     <Compile Include="Handlers\MessageHandler.cs" />
     <Compile Include="Helpers\Calculator.cs" />
     <Compile Include="Helpers\Extensions.cs" />
     <Compile Include="Helpers\TitanLordExtensions.cs" />
+    <Compile Include="GameEntity\Enums\EntityId\EquipmentId.cs" />
     <Compile Include="Models\General\Percentage.cs" />
-    <Compile Include="Models\TT2\GameEntity.cs" />
-    <Compile Include="Models\TT2\ImprovementCollection.cs" />
-    <Compile Include="Services\ServiceAreas\HelperService.cs" />
-    <Compile Include="Services\ServiceAreas\HelperSkillService.cs" />
-    <Compile Include="Services\ServiceAreas\PetService.cs" />
-    <Compile Include="Services\ServiceAreas\ArtifactService.cs" />
-    <Compile Include="Services\ServiceAreas\EquipmentService.cs" />
-    <Compile Include="Services\ServiceAreas\GameEntityService.cs" />
+    <Compile Include="GameEntity\Base\GameEntity.cs" />
+    <Compile Include="GameEntity\Entities\Skill.cs" />
+    <Compile Include="GameEntity\Services\HelperService.cs" />
+    <Compile Include="GameEntity\Services\HelperSkillService.cs" />
+    <Compile Include="GameEntity\Services\SkillTreeService.cs" />
+    <Compile Include="GameEntity\Services\PetService.cs" />
+    <Compile Include="GameEntity\Services\ArtifactService.cs" />
+    <Compile Include="GameEntity\Services\EquipmentService.cs" />
+    <Compile Include="GameEntity\Base\GameEntityService.cs" />
+    <Compile Include="GameEntity\Enums\SkillCategory.cs" />
+    <Compile Include="GameEntity\Enums\EntityId\SkillId.cs" />
     <Compile Include="Services\TT2DataService.cs" />
     <Compile Include="TT2Localisation\Commands\ApplyText.cs" />
+    <Compile Include="TT2Localisation\Commands\SkillText.cs" />
     <Compile Include="TT2Localisation\Commands\HelperText.cs" />
     <Compile Include="TT2Localisation\Commands\PrestigeText.cs" />
     <Compile Include="TT2Localisation\Commands\PetText.cs" />
@@ -226,16 +248,12 @@
     <Compile Include="TT2Localisation\Commands\SubmitText.cs" />
     <Compile Include="TT2Localisation\Commands\SuggestText.cs" />
     <Compile Include="TT2Localisation\Commands\ReportText.cs" />
+    <Compile Include="TT2Localisation\Enums\SkillCategoryText.cs" />
     <Compile Include="TT2Localisation\Enums\SubmissionTypeText.cs" />
     <Compile Include="TT2Localisation\Enums\HelperTypeText.cs" />
     <Compile Include="TT2Localisation\Enums\Enums.cs" />
     <Compile Include="TT2Localisation\Enums\Equipment.cs" />
     <Compile Include="TT2Localisation\FormatTypes.cs" />
-    <Compile Include="TT2Localisation\Game\Equipment.cs" />
-    <Compile Include="TT2Localisation\Game\Game.cs" />
-    <Compile Include="TT2Localisation\Game\Helper.cs" />
-    <Compile Include="TT2Localisation\Game\HelperSkill.cs" />
-    <Compile Include="TT2Localisation\Game\Pet.cs" />
     <Compile Include="TT2Localisation\Help\Desc.cs" />
     <Compile Include="TT2Localisation\Help\Flag.cs" />
     <Compile Include="TT2Localisation\Help\Help.cs" />
@@ -250,33 +268,33 @@
     <Compile Include="Models\Settings\TT2GlobalSettings.cs" />
     <Compile Include="Models\Settings\TitanLordSettings.cs" />
     <Compile Include="Models\Settings\TitanLordTimerData.cs" />
-    <Compile Include="Models\TT2\Artifact.cs" />
-    <Compile Include="Models\TT2\Enums\ArtifactTier.cs" />
-    <Compile Include="Models\TT2\Enums\BonusType.cs" />
-    <Compile Include="Models\TT2\Enums\EquipmentClass.cs" />
-    <Compile Include="Models\TT2\Enums\EquipmentRarity.cs" />
-    <Compile Include="Models\TT2\Enums\EquipmentSource.cs" />
-    <Compile Include="Models\TT2\Enums\HelperType.cs" />
-    <Compile Include="Models\TT2\Equipment.cs" />
-    <Compile Include="Models\TT2\Helper.cs" />
-    <Compile Include="Models\TT2\HelperSkill.cs" />
-    <Compile Include="Models\TT2\HighScoreSheet.cs" />
-    <Compile Include="Models\TT2\Pet.cs" />
+    <Compile Include="GameEntity\Entities\Artifact.cs" />
+    <Compile Include="GameEntity\Enums\ArtifactTier.cs" />
+    <Compile Include="GameEntity\Enums\BonusType.cs" />
+    <Compile Include="GameEntity\Enums\EquipmentClass.cs" />
+    <Compile Include="GameEntity\Enums\EquipmentRarity.cs" />
+    <Compile Include="GameEntity\Enums\EquipmentSource.cs" />
+    <Compile Include="GameEntity\Enums\HelperType.cs" />
+    <Compile Include="GameEntity\Entities\Equipment.cs" />
+    <Compile Include="GameEntity\Entities\Helper.cs" />
+    <Compile Include="GameEntity\Entities\HelperSkill.cs" />
+    <Compile Include="Models\General\HighScoreSheet.cs" />
+    <Compile Include="GameEntity\Entities\Pet.cs" />
     <Compile Include="Overrides\Formatter.cs" />
     <Compile Include="Overrides\Logger.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TT2BotClient.cs" />
     <Compile Include="TT2Localisation\Enums\BonusTypeText.cs" />
-    <Compile Include="TT2Localisation\Commands\Commands.cs" />
-    <Compile Include="TT2Localisation\Game\Artifact.cs" />
+    <Compile Include="TT2Localisation\Commands\CommandText.cs" />
     <Compile Include="TT2Localisation\Help\Usage.cs" />
     <Compile Include="TT2Localisation\Types.cs" />
-    <Compile Include="TypeReaders\ArtifactTypeReader.cs" />
-    <Compile Include="TypeReaders\EquipmentTypeReader.cs" />
-    <Compile Include="TypeReaders\GameEntityTypeReader.cs" />
-    <Compile Include="TypeReaders\HelperTypeReader.cs" />
-    <Compile Include="TypeReaders\PetTypeReader.cs" />
+    <Compile Include="GameEntity\TypeReaders\ArtifactTypeReader.cs" />
+    <Compile Include="GameEntity\TypeReaders\EquipmentTypeReader.cs" />
+    <Compile Include="GameEntity\Base\GameEntityTypeReader.cs" />
+    <Compile Include="GameEntity\TypeReaders\HelperTypeReader.cs" />
+    <Compile Include="GameEntity\TypeReaders\SkillTreeTypeReader.cs" />
+    <Compile Include="GameEntity\TypeReaders\PetTypeReader.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -286,6 +304,8 @@
     <Analyzer Include="..\packages\Microsoft.CodeAnalysis.Analyzers.1.1.0\analyzers\dotnet\cs\Microsoft.CodeAnalysis.Analyzers.dll" />
     <Analyzer Include="..\packages\Microsoft.CodeAnalysis.Analyzers.1.1.0\analyzers\dotnet\cs\Microsoft.CodeAnalysis.CSharp.Analyzers.dll" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="TypeReaders\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

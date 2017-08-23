@@ -9,7 +9,7 @@ namespace TT2Bot
         {
             public static class SubmissionTypeText
             {
-                private const string BASE_PATH = Enums.BASE_PATH + "SUBMISSIONTYPE_";
+                public const string BASE_PATH = Enums.BASE_PATH + "SUBMISSIONTYPE_";
 
                 public const string BUG = BASE_PATH + nameof(BUG);
                 public const string SUGGESTION = BASE_PATH + nameof(SUGGESTION);

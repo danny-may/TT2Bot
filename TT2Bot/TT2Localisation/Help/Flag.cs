@@ -9,7 +9,7 @@ namespace TT2Bot
         {
             public static class Flag
             {
-                private const string BASE_PATH = Help.BASE_PATH + "FLAG_";
+                public const string BASE_PATH = Help.BASE_PATH + "FLAG_";
 
                 public const string APPLY_G = BASE_PATH + nameof(APPLY_G);
                 public const string APPLY_I = BASE_PATH + nameof(APPLY_I);

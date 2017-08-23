@@ -9,7 +9,7 @@ namespace TT2Bot
         {
             public static class HelperTypeText
             {
-                private const string BASE_PATH = Enums.BASE_PATH + "HELPERTYPE_";
+                public const string BASE_PATH = Enums.BASE_PATH + "HELPERTYPE_";
 
                 public const string SPELL = BASE_PATH + nameof(SPELL);
                 public const string MELEE = BASE_PATH + nameof(MELEE);

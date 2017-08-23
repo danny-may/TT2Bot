@@ -5,11 +5,11 @@ namespace TT2Bot
 {
     public static partial class TT2Localisation
     {
-        public static partial class Commands
+        public static partial class CommandText
         {
             public static class SubmitText
             {
-                private const string BASE_PATH = Commands.BASE_PATH + "SUBMIT_";
+                public const string BASE_PATH = CommandText.BASE_PATH + "SUBMIT_";
                 
                 public const string BLOCKED = BASE_PATH + nameof(BLOCKED);
                 public const string MISSING_CHANNEL = BASE_PATH + nameof(MISSING_CHANNEL);

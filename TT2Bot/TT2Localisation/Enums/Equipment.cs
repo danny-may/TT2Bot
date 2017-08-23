@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Collections.Immutable;
+using TitanBot.Formatting;
+using TT2Bot.GameEntity.Enums;
 
 namespace TT2Bot
 {
@@ -9,68 +11,61 @@ namespace TT2Bot
         {
             public static class EquipmentClassText
             {
-                private const string BASE_PATH = Enums.BASE_PATH + "EQUIPMENTCLASS_";
+                public const string BASE_PATH = Enums.BASE_PATH + "EQUIPMENTCLASS_";
 
-                public const string NONE = BASE_PATH + nameof(NONE);
-                public const string WEAPON = BASE_PATH + nameof(WEAPON);
-                public const string HAT = BASE_PATH + nameof(HAT);
-                public const string SUIT = BASE_PATH + nameof(SUIT);
-                public const string AURA = BASE_PATH + nameof(AURA);
-                public const string SLASH = BASE_PATH + nameof(SLASH);
-                public const string WEAPON_ALT = BASE_PATH + nameof(WEAPON_ALT);
-                public const string HAT_ALT = BASE_PATH + nameof(HAT_ALT);
-                public const string SUIT_ALT = BASE_PATH + nameof(SUIT_ALT);
-                public const string AURA_ALT = BASE_PATH + nameof(AURA_ALT);
-                public const string SLASH_ALT = BASE_PATH + nameof(SLASH_ALT);
+                public static LocalisedString Localisable(EquipmentClass eClass)
+                    => new LocalisedString(BASE_PATH + eClass.ToString().ToUpper());
+
+                public static LocalisedString LocalisableAlt(EquipmentClass eClass)
+                    => new LocalisedString(BASE_PATH + eClass.ToString().ToUpper() + "_ALT");
 
                 public static IReadOnlyDictionary<string, string> Defaults { get; }
                     = new Dictionary<string, string>
                     {
-                        { NONE, "Removed" },
-                        { WEAPON, "Weapon" },
-                        { HAT, "Hat" },
-                        { SUIT, "Suit" },
-                        { AURA, "Aura" },
-                        { SLASH, "Slash" },
-                        { WEAPON_ALT, "Sword" },
-                        { HAT_ALT, "Helmet" },
-                        { SUIT_ALT, "Chest,Body" },
-                        { AURA_ALT, null },
-                        { SLASH_ALT, null }
+                        { Localisable(EquipmentClass.None).Key, "Removed" },
+                        { Localisable(EquipmentClass.Weapon).Key, "Weapon" },
+                        { Localisable(EquipmentClass.Hat).Key, "Hat" },
+                        { Localisable(EquipmentClass.Suit).Key, "Suit" },
+                        { Localisable(EquipmentClass.Aura).Key, "Aura" },
+                        { Localisable(EquipmentClass.Slash).Key, "Slash" },
+                        { LocalisableAlt(EquipmentClass.None).Key, "" },
+                        { LocalisableAlt(EquipmentClass.Weapon).Key, "Sword" },
+                        { LocalisableAlt(EquipmentClass.Hat).Key, "Helmet" },
+                        { LocalisableAlt(EquipmentClass.Suit).Key, "Chest,Body" },
+                        { LocalisableAlt(EquipmentClass.Aura).Key, "" },
+                        { LocalisableAlt(EquipmentClass.Slash).Key, "" }
                     }.ToImmutableDictionary();
             }
 
             public static class EquipmentRarityText
             {
-                private const string BASE_PATH = Enums.BASE_PATH + "EQUIPMENTRARITY_";
+                public const string BASE_PATH = Enums.BASE_PATH + "EQUIPMENTRARITY_";
 
-                public const string REMOVED = BASE_PATH + nameof(REMOVED);
-                public const string COMMON = BASE_PATH + nameof(COMMON);
-                public const string RARE = BASE_PATH + nameof(RARE);
-                public const string LEGENDARY = BASE_PATH + nameof(LEGENDARY);
+                public static LocalisedString Localisable(EquipmentRarity rarity)
+                    => new LocalisedString(BASE_PATH + rarity.ToString().ToUpper());
 
                 public static IReadOnlyDictionary<string, string> Defaults { get; }
                     = new Dictionary<string, string>
                     {
-                        { REMOVED, "Removed" },
-                        { COMMON, "Common" },
-                        { RARE, "Rare" },
-                        { LEGENDARY, "Legendary" }
+                        { Localisable(EquipmentRarity.Removed).Key, "Removed" },
+                        { Localisable(EquipmentRarity.Common).Key, "Common" },
+                        { Localisable(EquipmentRarity.Rare).Key, "Rare" },
+                        { Localisable(EquipmentRarity.Legendary).Key, "Legendary" }
                     }.ToImmutableDictionary();
             }
 
             public static class EquipmentSourceText
             {
-                private const string BASE_PATH = Enums.BASE_PATH + "EQUIPMENTSOURCE_";
+                public const string BASE_PATH = Enums.BASE_PATH + "EQUIPMENTSOURCE_";
 
-                public const string DEFAULT = BASE_PATH + nameof(DEFAULT);
-                public const string VALENTINES = BASE_PATH + nameof(VALENTINES);
+                public static LocalisedString Localisable(EquipmentSource source)
+                    => new LocalisedString(BASE_PATH + source.ToString().ToUpper());
 
                 public static IReadOnlyDictionary<string, string> Defaults { get; }
                     = new Dictionary<string, string>
                     {
-                        { DEFAULT, "Default" },
-                        { VALENTINES, "Valentines" }
+                        { Localisable(EquipmentSource.Default).Key, "Default" },
+                        { Localisable(EquipmentSource.Valentines).Key, "Valentines" }
                     }.ToImmutableDictionary();
             }
         }

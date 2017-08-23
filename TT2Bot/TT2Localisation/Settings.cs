@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace TT2Bot
 {
@@ -11,14 +8,14 @@ namespace TT2Bot
     {
         public static class Settings
         {
-            private const string BASE_PATH = "SETTINGS_";
+            public const string BASE_PATH = "SETTINGS_";
 
             public const string STRING_TOOLONG = BASE_PATH + nameof(STRING_TOOLONG);
             public const string CQ_TOOLOW = BASE_PATH + nameof(CQ_TOOLOW);
 
             public static class Desc
             {
-                private const string BASE_PATH = Settings.BASE_PATH + "DESCRIPTION_";
+                public const string BASE_PATH = Settings.BASE_PATH + "DESCRIPTION_";
 
                 public const string GUILD_TITANLORD = BASE_PATH + nameof(GUILD_TITANLORD);
                 public const string GLOBAL_TT2 = BASE_PATH + nameof(GLOBAL_TT2);
@@ -35,7 +32,7 @@ namespace TT2Bot
 
             public static class Notes
             {
-                private const string BASE_PATH = Settings.BASE_PATH + "NOTES_";
+                public const string BASE_PATH = Settings.BASE_PATH + "NOTES_";
 
                 public const string GUILD_TITANLORD = BASE_PATH + nameof(GUILD_TITANLORD);
 

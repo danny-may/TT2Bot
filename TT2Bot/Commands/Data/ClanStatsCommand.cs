@@ -5,9 +5,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using TitanBot.Commands;
 using TitanBot.Formatting;
+using TT2Bot.GameEntity.Enums;
 using TT2Bot.Helpers;
 using TT2Bot.Models;
-using static TT2Bot.TT2Localisation.Commands;
+using static TT2Bot.TT2Localisation.CommandText;
 using static TT2Bot.TT2Localisation.Help;
 
 namespace TT2Bot.Commands.Data
@@ -40,8 +41,8 @@ namespace TT2Bot.Commands.Data
             };
             builder.WithTitle(ClanStatsText.TITLE, clanLevel)
                    .AddInlineField(f => f.WithName(ClanStatsText.FIELD_CQ).WithValue(absLevel))
-                   .AddInlineField(f => f.WithName(ClanStatsText.FIELD_BONUS_CURRENT).WithValue(BonusType.ClanDamage.LocaliseValue(currentBonus)))
-                   .AddInlineField(f => f.WithName(ClanStatsText.FIELD_BONUS_NEXT).WithValue(BonusType.ClanDamage.LocaliseValue(nextBonus)))
+                   .AddInlineField(f => f.WithName(ClanStatsText.FIELD_BONUS_CURRENT).WithValue(BonusType.ClanDamage.ToLocalisable(currentBonus)))
+                   .AddInlineField(f => f.WithName(ClanStatsText.FIELD_BONUS_NEXT).WithValue(BonusType.ClanDamage.ToLocalisable(nextBonus)))
                    .AddInlineField(f => f.WithName(ClanStatsText.FIELD_HP).WithValue(nextTitanLordHp))
                    .AddInlineField(f => f.WithName(ClanStatsText.FIELD_ADVSTART).WithValue(advanceStart));
             LocalisedString[] rows = attackers.Select(num =>

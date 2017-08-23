@@ -5,11 +5,11 @@ namespace TT2Bot
 {
     public static partial class TT2Localisation
     {
-        public static partial class Commands
+        public static partial class CommandText
         {
             public static class ClaimText
             {
-                private const string BASE_PATH = Commands.BASE_PATH + "CLAIM_";
+                public const string BASE_PATH = CommandText.BASE_PATH + "CLAIM_";
 
                 public const string MISSING_SUPPORTCODE = BASE_PATH + nameof(MISSING_SUPPORTCODE);
                 public const string INVALID_SUPPORTCODE = BASE_PATH + nameof(INVALID_SUPPORTCODE);

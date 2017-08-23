@@ -8,7 +8,7 @@ namespace TT2Bot
     {
         public static partial class Help
         {
-            private const string BASE_PATH = "HELP_";
+            public const string BASE_PATH = "HELP_";
 
             public static IReadOnlyDictionary<string, string> Defaults { get; }
                     = new Dictionary<string, string>().Concat(Desc.Defaults)
