@@ -57,7 +57,7 @@ namespace TT2Bot.GameEntity.Entities
                 { SkillId.SplashDmg, Imgur("lsUMXUV") },
                 { SkillId.AutoAdvance, Imgur("WGFO3py") },
                 { SkillId.MultiMonsters, Imgur("x6d8i7Y") },
-                { SkillId.PetOfflineDmg, Imgur("x6d8i7Y") },
+                { SkillId.PetOfflineDmg, Imgur("pDm8Wdv") },
                 { SkillId.BurstSkillBoost, Imgur("cGVgJSK") },
                 { SkillId.FireTapSkillBoost, Imgur("7Y084tp") },
                 { SkillId.MPRegenBoost, Imgur("MQUCTiB") },
