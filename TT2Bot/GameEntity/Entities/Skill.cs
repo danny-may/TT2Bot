@@ -9,7 +9,6 @@ using TT2Bot.GameEntity.Base;
 using TT2Bot.GameEntity.Enums;
 using TT2Bot.GameEntity.Enums.EntityId;
 using TT2Bot.GameEntity.Localisation;
-using TT2Bot.Models;
 
 namespace TT2Bot.GameEntity.Entities
 {
@@ -21,12 +20,6 @@ namespace TT2Bot.GameEntity.Entities
                 { SkillCategory.Left, new []{ SkillId.PetQTE, SkillId.BossDmgQTE, SkillId.PetGoldQTE, SkillId.HelperDmgQTE, SkillId.HelperCountQTE, SkillId.Fairy, SkillId.BossTimer, SkillId.ClanQTE } },
                 { SkillCategory.Center, new []{ SkillId.OfflineGold, SkillId.MeleeHelperDmg, SkillId.SpellHelperDmg, SkillId.RangedHelperDmg, SkillId.PetDmg, SkillId.LessMonsters, SkillId.SplashDmg, SkillId.AutoAdvance, SkillId.MultiMonsters, SkillId.PetOfflineDmg } },
                 { SkillCategory.Right, new []{ SkillId.BurstSkillBoost, SkillId.FireTapSkillBoost, SkillId.MPRegenBoost, SkillId.MPCapacityBoost, SkillId.HelperDmgSkillBoost, SkillId.MidasSkillBoost, SkillId.ManaStealSkillBoost, SkillId.CritSkillBoost, SkillId.CloneSkillBoost, SkillId.ManaMonster } }
-            }.ToImmutableDictionary(k => k.Key, v => v.Value.ToImmutableArray());
-
-        public static IReadOnlyDictionary<BonusType, ImmutableArray<string>> SudoBonusTypes { get; }
-            = new Dictionary<BonusType, string[]>
-            {
-
             }.ToImmutableDictionary(k => k.Key, v => v.Value.ToImmutableArray());
 
         public override LocalisedString Name => Localisation.GetName(Id);
@@ -42,6 +35,41 @@ namespace TT2Bot.GameEntity.Entities
         public double MaxBonus => Levels.Last().Bonus;
         public SkillCategory Category { get; }
         public BonusType SudoBonusType { get; }
+
+        static Skill()
+        {
+            ImageUrls = new Dictionary<SkillId, string>
+            {
+                { SkillId.PetQTE, Imgur("5sBkGbz") },
+                { SkillId.BossDmgQTE, Imgur("HdCnYse") },
+                { SkillId.PetGoldQTE, Imgur("zCL5tnH") },
+                { SkillId.HelperDmgQTE, Imgur("WXfA5Vc") },
+                { SkillId.HelperCountQTE, Imgur("mVJn79f") },
+                { SkillId.Fairy, Imgur("HkgE5dL") },
+                { SkillId.BossTimer, Imgur("glVLX4O") },
+                { SkillId.ClanQTE, Imgur("XmRvhkn") },
+                { SkillId.OfflineGold, Imgur("Hnxaos7") },
+                { SkillId.MeleeHelperDmg, Imgur("rihNNiW") },
+                { SkillId.SpellHelperDmg, Imgur("Kf6KAB9") },
+                { SkillId.RangedHelperDmg, Imgur("aUWtNwb") },
+                { SkillId.PetDmg, Imgur("1qb9AqW") },
+                { SkillId.LessMonsters, Imgur("y1tLSqG") },
+                { SkillId.SplashDmg, Imgur("lsUMXUV") },
+                { SkillId.AutoAdvance, Imgur("WGFO3py") },
+                { SkillId.MultiMonsters, Imgur("x6d8i7Y") },
+                { SkillId.PetOfflineDmg, Imgur("x6d8i7Y") },
+                { SkillId.BurstSkillBoost, Imgur("cGVgJSK") },
+                { SkillId.FireTapSkillBoost, Imgur("7Y084tp") },
+                { SkillId.MPRegenBoost, Imgur("MQUCTiB") },
+                { SkillId.MPCapacityBoost, Imgur("sNznnE3") },
+                { SkillId.HelperDmgSkillBoost, Imgur("8sweREW") },
+                { SkillId.MidasSkillBoost, Imgur("vVbTJkv") },
+                { SkillId.ManaStealSkillBoost, Imgur("bSYjR6J") },
+                { SkillId.CritSkillBoost, Imgur("M2kNj2q") },
+                { SkillId.CloneSkillBoost, Imgur("dWTwocs") },
+                { SkillId.ManaMonster, Imgur("G7kfSX5") }
+            }.ToImmutableDictionary();
+        }
 
         public Skill(SkillId id,
                      string note,
@@ -62,11 +90,6 @@ namespace TT2Bot.GameEntity.Entities
 
             MaxLevel = Levels.Length;
             Category = SkillCategories.FirstOrDefault(c => c.Value.Contains(Id)).Key;
-        }
-
-        public LocalisedString FormatBonus(double bonus)
-        {
-            return null;
         }
 
         public static class Localisation
