@@ -1,5 +1,4 @@
 ﻿using Discord;
-using Newtonsoft.Json;
 using System;
 using TitanBot.Contexts;
 using TitanBot.Formatting;
@@ -16,8 +15,8 @@ namespace TT2Bot.Callbacks
             if (context.Guild == null)
                 return;
 
-            var data = JsonConvert.DeserializeObject<TitanLordTimerData>(context.Record.Data);
-            var settings = context.GuildSettings.Get<TitanLordSettings>();
+            var data = TitanLordTimerData.FromJson(context.Record.Data);
+            var settings = context.GuildSettings.Get<TitanLordSettings>(data.GroupId);
 
             var actualTime = context.Record.EndTime.AddTicks(-((context.Record.EndTime - context.CycleTime + context.Delay).Ticks / context.Record.Interval.Ticks) * context.Record.Interval.Ticks);
 
@@ -53,8 +52,8 @@ namespace TT2Bot.Callbacks
             if (context.Guild == null)
                 return;
 
-            var data = JsonConvert.DeserializeObject<TitanLordTimerData>(context.Record.Data);
-            var settings = context.GuildSettings.Get<TitanLordSettings>();
+            var data = TitanLordTimerData.FromJson(context.Record.Data);
+            var settings = context.GuildSettings.Get<TitanLordSettings>(data.GroupId);
 
             var messageChannel = context.Client.GetChannel(data.MessageChannelId) as IMessageChannel;
             if (messageChannel == null || context.Author == null)

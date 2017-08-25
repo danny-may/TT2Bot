@@ -21,8 +21,8 @@ namespace TT2Bot.Callbacks
             if (context.Guild == null)
                 return;
 
-            var data = JsonConvert.DeserializeObject<TitanLordTimerData>(context.Record.Data);
-            var settings = context.GuildSettings.Get<TitanLordSettings>();
+            var data = TitanLordTimerData.FromJson(context.Record.Data);
+            var settings = context.GuildSettings.Get<TitanLordSettings>(data.GroupId);
 
             var messageChannel = context.Client.GetChannel(data.MessageChannelId) as IMessageChannel;
 

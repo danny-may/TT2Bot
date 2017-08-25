@@ -28,6 +28,7 @@ namespace TT2Bot
                 public const string PRESTIGE_C = BASE_PATH + nameof(PRESTIGE_C);
                 public const string PRESTIGE_I = BASE_PATH + nameof(PRESTIGE_I);
                 public const string HELPER_G = BASE_PATH + nameof(HELPER_G);
+                public const string TITANLORD_G = BASE_PATH + nameof(TITANLORD_G);
 
                 public static IReadOnlyDictionary<string, string> Defaults { get; }
                     = new Dictionary<string, string>
@@ -49,7 +50,8 @@ namespace TT2Bot
                         { PRESTIGE_B, "Uses the given BoS level" },
                         { PRESTIGE_C, "Uses the given clan level" },
                         { PRESTIGE_I, "Uses the given IP level" },
-                        { HELPER_G, "Orders the heroes rather than grouping them" }
+                        { HELPER_G, "Orders the heroes rather than grouping them" },
+                        { TITANLORD_G, "Specify a clan to use. Use the settings command to create groups" }
                     }.ToImmutableDictionary();
             }
         }
