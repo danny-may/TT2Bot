@@ -1,6 +1,7 @@
 ﻿using Discord;
 using Newtonsoft.Json;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using TitanBot.Commands;
 using TitanBot.Formatting;
@@ -20,14 +21,15 @@ namespace TT2Bot.Commands.Clan
     [DefaultPermission(8)]
     [RequireContext(ContextType.Guild)]
     [Alias("TL", "Boss")]
-    class TitanLordCommand : TT2Command
+    internal class TitanLordCommand : TT2Command
     {
-        TitanLordSettings TitanLordSettings => GuildSettings.Get<TitanLordSettings>();
+        private TitanLordSettings TitanLordSettings(int group) => GuildSettings.Get<TitanLordSettings>(group);
 
         // Since TimeSpans are counting down from when they are created,
         // these arrays have been made from which the timespans will be
         // initialized from during runtime.
         private static readonly TimeSpan BossUptime = new TimeSpan(24, 0, 0);
+
         private static readonly TimeSpan BossDelay = new TimeSpan(6, 0, 0);
         private static readonly TimeSpan BossRound = new TimeSpan(1, 0, 0);
         private static readonly TimeSpan AttackTime = new TimeSpan(0, 0, 30);
@@ -35,44 +37,46 @@ namespace TT2Bot.Commands.Clan
 
         [Call("In")]
         [Usage(Usage.TITANLORD_IN)]
-        private Task TitanLordInAsync([Dense]TimeSpan time)
+        private Task TitanLordInAsync([Dense]TimeSpan time, [CallFlag('g', "Group", Flag.TITANLORD_G)]string group = null)
         {
             lock (GuildCommandLock)
-                LockedTitanLordIn(time).Wait();
+                LockedTitanLordIn(time, group).Wait();
 
             return Task.CompletedTask;
         }
 
         [Call("Dead")]
         [Usage(Usage.TITANLORD_DEAD)]
-        private Task TitanLordDead()
-            => TitanLordInAsync(BossDelay);
+        private Task TitanLordDead([CallFlag('g', "Group", Flag.TITANLORD_G)]string group = null)
+            => TitanLordInAsync(BossDelay, group);
 
-        private async Task LockedTitanLordIn(TimeSpan time)
+        private async Task LockedTitanLordIn(TimeSpan time, string group)
         {
+            var groupId = GetGroup(group);
+
             if (time > BossDelay)
             {
                 await ReplyAsync(TitanLordText.TIMER_TOOLONG, ReplyType.Error);
                 return;
             }
 
-            (var ticks, var rounds) = CancelCurrent();
+            (var ticks, var rounds) = CancelCurrent(groupId);
 
             var startTime = DateTime.Now.Add(time).Add(-BossDelay);
 
-            var tlChannel = Client.GetChannel(TitanLordSettings.Channel ?? Channel.Id) as IMessageChannel;
+            var tlChannel = Client.GetChannel(TitanLordSettings(groupId).Channel ?? Channel.Id) as IMessageChannel;
 
             if (ticks.Length == 0)
             {
-                var mostRecent = Scheduler.GetMostRecent<TitanLordTickCallback>(Guild.Id, null);
+                var mostRecent = Scheduler.GetMostRecent<TitanLordTickCallback>(Guild.Id, null, GroupCheck(groupId));
                 if (mostRecent != null && mostRecent.CompleteTime >= mostRecent.EndTime)
-                    await Reply(tlChannel).WithEmbedable(NewBoss(mostRecent, time)).SendAsync();
+                    await Reply(tlChannel).WithEmbedable(NewBoss(mostRecent, time, TitanLordSettings(groupId))).SendAsync();
             }
 
             var timer = await Reply(tlChannel).WithMessage((LocalisedString)TitanLordText.TIMER_LOADING)
                                               .SendAsync();
 
-            if (TitanLordSettings.PinTimer)
+            if (TitanLordSettings(groupId).PinTimer)
             {
                 try
                 {
@@ -84,7 +88,8 @@ namespace TT2Bot.Commands.Clan
             var data = new TitanLordTimerData
             {
                 MessageChannelId = tlChannel.Id,
-                MessageId = timer.Id
+                MessageId = timer.Id,
+                GroupId = groupId
             };
 
             StartTimers(startTime, data);
@@ -94,14 +99,17 @@ namespace TT2Bot.Commands.Clan
 
         [Call("Now")]
         [Usage(Usage.TITANLORD_NOW)]
-        private async Task TitanLordNowAsync()
+        private async Task TitanLordNowAsync([CallFlag('g', "Group", Flag.TITANLORD_G)]string group = null)
         {
-            CancelCurrent();
+            var groupId = GetGroup(group);
+
+            CancelCurrent(groupId);
             var startTime = DateTime.Now.Add(-BossDelay);
 
             var data = new TitanLordTimerData
             {
-                MessageChannelId = Client.GetChannel(TitanLordSettings.Channel ?? Channel.Id).Id
+                MessageChannelId = Client.GetChannel(TitanLordSettings(groupId).Channel ?? Channel.Id).Id,
+                GroupId = groupId
             };
 
             StartTimers(startTime, data);
@@ -111,9 +119,10 @@ namespace TT2Bot.Commands.Clan
 
         [Call("When")]
         [Usage(Usage.TITANLORD_WHEN)]
-        private async Task TitanLordWhenAsync()
+        private async Task TitanLordWhenAsync([CallFlag('g', "Group", Flag.TITANLORD_G)]string group = null)
         {
-            var current = Scheduler.GetMostRecent<TitanLordTickCallback>(Guild.Id, null);
+            var groupId = GetGroup(group);
+            var current = Scheduler.GetMostRecent<TitanLordTickCallback>(Guild.Id, null, GroupCheck(groupId));
             if (current == null || current.EndTime < DateTime.Now)
                 await ReplyAsync(TitanLordText.WHEN_NORUNNING, ReplyType.Info);
             else
@@ -122,26 +131,28 @@ namespace TT2Bot.Commands.Clan
 
         [Call("Info")]
         [Usage(Usage.TITANLORD_INFO)]
-        private async Task TitanLordInfoAsync()
-            => await ReplyAsync(ClanStatsCommand.StatsBuilder(BotUser, TitanLordSettings.CQ));
+        private async Task TitanLordInfoAsync([CallFlag('g', "Group", Flag.TITANLORD_G)]string group = null)
+            => await ReplyAsync(ClanStatsCommand.StatsBuilder(BotUser, TitanLordSettings(GetGroup(group)).CQ));
 
         [Call("Stop")]
         [Usage(Usage.TITANLORD_STOP)]
-        private async Task TitanLordStopAsync()
+        private async Task TitanLordStopAsync([CallFlag('g', "Group", Flag.TITANLORD_G)]string group = null)
         {
-            CancelCurrent();
+            CancelCurrent(GetGroup(group));
 
-            await ReplyAsync(TitanLordText.STOP_SUCCESS, ReplyType.Success);
+            if (SettingsManager.GetGroups(Guild).Count == 0)
+                await ReplyAsync(TitanLordText.STOP_SUCCESS, ReplyType.Success);
+            else
+                await ReplyAsync(TitanLordText.STOP_SUCCESS_GROUP, ReplyType.Success, group);
         }
 
-        private Embedable NewBoss(ISchedulerRecord latestTimer, TimeSpan time)
+        private Embedable NewBoss(ISchedulerRecord latestTimer, TimeSpan time, TitanLordSettings settings)
         {
             GuildSettings.Edit<TitanLordSettings>(s => s.CQ++);
 
-
-            var bossHp = Calculator.TitanLordHp(TitanLordSettings.CQ);
-            var clanBonus = Calculator.ClanBonus(TitanLordSettings.CQ);
-            var advStart = Calculator.AdvanceStart(TitanLordSettings.CQ);
+            var bossHp = Calculator.TitanLordHp(settings.CQ);
+            var clanBonus = Calculator.ClanBonus(settings.CQ);
+            var advStart = Calculator.AdvanceStart(settings.CQ);
 
             var builder = new LocalisedEmbedBuilder
             {
@@ -149,7 +160,7 @@ namespace TT2Bot.Commands.Clan
                 Timestamp = DateTime.Now,
             }.WithTitle(TitanLordText.NEWBOSS_EMBED_TITLE)
              .WithRawThumbnailUrl("https://cdn.discordapp.com/attachments/275257967937454080/308047011289235456/emoji.png")
-             .AddField(f => f.WithName(TitanLordText.NEWBOSS_EMBED_CQ).WithValue(TitanLordSettings.CQ))
+             .AddField(f => f.WithName(TitanLordText.NEWBOSS_EMBED_CQ).WithValue(settings.CQ))
              .AddField(f => f.WithName(TitanLordText.NEWBOSS_EMBED_BONUS).WithValue(BonusType.ClanDamage.ToLocalisable(clanBonus)))
              .AddField(f => f.WithName(TitanLordText.NEWBOSS_EMBED_HP).WithValue(bossHp))
              .AddField(f => f.WithName(TitanLordText.NEWBOSS_EMBED_TTK).WithValue(DateTime.Now.Add(time).Add(-BossDelay) - latestTimer.EndTime));
@@ -157,8 +168,20 @@ namespace TT2Bot.Commands.Clan
             return builder;
         }
 
-        private (ISchedulerRecord[] Ticks, ISchedulerRecord[] Rounds) CancelCurrent()
-            => (Scheduler.Cancel<TitanLordTickCallback>(Guild.Id, null), Scheduler.Cancel<TitanLordRoundCallback>(Guild.Id, null));
+        private (ISchedulerRecord[] Ticks, ISchedulerRecord[] Rounds) CancelCurrent(int group)
+            => (Scheduler.Cancel<TitanLordTickCallback>(Guild.Id, null, GroupCheck(group)),
+                Scheduler.Cancel<TitanLordRoundCallback>(Guild.Id, null, GroupCheck(group)));
+
+        private Func<string, bool> GroupCheck(int groupId)
+            => s => TitanLordTimerData.FromJson(s).GroupId == groupId;
+
+        private int GetGroup(string group)
+        {
+            if (group == null)
+                return 0;
+            var groups = SettingsManager.GetGroups(Guild);
+            return groups.Select(g => new { Id = g.Key, Values = g.Value }).FirstOrDefault(g => g.Values.Contains(group.ToLower()))?.Id ?? 0;
+        }
 
         private (ulong TickTimer, ulong RoundTimer) StartTimers(DateTime from, TitanLordTimerData data)
             => (
