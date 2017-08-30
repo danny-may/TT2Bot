@@ -18,6 +18,7 @@ namespace TT2Bot
                 public const string WHEN_NORUNNING = BASE_PATH + nameof(WHEN_NORUNNING);
                 public const string WHEN_RUNNING = BASE_PATH + nameof(WHEN_RUNNING);
                 public const string STOP_SUCCESS = BASE_PATH + nameof(STOP_SUCCESS);
+                public const string STOP_SUCCESS_GROUP = BASE_PATH + nameof(STOP_SUCCESS_GROUP);
                 public const string NEWBOSS_EMBED_TITLE = BASE_PATH + nameof(NEWBOSS_EMBED_TITLE);
                 public const string NEWBOSS_EMBED_CQ = BASE_PATH + nameof(NEWBOSS_EMBED_CQ);
                 public const string NEWBOSS_EMBED_BONUS = BASE_PATH + nameof(NEWBOSS_EMBED_BONUS);
@@ -34,6 +35,7 @@ namespace TT2Bot
                         { WHEN_NORUNNING, "There is no currently active Titan Lord timer running" },
                         { WHEN_RUNNING, "There will be a Titan Lord in {0}" },
                         { STOP_SUCCESS, "All currently running Titan Lord timers have been stopped" },
+                        { STOP_SUCCESS_GROUP, "The Titan Lord timer for {0} has been stopped" },
                         { NEWBOSS_EMBED_TITLE, "Titan Lord data updated!" },
                         { NEWBOSS_EMBED_CQ,"New Clan Quest" },
                         { NEWBOSS_EMBED_BONUS, "New bonus" },

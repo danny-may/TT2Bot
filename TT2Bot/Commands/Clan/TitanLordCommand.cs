@@ -21,14 +21,15 @@ namespace TT2Bot.Commands.Clan
     [DefaultPermission(8)]
     [RequireContext(ContextType.Guild)]
     [Alias("TL", "Boss")]
-    class TitanLordCommand : TT2Command
+    internal class TitanLordCommand : TT2Command
     {
-        TitanLordSettings TitanLordSettings(int group) => GuildSettings.Get<TitanLordSettings>(group);
+        private TitanLordSettings TitanLordSettings(int group) => GuildSettings.Get<TitanLordSettings>(group);
 
         // Since TimeSpans are counting down from when they are created,
         // these arrays have been made from which the timespans will be
         // initialized from during runtime.
         private static readonly TimeSpan BossUptime = new TimeSpan(24, 0, 0);
+
         private static readonly TimeSpan BossDelay = new TimeSpan(6, 0, 0);
         private static readonly TimeSpan BossRound = new TimeSpan(1, 0, 0);
         private static readonly TimeSpan AttackTime = new TimeSpan(0, 0, 30);
@@ -139,13 +140,15 @@ namespace TT2Bot.Commands.Clan
         {
             CancelCurrent(GetGroup(group));
 
-            await ReplyAsync(TitanLordText.STOP_SUCCESS, ReplyType.Success);
+            if (SettingsManager.GetGroups(Guild).Count == 0)
+                await ReplyAsync(TitanLordText.STOP_SUCCESS, ReplyType.Success);
+            else
+                await ReplyAsync(TitanLordText.STOP_SUCCESS_GROUP, ReplyType.Success, group);
         }
 
         private Embedable NewBoss(ISchedulerRecord latestTimer, TimeSpan time, TitanLordSettings settings)
         {
             GuildSettings.Edit<TitanLordSettings>(s => s.CQ++);
-
 
             var bossHp = Calculator.TitanLordHp(settings.CQ);
             var clanBonus = Calculator.ClanBonus(settings.CQ);
