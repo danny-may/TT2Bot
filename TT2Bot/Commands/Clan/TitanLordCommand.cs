@@ -66,7 +66,7 @@ namespace TT2Bot.Commands.Clan
 
             var tlChannel = Client.GetChannel(TitanLordSettings(groupId).Channel ?? Channel.Id) as IMessageChannel;
 
-            if (ticks.Length == 0)
+            if (ticks.Length == 1)
             {
                 var mostRecent = Scheduler.GetMostRecent<TitanLordTickCallback>(Guild.Id, null, GroupCheck(groupId));
                 if (mostRecent != null && mostRecent.CompleteTime >= mostRecent.EndTime)
