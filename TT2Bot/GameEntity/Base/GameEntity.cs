@@ -65,10 +65,10 @@ namespace TT2Bot.GameEntity.Base
     {
         new public TId Id { get => (TId)base.Id; set => base.Id = value; }
 
-        public override string ImageUrl => ImageUrls.TryGetValue(Id, out var url) ? url : null;
-
-        protected static IReadOnlyDictionary<TId, string> ImageUrls { get; set; }
-            = new Dictionary<TId, string>().ToImmutableDictionary();
+        //public override string ImageUrl => ImageUrls.TryGetValue(Id, out var url) ? url : null;
+        //
+        //protected static IReadOnlyDictionary<TId, string> ImageUrls { get; set; }
+        //    = new Dictionary<TId, string>().ToImmutableDictionary();
 
         protected static string Imgur(string imageId)
             => $"http://i.imgur.com/{imageId}.png";

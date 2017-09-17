@@ -9,46 +9,13 @@ using TT2Bot.GameEntity.Base;
 using TT2Bot.GameEntity.Enums;
 using TT2Bot.GameEntity.Enums.EntityId;
 using TT2Bot.GameEntity.Localisation;
-using TT2Bot.Models;
 
 namespace TT2Bot.GameEntity.Entities
 {
-    class Equipment : GameEntity<EquipmentId>
+    internal class Equipment : GameEntity<EquipmentId>
     {
-        public override LocalisedString Name => Localisation.GetName(Id);
-        public override LocalisedString Abbreviations => Localisation.GetAbbreviation(Id);
-        public EquipmentClass Class { get; }
-        public BonusType BonusType { get; }
-        public EquipmentRarity Rarity { get; }
-        public double BonusBase { get; }
-        public double BonusIncrease { get; }
-        public EquipmentSource Source { get; }
-        public override string ImageUrl => ImageUrls.TryGetValue(Id, out var url) ? url : _defaultImages[0];
-
-        internal Equipment(EquipmentId id,
-                           EquipmentClass eClass,
-                           BonusType bonusType,
-                           EquipmentRarity rarity,
-                           double bonusBase,
-                           double bonusIncrease,
-                           EquipmentSource source,
-                           string fileVersion,
-                           Func<string, ValueTask<Bitmap>> imageGetter = null)
-        {
-            Id = id;
-            Class = eClass;
-            BonusType = bonusType;
-            Rarity = rarity;
-            BonusBase = bonusBase;
-            BonusIncrease = bonusIncrease;
-            Source = source;
-            FileVersion = fileVersion;
-            ImageGetter = imageGetter;
-        }
-
-        static Equipment()
-        {
-            ImageUrls = new Dictionary<EquipmentId, string>
+        public static IReadOnlyDictionary<EquipmentId, string> ImageUrls { get; }
+            = new Dictionary<EquipmentId, string>
             {
                 { EquipmentId.Aura_Bats, Imgur("6JQGW3V") },
                 { EquipmentId.Aura_Bird, Imgur("iIC7MeB") },
@@ -182,6 +149,36 @@ namespace TT2Bot.GameEntity.Entities
                 { EquipmentId.Hat_Valentines, Imgur("KNAkgcU") },
                 { EquipmentId.Weapon_Valentines, Imgur("LnE4Erc") }
             }.ToImmutableDictionary();
+
+        public override LocalisedString Name => Localisation.GetName(Id);
+        public override LocalisedString Abbreviations => Localisation.GetAbbreviation(Id);
+        public EquipmentClass Class { get; }
+        public BonusType BonusType { get; }
+        public EquipmentRarity Rarity { get; }
+        public double BonusBase { get; }
+        public double BonusIncrease { get; }
+        public EquipmentSource Source { get; }
+        public override string ImageUrl => ImageUrls.TryGetValue(Id, out var url) ? url : _defaultImages[0];
+
+        internal Equipment(EquipmentId id,
+                           EquipmentClass eClass,
+                           BonusType bonusType,
+                           EquipmentRarity rarity,
+                           double bonusBase,
+                           double bonusIncrease,
+                           EquipmentSource source,
+                           string fileVersion,
+                           Func<string, ValueTask<Bitmap>> imageGetter = null)
+        {
+            Id = id;
+            Class = eClass;
+            BonusType = bonusType;
+            Rarity = rarity;
+            BonusBase = bonusBase;
+            BonusIncrease = bonusIncrease;
+            Source = source;
+            FileVersion = fileVersion;
+            ImageGetter = imageGetter;
         }
 
         public double BonusOnLevel(double level)

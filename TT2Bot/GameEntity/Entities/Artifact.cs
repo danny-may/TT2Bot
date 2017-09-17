@@ -8,11 +8,10 @@ using TitanBot.Formatting;
 using TT2Bot.GameEntity.Base;
 using TT2Bot.GameEntity.Enums;
 using TT2Bot.GameEntity.Localisation;
-using TT2Bot.Models;
 
 namespace TT2Bot.GameEntity.Entities
 {
-    class Artifact : GameEntity<int>
+    internal class Artifact : GameEntity<int>
     {
         public static IReadOnlyDictionary<ArtifactTier, ImmutableArray<int>> Tiers { get; }
             = new Dictionary<ArtifactTier, int[]>
@@ -25,45 +24,8 @@ namespace TT2Bot.GameEntity.Entities
                 { ArtifactTier.E, new [] { 6, 8, 10, 11, 12, 16, 29, 36, 37} }
             }.ToImmutableDictionary(k => k.Key, v => v.Value.ToImmutableArray());
 
-        public override LocalisedString Name => Localisation.GetName(Id);
-        public override LocalisedString Abbreviations => Localisation.GetAbbreviation(Id);
-        public string TT1 { get; }
-        public BonusType BonusType { get; }
-        public double EffectPerLevel { get; }
-        public double DamageBonus { get; }
-        public double CostCoef { get; }
-        public double CostExpo { get; }
-        public string Note { get; }
-        public ArtifactTier Tier => Tiers.FirstOrDefault(t => t.Value.Contains(Id)).Key;
-
-        internal Artifact(int id,
-                          int? maxLevel,
-                          string tt1,
-                          BonusType bonusType,
-                          double effectPerLevel,
-                          double damageBonus,
-                          double costCoef,
-                          double costExpo,
-                          string note,
-                          string fileVersion,
-                          Func<string, ValueTask<Bitmap>> imageGetter = null)
-        {
-            Id = id;
-            MaxLevel = maxLevel;
-            TT1 = tt1;
-            BonusType = bonusType;
-            EffectPerLevel = effectPerLevel;
-            DamageBonus = damageBonus;
-            CostCoef = costCoef;
-            CostExpo = costExpo;
-            Note = note;
-            FileVersion = fileVersion;
-            ImageGetter = imageGetter;
-        }
-
-        static Artifact()
-        {
-            ImageUrls = new Dictionary<int, string>
+        public static IReadOnlyDictionary<int, string> ImageUrls { get; }
+            = new Dictionary<int, string>
             {
                 { 1, Cockleshell("a4") },
                 { 2, Cockleshell("a38") },
@@ -104,6 +66,42 @@ namespace TT2Bot.GameEntity.Entities
                 { 38, Cockleshell("a5") },
                 { 39, Cockleshell("a21") }
             }.ToImmutableDictionary();
+
+        public override LocalisedString Name => Localisation.GetName(Id);
+        public override LocalisedString Abbreviations => Localisation.GetAbbreviation(Id);
+        public string TT1 { get; }
+        public BonusType BonusType { get; }
+        public double EffectPerLevel { get; }
+        public double DamageBonus { get; }
+        public double CostCoef { get; }
+        public double CostExpo { get; }
+        public string Note { get; }
+        public ArtifactTier Tier => Tiers.FirstOrDefault(t => t.Value.Contains(Id)).Key;
+        public override string ImageUrl => ImageUrls.TryGetValue(Id, out var url) ? url : null;
+
+        internal Artifact(int id,
+                          int? maxLevel,
+                          string tt1,
+                          BonusType bonusType,
+                          double effectPerLevel,
+                          double damageBonus,
+                          double costCoef,
+                          double costExpo,
+                          string note,
+                          string fileVersion,
+                          Func<string, ValueTask<Bitmap>> imageGetter = null)
+        {
+            Id = id;
+            MaxLevel = maxLevel;
+            TT1 = tt1;
+            BonusType = bonusType;
+            EffectPerLevel = effectPerLevel;
+            DamageBonus = damageBonus;
+            CostCoef = costCoef;
+            CostExpo = costExpo;
+            Note = note;
+            FileVersion = fileVersion;
+            ImageGetter = imageGetter;
         }
 
         public double EffectAt(int level)

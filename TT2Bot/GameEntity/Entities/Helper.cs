@@ -11,48 +11,10 @@ using TT2Bot.GameEntity.Localisation;
 
 namespace TT2Bot.GameEntity.Entities
 {
-    class Helper : GameEntity<int>
+    internal class Helper : GameEntity<int>
     {
-        private static float HelperInefficency = 0.023f;
-        private static int HelperInefficencySlowdown = 34;
-        private static float DmgScaleDown = 0.1f;
-
-        public int Order { get; }
-        public override LocalisedString Name => Localisation.GetName(Id);
-        public override LocalisedString Abbreviations => Localisation.GetShortName(Id);
-        public HelperType HelperType { get; }
-        public double BaseCost { get; }
-        public double BaseDamage { get; }
-        public double Efficency { get; }
-        public IReadOnlyList<HelperSkill> Skills { get; }
-        public bool IsInGame { get; }
-
-        public Helper(int id,
-                      int order,
-                      HelperType type,
-                      double baseCost,
-                      List<HelperSkill> skills,
-                      bool isInGame,
-                      string version,
-                      Func<string, ValueTask<Bitmap>> imageGetter = null)
-        {
-            Id = id;
-            Order = order;
-            HelperType = type;
-            BaseCost = baseCost;
-            Skills = skills.AsReadOnly();
-            IsInGame = isInGame;
-            FileVersion = version;
-            ImageGetter = imageGetter;
-
-
-            Efficency = Math.Pow(1f - HelperInefficency * Math.Min(Order, HelperInefficencySlowdown), Math.Min(Order, HelperInefficencySlowdown));
-            BaseDamage = Efficency * DmgScaleDown * BaseCost;
-        }
-
-        static Helper()
-        {
-            ImageUrls = new Dictionary<int, string>
+        public static IReadOnlyDictionary<int, string> ImageUrls { get; }
+            = new Dictionary<int, string>
             {
                 { 1,  Imgur("hvV0TIq") },
                 { 2,  Imgur("vfwJHOr") },
@@ -92,6 +54,42 @@ namespace TT2Bot.GameEntity.Entities
                 { 36, Imgur("OMSXN8J") },
                 { 37, Imgur("NGotVYA") },
             }.ToImmutableDictionary();
+
+        private static float HelperInefficency = 0.023f;
+        private static int HelperInefficencySlowdown = 34;
+        private static float DmgScaleDown = 0.1f;
+
+        public int Order { get; }
+        public override LocalisedString Name => Localisation.GetName(Id);
+        public override LocalisedString Abbreviations => Localisation.GetShortName(Id);
+        public HelperType HelperType { get; }
+        public double BaseCost { get; }
+        public double BaseDamage { get; }
+        public double Efficency { get; }
+        public IReadOnlyList<HelperSkill> Skills { get; }
+        public bool IsInGame { get; }
+        public override string ImageUrl => ImageUrls.TryGetValue(Id, out var url) ? url : null;
+
+        public Helper(int id,
+                      int order,
+                      HelperType type,
+                      double baseCost,
+                      List<HelperSkill> skills,
+                      bool isInGame,
+                      string version,
+                      Func<string, ValueTask<Bitmap>> imageGetter = null)
+        {
+            Id = id;
+            Order = order;
+            HelperType = type;
+            BaseCost = baseCost;
+            Skills = skills.AsReadOnly();
+            IsInGame = isInGame;
+            FileVersion = version;
+            ImageGetter = imageGetter;
+
+            Efficency = Math.Pow(1f - HelperInefficency * Math.Min(Order, HelperInefficencySlowdown), Math.Min(Order, HelperInefficencySlowdown));
+            BaseDamage = Efficency * DmgScaleDown * BaseCost;
         }
 
         public double GetDps(int level)

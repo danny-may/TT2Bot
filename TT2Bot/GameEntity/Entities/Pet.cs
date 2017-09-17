@@ -12,38 +12,10 @@ using TT2Bot.Models.General;
 
 namespace TT2Bot.GameEntity.Entities
 {
-    class Pet : GameEntity<int>
+    internal class Pet : GameEntity<int>
     {
-        public override LocalisedString Name => Localisation.GetName(Id);
-        public override LocalisedString Abbreviations => null;
-        public double DamageBase { get; }
-        public Dictionary<int, double> IncreaseRanges { get; }
-        public BonusType BonusType { get; }
-        public double BonusBase { get; }
-        public double BonusIncrement { get; }
-
-        public Pet(int id,
-                    double damageBase,
-                    Dictionary<int, double> increaseRanges,
-                    BonusType bonusType,
-                    double bonusBase,
-                    double bonusIncrement,
-                    string version,
-                    Func<string, ValueTask<Bitmap>> imageGetter = null)
-        {
-            Id = id;
-            DamageBase = damageBase;
-            IncreaseRanges = increaseRanges;
-            BonusType = bonusType;
-            BonusBase = bonusBase;
-            BonusIncrement = bonusIncrement;
-            FileVersion = FileVersion;
-            ImageGetter = imageGetter;
-        }
-
-        static Pet()
-        {
-            ImageUrls = new Dictionary<int, string>
+        public static IReadOnlyDictionary<int, string> ImageUrls { get; }
+            = new Dictionary<int, string>
             {
                 { 1,  Cockleshell("p9") },
                 { 2,  Cockleshell("p7") },
@@ -62,6 +34,33 @@ namespace TT2Bot.GameEntity.Entities
                 { 15,  Cockleshell("p15") },
                 { 16,  Cockleshell("p14") }
             }.ToImmutableDictionary();
+
+        public override LocalisedString Name => Localisation.GetName(Id);
+        public override LocalisedString Abbreviations => null;
+        public double DamageBase { get; }
+        public Dictionary<int, double> IncreaseRanges { get; }
+        public BonusType BonusType { get; }
+        public double BonusBase { get; }
+        public double BonusIncrement { get; }
+        public override string ImageUrl => ImageUrls.TryGetValue(Id, out var url) ? url : null;
+
+        public Pet(int id,
+                    double damageBase,
+                    Dictionary<int, double> increaseRanges,
+                    BonusType bonusType,
+                    double bonusBase,
+                    double bonusIncrement,
+                    string version,
+                    Func<string, ValueTask<Bitmap>> imageGetter = null)
+        {
+            Id = id;
+            DamageBase = damageBase;
+            IncreaseRanges = increaseRanges;
+            BonusType = bonusType;
+            BonusBase = bonusBase;
+            BonusIncrement = bonusIncrement;
+            FileVersion = FileVersion;
+            ImageGetter = imageGetter;
         }
 
         public double DamageOnLevel(int level)
@@ -111,7 +110,6 @@ namespace TT2Bot.GameEntity.Entities
                         { GetName(14).Key,  "Phobos" },
                         { GetName(15).Key,  "Fluffers" },
                         { GetName(16).Key,  "Kit" },
-
                 }.ToImmutableDictionary();
         }
     }

@@ -12,7 +12,7 @@ using TT2Bot.GameEntity.Localisation;
 
 namespace TT2Bot.GameEntity.Entities
 {
-    class Skill : GameEntity<SkillId>
+    internal class Skill : GameEntity<SkillId>
     {
         public static IReadOnlyDictionary<SkillCategory, ImmutableArray<SkillId>> SkillCategories { get; }
             = new Dictionary<SkillCategory, SkillId[]>
@@ -22,23 +22,8 @@ namespace TT2Bot.GameEntity.Entities
                 { SkillCategory.Right, new []{ SkillId.BurstSkillBoost, SkillId.FireTapSkillBoost, SkillId.MPRegenBoost, SkillId.MPCapacityBoost, SkillId.HelperDmgSkillBoost, SkillId.MidasSkillBoost, SkillId.ManaStealSkillBoost, SkillId.CritSkillBoost, SkillId.CloneSkillBoost, SkillId.ManaMonster } }
             }.ToImmutableDictionary(k => k.Key, v => v.Value.ToImmutableArray());
 
-        public override LocalisedString Name => Localisation.GetName(Id);
-        public override LocalisedString Abbreviations => Localisation.GetAbbreviation(Id);
-        public string Note { get; }
-        public SkillId RequirementKey { get; }
-        public Skill Requirement => AllSkills.FirstOrDefault(s => s.Id == RequirementKey);
-        private List<Skill> AllSkills { get; }
-        public int StageRequirement { get; }
-        public (int Cost, double Bonus)[] Levels { get; }
-        public int TotalCost => Levels.Sum(l => l.Cost);
-        public int UnlockCost => Requirement?.UnlockCost + 1 ?? 0;
-        public double MaxBonus => Levels.Last().Bonus;
-        public SkillCategory Category { get; }
-        public BonusType SudoBonusType { get; }
-
-        static Skill()
-        {
-            ImageUrls = new Dictionary<SkillId, string>
+        public static IReadOnlyDictionary<SkillId, string> ImageUrls { get; }
+            = new Dictionary<SkillId, string>
             {
                 { SkillId.PetQTE, Imgur("5sBkGbz") },
                 { SkillId.BossDmgQTE, Imgur("HdCnYse") },
@@ -69,7 +54,21 @@ namespace TT2Bot.GameEntity.Entities
                 { SkillId.CloneSkillBoost, Imgur("dWTwocs") },
                 { SkillId.ManaMonster, Imgur("G7kfSX5") }
             }.ToImmutableDictionary();
-        }
+
+        public override LocalisedString Name => Localisation.GetName(Id);
+        public override LocalisedString Abbreviations => Localisation.GetAbbreviation(Id);
+        public string Note { get; }
+        public SkillId RequirementKey { get; }
+        public Skill Requirement => AllSkills.FirstOrDefault(s => s.Id == RequirementKey);
+        private List<Skill> AllSkills { get; }
+        public int StageRequirement { get; }
+        public (int Cost, double Bonus)[] Levels { get; }
+        public int TotalCost => Levels.Sum(l => l.Cost);
+        public int UnlockCost => Requirement?.UnlockCost + 1 ?? 0;
+        public double MaxBonus => Levels.Last().Bonus;
+        public SkillCategory Category { get; }
+        public BonusType SudoBonusType { get; }
+        public override string ImageUrl => ImageUrls.TryGetValue(Id, out var url) ? url : null;
 
         public Skill(SkillId id,
                      string note,
