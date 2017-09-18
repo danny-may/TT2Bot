@@ -77,8 +77,8 @@ namespace TT2Bot.Commands.Clan
                     },
                     Timestamp = DateTime.Now
                 }
-                .AddField("Message", $"Failed to cancel current titanlord for group {group} with id {groupId}")
-                .AddField("Exception", e.ToString());
+                .AddField("Message", $"Failed to cancel current titanlord for group {group} with id {groupId}");
+                //.AddField("Exception", e.ToString());
 
                 await Reply(channel).WithEmbedable((Embedable)builder).SendAsync();
                 return;
