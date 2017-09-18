@@ -60,7 +60,30 @@ namespace TT2Bot.Commands.Clan
                 return;
             }
 
-            (var ticks, var rounds) = CancelCurrent(groupId);
+            ISchedulerRecord[] ticks, rounds;
+            try
+            {
+                (ticks, rounds) = CancelCurrent(groupId);
+            }
+            catch (Exception e)
+            {
+                var channel = Client.GetChannel(347122777897041921) as IMessageChannel;
+
+                var builder = new EmbedBuilder
+                {
+                    Author = new EmbedAuthorBuilder
+                    {
+                        Name = $"{Author?.Username}#{Author?.Discriminator}"
+                    },
+                    Timestamp = DateTime.Now
+                }
+                .AddField("Message", $"Failed to cancel current titanlord for group {group} with id {groupId}")
+                .AddField("Exception", e.ToString());
+
+                await Reply(channel).WithEmbedable((Embedable)builder).SendAsync();
+                return;
+            }
+            
 
             var startTime = DateTime.Now.Add(time).Add(-BossDelay);
 
