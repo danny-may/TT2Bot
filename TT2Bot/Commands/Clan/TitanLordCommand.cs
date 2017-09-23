@@ -65,7 +65,7 @@ namespace TT2Bot.Commands.Clan
             {
                 (ticks, rounds) = CancelCurrent(groupId);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 var channel = Client.GetChannel(347122777897041921) as IMessageChannel;
 
@@ -83,7 +83,6 @@ namespace TT2Bot.Commands.Clan
                 await Reply(channel).WithEmbedable((Embedable)builder).SendAsync();
                 return;
             }
-            
 
             var startTime = DateTime.Now.Add(time).Add(-BossDelay);
 
