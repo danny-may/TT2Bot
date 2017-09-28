@@ -1,6 +1,6 @@
 ﻿namespace TT2Bot.GameEntity.Enums.EntityId
 {
-    enum EquipmentId
+    internal enum EquipmentId
     {
         Default,
         None,
@@ -134,6 +134,47 @@
         Weapon_ZigZag,
         Aura_Valentines,
         Hat_Valentines,
-        Weapon_Valentines
+        Weapon_Valentines,
+        //2.0
+        Hat_FireTribe,
+        Hat_Skulls,
+        Hat_HighTecLightning,
+        Hat_Pirate,
+        Hat_DarkAlien,
+        Hat_BlueFlame,
+        Hat_Samurai,
+        Hat_BoneTribe,
+        Slash_FireTribe,
+        Slash_Skulls,
+        Slash_HighTecLightning,
+        Slash_Pirate,
+        Slash_DarkAlien,
+        Slash_BlueFlame,
+        Slash_Samurai,
+        Slash_BoneTribe,
+        Suit_FireTribe,
+        Suit_Skulls,
+        Suit_HighTecLightning,
+        Suit_Pirate,
+        Suit_DarkAlien,
+        Suit_BlueFlame,
+        Suit_Samurai,
+        Suit_BoneTribe,
+        Weapon_FireTribe,
+        Weapon_Skulls,
+        Weapon_HighTecLightning,
+        Weapon_Pirate,
+        Weapon_DarkAlien,
+        Weapon_BlueFlame,
+        Weapon_Samurai,
+        Weapon_BoneTribe,
+        Aura_FireTribe,
+        Aura_Skulls,
+        Aura_HighTecLightning,
+        Aura_Pirate,
+        Aura_DarkAlien,
+        Aura_BlueFlame,
+        Aura_Samurai,
+        Aura_BoneTribe
     }
 }

@@ -11,18 +11,20 @@ namespace TT2Bot.GameEntity.Commands
 {
     [Description(Desc.ARTIFACT), Group("Data")]
     [Alias("Art", "Arts", "Artifact")]
-    class ArtifactsCommand : GameEntityCommand
+    internal class ArtifactsCommand : GameEntityCommand
     {
-        public ArtifactsCommand(TT2DataService dataService) : base(dataService) { }
+        public ArtifactsCommand(TT2DataService dataService) : base(dataService)
+        {
+        }
 
         [Call, Alias("List")]
         [Usage(Usage.ARTIFACT_LIST)]
-        async Task ListArtifactsAsync()
+        private async Task ListArtifactsAsync()
             => await ReplyAsync(new ArtifactListEmbedable(Context, DataService.Artifacts));
 
         [Call("Budget")]
         [Usage(Usage.ARTIFACT_BUDGET)]
-        Task GetBudgetAsync([Dense]Artifact artifact, double relics, int currentLevel = 0)
+        private Task GetBudgetAsync([Dense]Artifact artifact, double relics, int currentLevel = 0)
         {
             relics = relics.Clamp(0, double.MaxValue);
             currentLevel = currentLevel.Clamp(0, artifact.MaxLevel ?? int.MaxValue);
@@ -31,7 +33,7 @@ namespace TT2Bot.GameEntity.Commands
 
         [Call]
         [Usage(Usage.ARTIFACT)]
-        async Task ShowArtifactAsync([Dense]Artifact artifact, int? from = null, int? to = null)
-            => await ReplyAsync(new ArtifactSingleEmbedable(Context, artifact, from ?? 1, to ?? 1));
+        private async Task ShowArtifactAsync([Dense]Artifact artifact, int? from = null, int? to = null)
+            => await ReplyAsync(new ArtifactSingleEmbedable(Context, artifact, from, to));
     }
 }

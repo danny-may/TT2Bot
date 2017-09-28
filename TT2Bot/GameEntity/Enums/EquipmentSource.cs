@@ -6,7 +6,8 @@ namespace TT2Bot.GameEntity.Enums
     public enum EquipmentSource
     {
         Default,
-        Valentines
+        Valentines,
+        EquipmentSets
     }
 
     public static class EquipmentSourceMethods

@@ -9,6 +9,7 @@ namespace TT2Bot.GameEntity.Enums
         Common = 1,
         Rare = 2,
         Legendary = 3,
+        EquipmentSet = 4
     }
 
     public static class EquipmentRarityMethods

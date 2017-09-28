@@ -12,7 +12,7 @@ using static TT2Bot.TT2Localisation.CommandText;
 
 namespace TT2Bot.GameEntity.Embedables
 {
-    class EquipmentListEmbedable : GameEntityListEmbedable<Equipment>
+    internal class EquipmentListEmbedable : GameEntityListEmbedable<Equipment>
     {
         private string GroupName { get; }
 
@@ -26,12 +26,14 @@ namespace TT2Bot.GameEntity.Embedables
         }
 
         protected override IEnumerable<Equipment> AllEntities
-            => base.AllEntities.OrderBy(e => e.BonusBase).ThenBy(e => e.BonusIncrease).ToList();
+            => base.AllEntities.OrderBy(e => e.AttributeBase).ThenBy(e => e.AttributeBaseInc).ToList();
 
         private Dictionary<ILocalisable<string>, Equipment[]> GroupEquipment()
         {
             if (string.IsNullOrWhiteSpace(GroupName))
                 return null;
+
+            var allEntities = AllEntities.ToArray();
 
             switch (EquipmentClassMethods.Find(Context.TextResource, GroupName))
             {

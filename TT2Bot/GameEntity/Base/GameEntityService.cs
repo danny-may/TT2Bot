@@ -6,11 +6,12 @@ using System.Linq;
 using System.Threading.Tasks;
 using TitanBot.Downloader;
 using TT2Bot.Models;
+using TT2Bot.Models.General;
 using TT2Bot.Services;
 
 namespace TT2Bot.GameEntity.Base
 {
-    abstract class GameEntityService<TEntity> where TEntity : GameEntity
+    internal abstract class GameEntityService<TEntity> where TEntity : GameEntity
     {
         protected abstract string FilePath { get; }
         protected abstract string FileVersion { get; }
@@ -27,8 +28,10 @@ namespace TT2Bot.GameEntity.Base
             WebClient = webClient;
         }
 
-        protected abstract TEntity Build(ICsvLine row, string version);
+        protected abstract TEntity Build(Iterable<string> row, string version);
 
+        private TEntity Build(ICsvLine row, string version)
+            => Build(new Iterable<string>(Enumerable.Range(0, row.ColumnCount).Select(i => row[i])), version);
 
         public virtual async ValueTask<TEntity> Get(object id)
         {
@@ -59,7 +62,15 @@ namespace TT2Bot.GameEntity.Base
 
             CachedObjects = new List<TEntity>();
 
-            var objects = CsvReader.ReadFromText(data).Select(r => Build(r, version));
+            var readerOptions = new CsvOptions
+            {
+                RowsToSkip = 1,
+                HeaderMode = HeaderMode.HeaderAbsent
+            };
+
+            var rows = CsvReader.ReadFromText(data, readerOptions).ToArray();
+
+            var objects = rows.Select(r => Build(new Iterable<string>(Enumerable.Range(0, r.ColumnCount).Select(i => r[i]).GetEnumerator()), version)).ToArray();
             CachedRaw = data;
             CachedObjects.AddRange(objects);
         }

@@ -50,7 +50,8 @@ namespace TT2Bot
                         { Localisable(EquipmentRarity.Removed).Key, "Removed" },
                         { Localisable(EquipmentRarity.Common).Key, "Common" },
                         { Localisable(EquipmentRarity.Rare).Key, "Rare" },
-                        { Localisable(EquipmentRarity.Legendary).Key, "Legendary" }
+                        { Localisable(EquipmentRarity.Legendary).Key, "Legendary" },
+                        { Localisable(EquipmentRarity.EquipmentSet).Key, "Equipment Set" }
                     }.ToImmutableDictionary();
             }
 
@@ -65,7 +66,8 @@ namespace TT2Bot
                     = new Dictionary<string, string>
                     {
                         { Localisable(EquipmentSource.Default).Key, "Default" },
-                        { Localisable(EquipmentSource.Valentines).Key, "Valentines" }
+                        { Localisable(EquipmentSource.Valentines).Key, "Valentines" },
+                        { Localisable(EquipmentSource.EquipmentSets).Key, "Equipment Set" }
                     }.ToImmutableDictionary();
             }
         }

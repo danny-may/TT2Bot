@@ -155,18 +155,30 @@ namespace TT2Bot.GameEntity.Entities
         public EquipmentClass Class { get; }
         public BonusType BonusType { get; }
         public EquipmentRarity Rarity { get; }
-        public double BonusBase { get; }
-        public double BonusIncrease { get; }
+        public double AttributeBase { get; }
+        public double AttributeBaseInc { get; }
+        public double AttributeExp1 { get; }
+        public double AttributeExp2 { get; }
+        public double AttributeExpBase { get; }
         public EquipmentSource Source { get; }
+        public double[] _1163 { get; }
+        public double[] _2095 { get; }
+        public double[] _4450 { get; }
         public override string ImageUrl => ImageUrls.TryGetValue(Id, out var url) ? url : _defaultImages[0];
 
         internal Equipment(EquipmentId id,
                            EquipmentClass eClass,
                            BonusType bonusType,
                            EquipmentRarity rarity,
-                           double bonusBase,
-                           double bonusIncrease,
+                           double attributeBase,
+                           double attributeBaseInc,
+                           double attributeExp1,
+                           double attributeExp2,
+                           double attributeExpBase,
                            EquipmentSource source,
+                           double[] _1163,
+                           double[] _2095,
+                           double[] _4450,
                            string fileVersion,
                            Func<string, ValueTask<Bitmap>> imageGetter = null)
         {
@@ -174,16 +186,22 @@ namespace TT2Bot.GameEntity.Entities
             Class = eClass;
             BonusType = bonusType;
             Rarity = rarity;
-            BonusBase = bonusBase;
-            BonusIncrease = bonusIncrease;
+            AttributeBase = attributeBase;
+            AttributeBaseInc = attributeBaseInc;
+            AttributeExp1 = attributeExp1;
+            AttributeExp2 = attributeExp2;
+            AttributeExpBase = attributeExpBase;
             Source = source;
+            this._1163 = _1163;
+            this._2095 = _2095;
+            this._4450 = _4450;
             FileVersion = fileVersion;
             ImageGetter = imageGetter;
         }
 
         public double BonusOnLevel(double level)
         {
-            return BonusBase + BonusIncrease * level;
+            return AttributeBase + AttributeBaseInc * level;
         }
 
         //public override double MatchCertainty(ITextResourceCollection textResource, string text)
@@ -356,6 +374,47 @@ namespace TT2Bot.GameEntity.Entities
                     { EquipmentId.Aura_Valentines, ("Circle of Love", "Aura_Valentines") },
                     { EquipmentId.Hat_Valentines, ("Hat of Love", "Hat_Valentines") },
                     { EquipmentId.Weapon_Valentines, ("Heartbreaker", "Weapon_Valentines") },
+                    //2.0
+                    { EquipmentId.Hat_FireTribe, ("Fire Tribe", "Hat_FireTribe")},
+                    { EquipmentId.Hat_Skulls, ("Skull", "Hat_Skulls")},
+                    { EquipmentId.Hat_HighTecLightning, ("High Lightning", "Hat_HighTecLightning")},
+                    { EquipmentId.Hat_Pirate, ("Pirate", "Hat_Pirate")},
+                    { EquipmentId.Hat_DarkAlien, ("Dark Alien", "Hat_DarkAlien")},
+                    { EquipmentId.Hat_BlueFlame, ("Blue Flame", "Hat_BlueFlame")},
+                    { EquipmentId.Hat_Samurai, ("Samurai", "Hat_Samurai")},
+                    { EquipmentId.Hat_BoneTribe, ("Bone Tribe", "Hat_BoneTribe")},
+                    { EquipmentId.Slash_FireTribe, ("Fire Tribe", "Slash_FireTribe")},
+                    { EquipmentId.Slash_Skulls, ("Skull", "Slash_Skulls")},
+                    { EquipmentId.Slash_HighTecLightning, ("High Lightning", "Slash_HighTecLightning")},
+                    { EquipmentId.Slash_Pirate, ("Pirate", "Slash_Pirate")},
+                    { EquipmentId.Slash_DarkAlien, ("Dark Alien", "Slash_DarkAlien")},
+                    { EquipmentId.Slash_BlueFlame, ("Blue Flame", "Slash_BlueFlame")},
+                    { EquipmentId.Slash_Samurai, ("Samurai", "Slash_Samurai")},
+                    { EquipmentId.Slash_BoneTribe, ("Bone Tribe", "Slash_BoneTribe")},
+                    { EquipmentId.Suit_FireTribe, ("Fire Tribe", "Suit_FireTribe")},
+                    { EquipmentId.Suit_Skulls, ("Skull", "Suit_Skulls")},
+                    { EquipmentId.Suit_HighTecLightning, ("High Lightning", "Suit_HighTecLightning")},
+                    { EquipmentId.Suit_Pirate, ("Pirate", "Suit_Pirate")},
+                    { EquipmentId.Suit_DarkAlien, ("Dark Alien", "Suit_DarkAlien")},
+                    { EquipmentId.Suit_BlueFlame, ("Blue Flame", "Suit_BlueFlame")},
+                    { EquipmentId.Suit_Samurai, ("Samurai", "Suit_Samurai")},
+                    { EquipmentId.Suit_BoneTribe, ("Bone Tribe", "Suit_BoneTribe")},
+                    { EquipmentId.Weapon_FireTribe, ("Fire Tribe", "Weapon_FireTribe")},
+                    { EquipmentId.Weapon_Skulls, ("Skull", "Weapon_Skulls")},
+                    { EquipmentId.Weapon_HighTecLightning, ("High Lightning", "Weapon_HighTecLightning")},
+                    { EquipmentId.Weapon_Pirate, ("Pirate", "Weapon_Pirate")},
+                    { EquipmentId.Weapon_DarkAlien, ("Dark Alien", "Weapon_DarkAlien")},
+                    { EquipmentId.Weapon_BlueFlame, ("Blue Flame", "Weapon_BlueFlame")},
+                    { EquipmentId.Weapon_Samurai, ("Samurai", "Weapon_Samurai")},
+                    { EquipmentId.Weapon_BoneTribe, ("Bone Tribe", "Weapon_BoneTribe")},
+                    { EquipmentId.Aura_FireTribe, ("Fire Tribe", "Aura_FireTribe")},
+                    { EquipmentId.Aura_Skulls, ("Skull", "Aura_Skulls")},
+                    { EquipmentId.Aura_HighTecLightning, ("High Lightning", "Aura_HighTecLightning")},
+                    { EquipmentId.Aura_Pirate, ("Pirate", "Aura_Pirate")},
+                    { EquipmentId.Aura_DarkAlien, ("Dark Alien", "Aura_DarkAlien")},
+                    { EquipmentId.Aura_BlueFlame, ("Blue Flame", "Aura_BlueFlame")},
+                    { EquipmentId.Aura_Samurai, ("Samurai", "Aura_Samurai")},
+                    { EquipmentId.Aura_BoneTribe, ("Bone Tribe", "Aura_BoneTribe")},
                 }.ToImmutableDictionary();
 
             public static IReadOnlyDictionary<string, string> Defaults { get; }

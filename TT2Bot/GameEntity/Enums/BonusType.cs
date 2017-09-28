@@ -18,18 +18,19 @@ namespace TT2Bot.GameEntity.Enums
         ArtifactDamage,
         HSArtifactDamage,
         AuraBoost,
+        BossHP,
+        BossRelic,
         BossTimer,
         BurstDamageSkillAmount,
-        BurstDamageSkillMana,
         ChestAmount,
         ChestChance,
-        ClanQTEDamage,
-        ClanDamage,
         CritBoostSkillDuration,
         CritBoostSkillAmount,
         CritBoostSkillMana,
         CritChance,
-        DoubleFairyChance,
+        BurstDamageSkillMana,
+        SuperCritDamage,
+        FairySpawnChance,
         GoblinQTE,
         GoldAll,
         GoldBoss,
@@ -48,18 +49,17 @@ namespace TT2Bot.GameEntity.Enums
         InactiveGold,
         ManaPoolCap,
         ManaRegen,
-        ManaMonsterMana,
+        ManaMonsterAmount,
         ManaTapRegen,
         ThisHelperDamage,
-        Memory,
         MonsterCountPerStage,
         MonsterHP,
         PetDamage,
-        PetDamageMult,
+        PetIndividualDamage,
         PetBossDamage,
         PetBossCount,
         PetQTEGold,
-        PetOfflineDamage,
+        InactivePetDamage,
         PrestigeRelic,
         ShadowCloneSkillDuration,
         ShadowCloneSkillAmount,
@@ -67,11 +67,16 @@ namespace TT2Bot.GameEntity.Enums
         SplashDamage,
         SlashBoost,
         SwordBoost,
+        SwordAttackDamage,
         TapBoostSkillDuration,
         TapBoostSkillAmount,
         TapBoostSkillMana,
         TapDamage,
-        TapDamageFromHelpers
+        TapDamageFromHelpers,
+        ClanShipDamage,
+        MultiMonsters,
+        SwordMasterDamage,
+        ClanDamage
     }
 
     public static class BonusTypeMethods
@@ -99,7 +104,7 @@ namespace TT2Bot.GameEntity.Enums
                     return new LocalisedString(FORMATMANA, Math.Round(value));
                 case BonusType.HelperUpgradeCost:
                     return new LocalisedString(FORMATDISCOUNT, value * 100);
-                case BonusType.DoubleFairyChance:
+                case BonusType.FairySpawnChance:
                 case BonusType.CritChance:
                 case BonusType.Goldx10Chance:
                 case BonusType.ChestChance:
@@ -110,7 +115,6 @@ namespace TT2Bot.GameEntity.Enums
                 case BonusType.RangedHelperDamage:
                 case BonusType.AllHelperDamage:
                 case BonusType.CritDamage:
-                case BonusType.PetDamageMult:
                 case BonusType.MonsterHP:
                 case BonusType.TapDamage:
                 case BonusType.AllDamage:
@@ -123,12 +127,14 @@ namespace TT2Bot.GameEntity.Enums
                 case BonusType.HandOfMidasSkillAmount:
                 case BonusType.TapBoostSkillAmount:
                 case BonusType.BurstDamageSkillAmount:
+                case BonusType.CritBoostSkillAmount:
                 case BonusType.PrestigeRelic:
                 case BonusType.HelmetBoost:
                 case BonusType.SwordBoost:
                 case BonusType.SlashBoost:
                 case BonusType.ArmorBoost:
                 case BonusType.AuraBoost:
+                case BonusType.ClanShipDamage:
                     return new LocalisedString(FORMATMULTIPLY, value + 1);
                 case BonusType.SplashDamage:
                 case BonusType.ManaRegen:

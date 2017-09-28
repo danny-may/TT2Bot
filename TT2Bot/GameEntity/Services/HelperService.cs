@@ -1,5 +1,4 @@
-﻿using Csv;
-using System;
+﻿using System;
 using System.Linq;
 using TitanBot.Downloader;
 using TT2Bot.GameEntity.Base;
@@ -7,10 +6,11 @@ using TT2Bot.GameEntity.Entities;
 using TT2Bot.GameEntity.Enums;
 using TT2Bot.Helpers;
 using TT2Bot.Models;
+using TT2Bot.Models.General;
 
 namespace TT2Bot.GameEntity.Services
 {
-    class HelperService : GameEntityService<Helper>
+    internal class HelperService : GameEntityService<Helper>
     {
         protected override string FilePath => "/HelperInfo.csv";
         protected override string FileVersion => Settings.FileVersions.Helper;
@@ -23,13 +23,13 @@ namespace TT2Bot.GameEntity.Services
             HelperSkills = helperSkills;
         }
 
-        protected override Helper Build(ICsvLine serverData, string version)
+        protected override Helper Build(Iterable<string> serverData, string version)
         {
-            int.TryParse(serverData[0].Without("H"), out int helperId);
-            int.TryParse(serverData[1], out int order);
-            Enum.TryParse(serverData[2], out HelperType type);
-            double.TryParse(serverData[3], out double baseCost);
-            int.TryParse(serverData[4], out int isInGame);
+            int.TryParse(serverData.Next().Without("H"), out int helperId);
+            int.TryParse(serverData.Next(), out int order);
+            Enum.TryParse(serverData.Next(), out HelperType type);
+            double.TryParse(serverData.Next(), out double baseCost);
+            int.TryParse(serverData.Next(), out int isInGame);
 
             var skills = HelperSkills.GetAll().Result.Where(h => h.HelperId == helperId).ToList();
 

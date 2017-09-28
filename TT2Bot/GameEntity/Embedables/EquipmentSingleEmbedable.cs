@@ -34,8 +34,8 @@ namespace TT2Bot.GameEntity.Embedables
                 builder.AddField(f => f.WithName(EquipmentText.SHOW_FIELD_BONUSAT, level, level * 10).WithValue(Entity.BonusType.ToLocalisable(Entity.BonusOnLevel(10 * level))))
                        .AddField(f => f.WithName(TitanBot.TBLocalisation.NOTES).WithValue(EquipmentText.SHOW_FIELD_NOTE));
             else
-                builder.AddInlineField(f => f.WithName(EquipmentText.SHOW_FIELD_BONUSBASE).WithValue(Entity.BonusType.ToLocalisable(Entity.BonusBase)))
-                       .AddInlineField(f => f.WithName(EquipmentText.SHOW_FIELD_BONUSINCREASE).WithValue(Entity.BonusType.ToLocalisable(Entity.BonusIncrease)))
+                builder.AddInlineField(f => f.WithName(EquipmentText.SHOW_FIELD_BONUSBASE).WithValue(Entity.BonusType.ToLocalisable(Entity.AttributeBase)))
+                       .AddInlineField(f => f.WithName(EquipmentText.SHOW_FIELD_BONUSINCREASE).WithValue(Entity.BonusType.ToLocalisable(Entity.AttributeBaseInc)))
                        .AddField(f => f.WithName(TitanBot.TBLocalisation.NOTES).WithValue(EquipmentText.SHOW_FIELD_NOTE_NOLEVEL));
         }
 

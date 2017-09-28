@@ -1,39 +1,43 @@
-﻿using Csv;
-using System;
+﻿using System;
 using TitanBot.Downloader;
 using TT2Bot.GameEntity.Base;
 using TT2Bot.GameEntity.Entities;
 using TT2Bot.GameEntity.Enums;
 using TT2Bot.Helpers;
 using TT2Bot.Models;
+using TT2Bot.Models.General;
 
 namespace TT2Bot.GameEntity.Services
 {
-    class ArtifactService : GameEntityService<Artifact>
+    internal class ArtifactService : GameEntityService<Artifact>
     {
         protected override string FilePath => "/ArtifactInfo.csv";
         protected override string FileVersion => Settings.FileVersions.Artifact;
 
-        public ArtifactService(Func<TT2GlobalSettings> settings, IDownloader webClient) : base(settings, webClient) { }
-
-        protected override Artifact Build(ICsvLine serverData, string version)
+        public ArtifactService(Func<TT2GlobalSettings> settings, IDownloader webClient) : base(settings, webClient)
         {
-            int.TryParse(serverData[0].Without("Artifact"), out int id);
-            int.TryParse(serverData[1], out int maxLevel);
-            string tt1 = serverData[2];
-            Enum.TryParse(serverData[3], out BonusType bonusType);
-            double.TryParse(serverData[4], out double effectPerLevel);
-            double.TryParse(serverData[5], out double damageBonus);
-            double.TryParse(serverData[6], out double costCoef);
-            double.TryParse(serverData[7], out double costExpo);
-            string note = serverData[8];
-            string name = serverData[9];
+        }
+
+        protected override Artifact Build(Iterable<string> serverData, string version)
+        {
+            int.TryParse(serverData.Next().Without("Artifact"), out int id);
+            int.TryParse(serverData.Next(), out int maxLevel);
+            //string tt1 = serverData.Next();
+            Enum.TryParse(serverData.Next(), out BonusType bonusType);
+            double.TryParse(serverData.Next(), out double effectPerLevel);
+            double.TryParse(serverData.Next(), out double effectCoef);
+            double.TryParse(serverData.Next(), out double damageBonus);
+            double.TryParse(serverData.Next(), out double costCoef);
+            double.TryParse(serverData.Next(), out double costExpo);
+            string note = serverData.Next();
+            string name = serverData.Next();
 
             return new Artifact(id,
                                 maxLevel == 0 ? (int?)null : maxLevel,
-                                tt1,
+                                //tt1,
                                 bonusType,
                                 effectPerLevel,
+                                effectCoef,
                                 damageBonus,
                                 costCoef,
                                 costExpo,

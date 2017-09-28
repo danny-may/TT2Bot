@@ -69,9 +69,10 @@ namespace TT2Bot.GameEntity.Entities
 
         public override LocalisedString Name => Localisation.GetName(Id);
         public override LocalisedString Abbreviations => Localisation.GetAbbreviation(Id);
-        public string TT1 { get; }
+        //public string TT1 { get; }
         public BonusType BonusType { get; }
         public double EffectPerLevel { get; }
+        public double EffectCoef { get; }
         public double DamageBonus { get; }
         public double CostCoef { get; }
         public double CostExpo { get; }
@@ -81,9 +82,10 @@ namespace TT2Bot.GameEntity.Entities
 
         internal Artifact(int id,
                           int? maxLevel,
-                          string tt1,
+                          //string tt1,
                           BonusType bonusType,
                           double effectPerLevel,
+                          double effectCoef,
                           double damageBonus,
                           double costCoef,
                           double costExpo,
@@ -93,9 +95,10 @@ namespace TT2Bot.GameEntity.Entities
         {
             Id = id;
             MaxLevel = maxLevel;
-            TT1 = tt1;
+            //TT1 = tt1;
             BonusType = bonusType;
             EffectPerLevel = effectPerLevel;
+            EffectCoef = effectCoef;
             DamageBonus = damageBonus;
             CostCoef = costCoef;
             CostExpo = costExpo;
@@ -193,6 +196,7 @@ namespace TT2Bot.GameEntity.Entities
                         { GetName(27).Key, "Glove of Kuma"},          { GetAbbreviation(27).Key, "GOK,GK" },
                         { GetName(28).Key, "Amethyst Staff"},         { GetAbbreviation(28).Key, "AS" },
                         { GetName(29).Key, "Drunken Hammer"},         { GetAbbreviation(29).Key, "DH" },
+                        { GetName(30).Key, "InfluencerElixir"},       { GetAbbreviation(30).Key, "IE"},
                         { GetName(31).Key, "Divine Retribution"},     { GetAbbreviation(31).Key, "DR" },
                         { GetName(32).Key, "Fruit of Eden"},          { GetAbbreviation(32).Key, "FOE,FE" },
                         { GetName(33).Key, "The Sword of Storms"},    { GetAbbreviation(33).Key, "TSOS,TSS,SS" },
@@ -202,6 +206,7 @@ namespace TT2Bot.GameEntity.Entities
                         { GetName(37).Key, "Oak Staff"},              { GetAbbreviation(37).Key, "OS" },
                         { GetName(38).Key, "Furies Bow"},             { GetAbbreviation(38).Key, "FB" },
                         { GetName(39).Key, "Titan Spear"},            { GetAbbreviation(39).Key, "TS" },
+                        { GetName(41).Key, "Royal Toxin"},            { GetAbbreviation(41).Key, "RT"}
                 }.ToImmutableDictionary();
         }
     }
