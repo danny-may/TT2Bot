@@ -56,6 +56,7 @@ namespace TT2Bot.GameEntity.Entities
                 { 27, Cockleshell("a31") },
                 { 28, Cockleshell("a16") },
                 { 29, Cockleshell("a37") },
+                { 30, Imgur("ZGfXaNb") },
                 { 31, Cockleshell("a11") },
                 { 32, Cockleshell("a6") },
                 { 33, Cockleshell("a8") },
@@ -64,7 +65,8 @@ namespace TT2Bot.GameEntity.Entities
                 { 36, Cockleshell("a35") },
                 { 37, Cockleshell("a29") },
                 { 38, Cockleshell("a5") },
-                { 39, Cockleshell("a21") }
+                { 39, Cockleshell("a21") },
+                { 41, Imgur("VOO6luq") }
             }.ToImmutableDictionary();
 
         public override LocalisedString Name => Localisation.GetName(Id);
@@ -196,7 +198,7 @@ namespace TT2Bot.GameEntity.Entities
                         { GetName(27).Key, "Glove of Kuma"},          { GetAbbreviation(27).Key, "GOK,GK" },
                         { GetName(28).Key, "Amethyst Staff"},         { GetAbbreviation(28).Key, "AS" },
                         { GetName(29).Key, "Drunken Hammer"},         { GetAbbreviation(29).Key, "DH" },
-                        { GetName(30).Key, "InfluencerElixir"},       { GetAbbreviation(30).Key, "IE"},
+                        { GetName(30).Key, "Influiential Elixir"},       { GetAbbreviation(30).Key, "IE"},
                         { GetName(31).Key, "Divine Retribution"},     { GetAbbreviation(31).Key, "DR" },
                         { GetName(32).Key, "Fruit of Eden"},          { GetAbbreviation(32).Key, "FOE,FE" },
                         { GetName(33).Key, "The Sword of Storms"},    { GetAbbreviation(33).Key, "TSOS,TSS,SS" },
