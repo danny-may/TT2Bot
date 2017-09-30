@@ -23,7 +23,7 @@ namespace TT2Bot.Commands.Data
         {
 
             ipLevel = Math.Min(20, ipLevel);
-            var startingStage = (int)Math.Max(1, stage * Calculator.AdvanceStart(clanLevel.Clamp(0, int.MaxValue)));
+            var startingStage = Math.Max(1, stage * Calculator.AdvanceStart(clanLevel.Clamp(0, int.MaxValue)) - 1);
             var totalRelics = Calculator.RelicsEarned(stage, bosLevel.Clamp(0, int.MaxValue));
             var baseRelics = Calculator.RelicsEarned(stage, 0);
             var enemiesToKill = Enumerable.Range(startingStage, stage - startingStage).Sum(s => Calculator.TitansOnStage(s, ipLevel.Clamp(0, int.MaxValue)));
