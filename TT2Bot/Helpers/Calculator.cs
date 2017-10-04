@@ -23,7 +23,9 @@ namespace TT2Bot.Helpers
             => Enumerable.Range(0, attacks).Sum(v => AttackCost(v));
 
         public static Percentage AdvanceStart(int clanQuest)
-            => Math.Min(0.5, Math.Min((double)clanQuest, 200) / 1000 + Math.Max((double)clanQuest - 200, 0) / 2000);
+            // Old formula
+            //=> Math.Min(0.5, Math.Min((double)clanQuest, 200) / 1000 + Math.Max((double)clanQuest - 200, 0) / 2000);
+            => Math.Min(0.003 * Math.Pow(Math.Log(clanQuest + 4), 2.692), 0.9);
 
         public static int AttacksNeeded(int clanLevel, int attackers, int maxStage, int tapsPerAttack)
             => (int)Math.Ceiling((TitanLordHp(clanLevel) / attackers) / (Math.Max(50, maxStage) * tapsPerAttack + Math.Max(50, maxStage) * 90 * 2));
