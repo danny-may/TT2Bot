@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using TitanBot.Commands;
 using TitanBot.Formatting;
+using TitanBot.Formatting.Interfaces;
 using TitanBot.Replying;
 using TitanBot.Scheduling;
 using TT2Bot.Callbacks;
@@ -67,8 +68,21 @@ namespace TT2Bot.Commands.Clan
             }
             catch (Exception)
             {
-                var channel = Client.GetChannel(347122777897041921) as IMessageChannel;
+                // Send error msg to user
+                const string errorStr = "Unfortunately a critical, and thankfully very rare, bug has occured with regards to the use of the titanlord command in this discord server. " + 
+                    "Unfortunately the only known fix for now is to wait it out. It can take around 24 hours for the bug to go away on its own. " + 
+                    "If you have any questions feel free to join our developer server. If you find a way to reproduce the bug, we'd very much like to hear from you!";
+                var builderUser = new EmbedBuilder
+                {
+                    Color = Color.Red,
+                    Timestamp = DateTime.Now,
+                    Title = "An error occured",
+                    Description = errorStr
+                };
+                await ReplyAsync(builderUser);
 
+                // Send error info to developer channel
+                var channel = Client.GetChannel(347122777897041921) as IMessageChannel;
                 var builder = new EmbedBuilder
                 {
                     Author = new EmbedAuthorBuilder
@@ -77,9 +91,9 @@ namespace TT2Bot.Commands.Clan
                     },
                     Timestamp = DateTime.Now
                 }
-                .AddField("Message", $"Failed to cancel current titanlord for group {group} with id {groupId}");
-                //.AddField("Exception", e.ToString());
-
+                .AddField("Message", $"Failed to cancel current titanlord for **unknown** group with groupId {groupId}")
+                .AddField("Guild", $"Failed in guild id {Guild?.Id} with name: {Guild?.Name}");
+                
                 await Reply(channel).WithEmbedable((Embedable)builder).SendAsync();
                 return;
             }
