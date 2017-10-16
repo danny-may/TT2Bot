@@ -197,6 +197,7 @@ namespace TT2Bot.Commands.Clan
             }.WithTitle(TitanLordText.NEWBOSS_EMBED_TITLE)
              .WithRawThumbnailUrl("https://cdn.discordapp.com/attachments/275257967937454080/308047011289235456/emoji.png")
              .AddField(f => f.WithName(TitanLordText.NEWBOSS_EMBED_CQ).WithValue(settings.CQ))
+             .AddField(f => f.WithName(TitanLordText.NEWBOSS_EMBED_ADVANCEDSTART).WithValue(BonusType.ClanDamage.ToLocalisable(advStart)))
              .AddField(f => f.WithName(TitanLordText.NEWBOSS_EMBED_BONUS).WithValue(BonusType.ClanDamage.ToLocalisable(clanBonus)))
              .AddField(f => f.WithName(TitanLordText.NEWBOSS_EMBED_HP).WithValue(bossHp))
              .AddField(f => f.WithName(TitanLordText.NEWBOSS_EMBED_TTK).WithValue(DateTime.Now.Add(time).Add(-BossDelay) - latestTimer.EndTime));

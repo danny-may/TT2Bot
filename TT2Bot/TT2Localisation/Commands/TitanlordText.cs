@@ -21,6 +21,7 @@ namespace TT2Bot
                 public const string STOP_SUCCESS_GROUP = BASE_PATH + nameof(STOP_SUCCESS_GROUP);
                 public const string NEWBOSS_EMBED_TITLE = BASE_PATH + nameof(NEWBOSS_EMBED_TITLE);
                 public const string NEWBOSS_EMBED_CQ = BASE_PATH + nameof(NEWBOSS_EMBED_CQ);
+                public const string NEWBOSS_EMBED_ADVANCEDSTART = BASE_PATH + nameof(NEWBOSS_EMBED_ADVANCEDSTART);
                 public const string NEWBOSS_EMBED_BONUS = BASE_PATH + nameof(NEWBOSS_EMBED_BONUS);
                 public const string NEWBOSS_EMBED_HP = BASE_PATH + nameof(NEWBOSS_EMBED_HP);
                 public const string NEWBOSS_EMBED_TTK = BASE_PATH + nameof(NEWBOSS_EMBED_TTK);
@@ -38,6 +39,7 @@ namespace TT2Bot
                         { STOP_SUCCESS_GROUP, "The Titan Lord timer for {0} has been stopped" },
                         { NEWBOSS_EMBED_TITLE, "Titan Lord data updated!" },
                         { NEWBOSS_EMBED_CQ,"New Clan Quest" },
+                        { NEWBOSS_EMBED_ADVANCEDSTART, "New Advanced Start" },
                         { NEWBOSS_EMBED_BONUS, "New bonus" },
                         { NEWBOSS_EMBED_HP, "Next Titan Lord HP" },
                         { NEWBOSS_EMBED_TTK, "Time to kill" }
