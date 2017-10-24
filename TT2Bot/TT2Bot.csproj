@@ -183,6 +183,7 @@
     <Compile Include="Commands\Clan\SubmitCommand.cs" />
     <Compile Include="Commands\Clan\TitanLordCommand.cs" />
     <Compile Include="Commands\CommandTemplate.cs" />
+    <Compile Include="Commands\General\PlebCommand.cs" />
     <Compile Include="GameEntity\Base\Embedable\GameEntitySingleEmbedable.cs" />
     <Compile Include="GameEntity\Commands\ArtifactsCommand.cs" />
     <Compile Include="Commands\Data\ClaimCommand.cs" />
