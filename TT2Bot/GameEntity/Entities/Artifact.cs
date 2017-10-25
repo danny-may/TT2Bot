@@ -73,7 +73,9 @@ namespace TT2Bot.GameEntity.Entities
         //public string TT1 { get; }
         public BonusType BonusType { get; }
         public double EffectPerLevel { get; }
-        public double EffectCoef { get; }
+        public double EffectGrowthMax { get; }
+        public double EffectGrowthRate { get; }
+        public double EffectGrowthExpo { get; }
         public double DamageBonus { get; }
         public double CostCoef { get; }
         public double CostExpo { get; }
@@ -86,7 +88,9 @@ namespace TT2Bot.GameEntity.Entities
                           //string tt1,
                           BonusType bonusType,
                           double effectPerLevel,
-                          double effectCoef,
+                          double growthMax,
+                          double growthRate,
+                          double growthExpo,
                           double damageBonus,
                           double costCoef,
                           double costExpo,
@@ -99,7 +103,9 @@ namespace TT2Bot.GameEntity.Entities
             //TT1 = tt1;
             BonusType = bonusType;
             EffectPerLevel = effectPerLevel;
-            EffectCoef = effectCoef;
+            EffectGrowthMax = growthMax;
+            EffectGrowthRate = growthRate;
+            EffectGrowthExpo = growthExpo;
             DamageBonus = damageBonus;
             CostCoef = costCoef;
             CostExpo = costExpo;
@@ -109,7 +115,7 @@ namespace TT2Bot.GameEntity.Entities
         }
 
         public double EffectAt(int level)
-            => EffectPerLevel * level;
+            => EffectPerLevel * Math.Pow(level, Math.Pow(1 + (CostExpo - 1) * Math.Min(EffectGrowthRate * level, EffectGrowthMax), EffectGrowthExpo));
 
         public double DamageAt(int level)
             => DamageBonus * level;

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using TitanBot.Downloader;
 using TT2Bot.GameEntity.Base;
 using TT2Bot.GameEntity.Entities;
@@ -26,7 +25,9 @@ namespace TT2Bot.GameEntity.Services
             //string tt1 = serverData.Next();
             Enum.TryParse(serverData.Next(), out BonusType bonusType);
             double.TryParse(serverData.Next(), out double effectPerLevel);
-            double.TryParse(serverData.Next(), out double effectCoef);
+            double.TryParse(serverData.Next(), out double growthMax);
+            double.TryParse(serverData.Next(), out double growthRate);
+            double.TryParse(serverData.Next(), out double growthExpo);
             double.TryParse(serverData.Next(), out double damageBonus);
             double.TryParse(serverData.Next(), out double costCoef);
             double.TryParse(serverData.Next(), out double costExpo);
@@ -38,7 +39,9 @@ namespace TT2Bot.GameEntity.Services
                                 //tt1,
                                 bonusType,
                                 effectPerLevel,
-                                effectCoef,
+                                growthMax,
+                                growthRate,
+                                growthExpo,
                                 damageBonus,
                                 costCoef,
                                 costExpo,
