@@ -76,7 +76,14 @@ namespace TT2Bot.GameEntity.Enums
         ClanShipDamage,
         MultiMonsters,
         SwordMasterDamage,
-        ClanDamage
+        ClanDamage,
+        //2.2
+        FairyGold,
+        SplashGold,
+        InactiveAllDamage,
+        AllActiveSkillAmount,
+        AllActiveSkillDuration,
+        SwordMasterUpgradeCost
     }
 
     public static class BonusTypeMethods
@@ -94,6 +101,7 @@ namespace TT2Bot.GameEntity.Enums
                 case BonusType.HelperBoostSkillDuration:
                 case BonusType.ShadowCloneSkillDuration:
                 case BonusType.TapBoostSkillDuration:
+                case BonusType.AllActiveSkillDuration:
                     return new LocalisedString(FORMATSECONDS, Math.Round(value));
                 case BonusType.BurstDamageSkillMana:
                 case BonusType.CritBoostSkillMana:
@@ -103,11 +111,13 @@ namespace TT2Bot.GameEntity.Enums
                 case BonusType.TapBoostSkillMana:
                     return new LocalisedString(FORMATMANA, Math.Round(value));
                 case BonusType.HelperUpgradeCost:
+                case BonusType.SwordMasterUpgradeCost:
                     return new LocalisedString(FORMATDISCOUNT, value * 100);
                 case BonusType.FairySpawnChance:
                 case BonusType.CritChance:
                 case BonusType.Goldx10Chance:
                 case BonusType.ChestChance:
+                case BonusType.SplashDamage:
                     return new LocalisedString(FORMATCHANCE, value * 100);
                 case BonusType.HSArtifactDamage:
                 case BonusType.MeleeHelperDamage:
@@ -135,8 +145,12 @@ namespace TT2Bot.GameEntity.Enums
                 case BonusType.ArmorBoost:
                 case BonusType.AuraBoost:
                 case BonusType.ClanShipDamage:
+                case BonusType.AllActiveSkillAmount:
+                case BonusType.InactiveAllDamage:
+                case BonusType.InactiveGold:
+                case BonusType.FairyGold:
+                case BonusType.SplashGold:
                     return new LocalisedString(FORMATMULTIPLY, value + 1);
-                case BonusType.SplashDamage:
                 case BonusType.ManaRegen:
                 case BonusType.ManaPoolCap:
                     return new LocalisedString(FORMATADD, value);

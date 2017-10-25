@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using TitanBot.Downloader;
 using TT2Bot.GameEntity.Base;
 using TT2Bot.GameEntity.Entities;

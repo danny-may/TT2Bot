@@ -70,7 +70,9 @@ namespace TT2Bot.GameEntity.Base
 
             var rows = CsvReader.ReadFromText(data, readerOptions).ToArray();
 
-            var objects = rows.Select(r => Build(new Iterable<string>(Enumerable.Range(0, r.ColumnCount).Select(i => r[i]).GetEnumerator()), version)).ToArray();
+            var objects = rows.Select(r => Build(new Iterable<string>(Enumerable.Range(0, r.ColumnCount).Select(i => r[i]).GetEnumerator()), version))
+                              .Where(e => e != null)
+                              .ToArray();
             CachedRaw = data;
             CachedObjects.AddRange(objects);
         }

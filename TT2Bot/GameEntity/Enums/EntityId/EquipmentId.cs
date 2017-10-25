@@ -175,6 +175,19 @@
         Aura_DarkAlien,
         Aura_BlueFlame,
         Aura_Samurai,
-        Aura_BoneTribe
+        Aura_BoneTribe,
+        //2.2
+        Aura_Pumpkin,
+        Hat_Ghost,
+        Hat_Pumpkin,
+        Slash_SpiderWeb,
+        Slash_MouthWash,
+        Suit_Scarecrow,
+        Suit_Ghost,
+        Weapon_DevilFork,
+        Weapon_Lolipod,
+        Weapon_StreetLamp,
+        Weapon_Pumpkin,
+        Weapon_BlueSword
     }
 }
