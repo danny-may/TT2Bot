@@ -26,51 +26,19 @@ namespace TT2Bot.GameEntity.Entities
         public static IReadOnlyDictionary<int, string> ImageUrls { get; }
             = new Dictionary<int, string>
             {
-                { 1,  Cockleshell("a4") },
-                { 2,  Cockleshell("a38") },
-                { 3,  Cockleshell("a22") },
-                { 4,  Cockleshell("a20") },
-                { 5,  Cockleshell("a24") },
-                { 6,  Cockleshell("a34") },
-                { 7,  Cockleshell("a2") },
-                { 8,  Cockleshell("a33") },
-                { 9,  Cockleshell("a3") },
-                { 10, Cockleshell("a27") },
-                { 11, Cockleshell("a36") },
-                { 12, Cockleshell("a32") },
-                { 13, Cockleshell("a30") },
-                { 14, Cockleshell("a15") },
-                { 15, Cockleshell("a14") },
-                { 16, Cockleshell("a28") },
-                { 17, Cockleshell("a18") },
-                { 18, Cockleshell("a26") },
-                { 19, Cockleshell("a25") },
-                { 20, Cockleshell("a12") },
-                { 21, Cockleshell("a13") },
-                { 22, Cockleshell("a1") },
-                { 23, Cockleshell("a19") },
-                { 24, Cockleshell("a23") },
-                { 25, Cockleshell("a17") },
-                { 26, Cockleshell("a10") },
-                { 27, Cockleshell("a31") },
-                { 28, Cockleshell("a16") },
-                { 29, Cockleshell("a37") },
-                { 30, Imgur("ZGfXaNb") },
-                { 31, Cockleshell("a11") },
-                { 32, Cockleshell("a6") },
-                { 33, Cockleshell("a8") },
-                { 34, Cockleshell("a7") },
-                { 35, Cockleshell("a9") },
-                { 36, Cockleshell("a35") },
-                { 37, Cockleshell("a29") },
-                { 38, Cockleshell("a5") },
-                { 39, Cockleshell("a21") },
-                { 41, Imgur("VOO6luq") }
+                { 1,  "iepmzFj" }, { 2,  "P7uOP5w" }, { 3,  "RZhGq6R" }, { 4,  "nQJNccr" }, { 5,  "W7irzH1" }, { 6,  "K4hLRun" },
+                { 7,  "VwA8GZX" }, { 8,  "tJ4wB13" }, { 9,  "QnM8m9M" }, { 10, "oQ5HqtM" }, { 11, "pUGBP51" }, { 12, "cYmClnM" },
+                { 13, "sihO05n" }, { 14, "hCZw37C" }, { 15, "vj6FZNr" }, { 16, "JnjNnVZ" }, { 17, "sUUuGwt" }, { 18, "j6gaxyy" },
+                { 19, "ChZZhS6" }, { 20, "INpQ4cy" }, { 21, "84MiaJD" }, { 22, "hcjMeVU" }, { 23, "zxlTQyM" }, { 24, "coJ7mAt" },
+                { 25, "dBDQPx3" }, { 26, "s4iJomt" }, { 27, "u9NNG0x" }, { 28, "RND5Q8k" }, { 29, "1G9I7ua" }, { 30, "QU4fGRL" },
+                { 31, "XiyMxlm" }, { 32, "ugdLrb2" }, { 33, "AFjew0l" }, { 34, "BBnhI4U" }, { 35, "m0foaMQ" }, { 36, "apCLPlL" },
+                { 37, "JEB9d1f" }, { 38, "NKjdgtt" }, { 39, "abpuZIr" }, { 40, "mKw6L0E" }, { 41, "Lj42MM9" }, { 42, "HqF5Cut" },
+                { 43, "NCPbNV6" }, { 44, "Ih4VVf4" }, { 45, "ODamXKS" }, { 46, "XLCgvqe" }, { 47, "4aqLJgZ" }, { 48, "ydrx4Al" },
+                { 49, "LGZAR8E" }, { 50, "rnGeVwj" }, { 51, "BAJwsuW" }
             }.ToImmutableDictionary();
 
         public override LocalisedString Name => Localisation.GetName(Id);
         public override LocalisedString Abbreviations => Localisation.GetAbbreviation(Id);
-        //public string TT1 { get; }
         public BonusType BonusType { get; }
         public double EffectPerLevel { get; }
         public double EffectGrowthMax { get; }
@@ -81,11 +49,10 @@ namespace TT2Bot.GameEntity.Entities
         public double CostExpo { get; }
         public string Note { get; }
         public ArtifactTier Tier => Tiers.FirstOrDefault(t => t.Value.Contains(Id)).Key;
-        public override string ImageUrl => ImageUrls.TryGetValue(Id, out var url) ? url : null;
+        public override string ImageUrl => Imgur(ImageUrls.TryGetValue(Id, out var url) ? url : "jguBSeh");
 
         internal Artifact(int id,
                           int? maxLevel,
-                          //string tt1,
                           BonusType bonusType,
                           double effectPerLevel,
                           double growthMax,
@@ -100,7 +67,6 @@ namespace TT2Bot.GameEntity.Entities
         {
             Id = id;
             MaxLevel = maxLevel;
-            //TT1 = tt1;
             BonusType = bonusType;
             EffectPerLevel = effectPerLevel;
             EffectGrowthMax = growthMax;
