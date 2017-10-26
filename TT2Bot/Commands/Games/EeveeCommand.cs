@@ -2,18 +2,45 @@
 using System;
 using System.Threading.Tasks;
 using TitanBot.Commands;
+using TitanBot.Replying;
 using TT2Bot.Models;
 
 namespace TT2Bot.Commands.Games
 {
     [Hidden]
-    class EeveeCommand : Command
+    internal class EeveeCommand : Command
     {
         private float criticalChance = 0.01f;
         private float eeveeCriticalChance = 0.5f;
 
+        private static bool InUse { get; set; }
+
         [Call]
-        async Task EeveeAsync()
+        private async Task EeveeAsync()
+        {
+            Task.Run(async () =>
+            {
+                if (InUse)
+                {
+                    await ReplyAsync("There is already a battle going on somewhere! Please wait for that to finish", ReplyType.Error);
+                    return;
+                }
+                lock (GlobalCommandLock)
+                {
+                    try
+                    {
+                        InUse = true;
+                        CatchEeevee().Wait();
+                    }
+                    finally
+                    {
+                        InUse = false;
+                    }
+                }
+            }).DontWait();
+        }
+
+        private async Task CatchEeevee()
         {
             var rand = new Random((int)(Message.Id % int.MaxValue));
             var rocks = rand.Next(5);
@@ -67,7 +94,7 @@ namespace TT2Bot.Commands.Games
 
         private async Task GotAway(IUserMessage message)
         {
-            await Append(message,"\n\nBut it got away...");
+            await Append(message, "\n\nBut it got away...");
         }
 
         private async Task Append(IUserMessage message, string text)
