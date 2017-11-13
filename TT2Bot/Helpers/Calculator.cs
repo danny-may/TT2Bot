@@ -36,9 +36,6 @@ namespace TT2Bot.Helpers
             var bosEffect = 1.0 + 0.05 * Math.Pow(bosLevel, 1 + 1.5 * Math.Min(2.5e-5 * bosLevel, 0.015));
             return (int) (baseRelics * bosEffect);
         }
-            
-            //=> (int)(Math.Max(Math.Ceiling(3.0 * Math.Pow(1.21, Math.Pow(stage, 0.48)) + 1.5 * (stage - 110)), 0)
-            //         * (1 + bosLevel * 0.05));
 
         public static int TitansOnStage(int stage, int ipLevel)
             => Math.Max(1, (stage / 500) * 2 + 10 - ipLevel);
