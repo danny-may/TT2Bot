@@ -12,12 +12,14 @@ using static TT2Bot.TT2Localisation.CommandText;
 
 namespace TT2Bot.GameEntity.Embedables
 {
-    class PetSingleEmbedable : GameEntitySingleEmbedable<Pet>
+    internal class PetSingleEmbedable : GameEntitySingleEmbedable<Pet>
     {
         protected override ILocalisable<string> Footer => new LocalisedString(PetText.SHOW_FOOTER, BotUser.Username, Entity.FileVersion);
         protected override ILocalisable<string> Title => new LocalisedString(PetText.SHOW_TITLE, Entity.Name);
 
-        public PetSingleEmbedable(ICommandContext context, Pet entity, int? level) : base(context, entity, null, level) { }
+        public PetSingleEmbedable(ICommandContext context, Pet entity, int? level) : base(context, entity, null, level)
+        {
+        }
 
         protected override LocalisedEmbedBuilder GetBaseEmbed()
             => base.GetBaseEmbed().AddInlineField(f => f.WithName(PetText.SHOW_FIELD_ID).WithValue(Entity.Id));
@@ -46,8 +48,8 @@ namespace TT2Bot.GameEntity.Embedables
                 var bonus = Entity.BonusOnLevel(actualLevel);
                 var mult = Entity.InactiveMultiplier(actualLevel);
                 builder.AddField(f => f.WithName(PetText.SHOW_FIELD_BONUSTYPE).WithValue(Entity.BonusType.ToLocalisable()));
-                builder.AddInlineField(f => f.WithValue(PetText.SHOW_FIELD_DAMAGEAT, actualLevel).WithValue(BonusType.PetDamage.ToLocalisable(dmg)));
-                builder.AddInlineField(f => f.WithValue(PetText.SHOW_FIELD_BONUSAT, actualLevel).WithValue(Entity.BonusType.ToLocalisable(bonus)));
+                builder.AddInlineField(f => f.WithName(PetText.SHOW_FIELD_DAMAGEAT, actualLevel).WithValue(BonusType.PetDamage.ToLocalisable(dmg)));
+                builder.AddInlineField(f => f.WithName(PetText.SHOW_FIELD_BONUSAT, actualLevel).WithValue(Entity.BonusType.ToLocalisable(bonus)));
                 if (mult < 1)
                 {
                     builder.AddField(f => f.WithName(PetText.SHOW_FIELD_INACTIVEPERCENT, actualLevel).WithValue(mult));
