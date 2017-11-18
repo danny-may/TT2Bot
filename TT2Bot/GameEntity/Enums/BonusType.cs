@@ -83,7 +83,19 @@ namespace TT2Bot.GameEntity.Enums
         InactiveAllDamage,
         AllActiveSkillAmount,
         AllActiveSkillDuration,
-        SwordMasterUpgradeCost
+        SwordMasterUpgradeCost,
+        //2.3
+        AllPetDamageEffect,
+        AllPetGoldEffect,
+        TitanDamage,
+        BossDamage,
+        AllEquipmentEffect,
+        BossTimerDuration,
+        AllActiveSkillCooldownRate,
+        AllUpgradeCost,
+        CompanionDamage,
+        FlyingHelperDamage,
+        GroundHelperDamage,
     }
 
     public static class BonusTypeMethods

@@ -23,7 +23,8 @@ namespace TT2Bot.GameEntity.Services
             int.TryParse(serverData.Next().Without("Artifact"), out int id);
             int.TryParse(serverData.Next(), out int maxLevel);
             //string tt1 = serverData.Next();
-            Enum.TryParse(serverData.Next(), out BonusType bonusType);
+            var bonustext = serverData.Next();
+            Enum.TryParse(bonustext, out BonusType bonusType);
             double.TryParse(serverData.Next(), out double effectPerLevel);
             double.TryParse(serverData.Next(), out double growthMax);
             double.TryParse(serverData.Next(), out double growthRate);

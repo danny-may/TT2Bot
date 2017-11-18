@@ -1,7 +1,9 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 using TitanBot.Formatting;
 using TitanBot.Formatting.Interfaces;
@@ -64,6 +66,8 @@ namespace TT2Bot.GameEntity.Base
     {
         new public TId Id { get => (TId)base.Id; set => base.Id = value; }
 
+        private static HttpClient _client = new HttpClient();
+
         //public override string ImageUrl => ImageUrls.TryGetValue(Id, out var url) ? url : null;
         //
         //protected static IReadOnlyDictionary<TId, string> ImageUrls { get; set; }
@@ -74,5 +78,19 @@ namespace TT2Bot.GameEntity.Base
 
         protected static string Cockleshell(string id)
             => $"http://www.cockleshell.org/static/TT2/img/{id}.png";
+
+        //Forgive me, this is a quick and VERY DIRTY way to do the image urls
+        //I wont do it like this in the rewrite
+        protected static TResult DownloadImgurAlbum<TResult>(string albumId, string clientId, Func<JToken[], TResult> selector)
+        {
+            var request = new HttpRequestMessage(HttpMethod.Get, $"https://api.imgur.com/3/album/{albumId}/images");
+            request.Headers.Add("Authorization", $"Client-ID {clientId}");
+
+            var response = _client.SendAsync(request).Result;
+
+            var data = JObject.Parse(response.Content.ReadAsStringAsync().Result)["data"].ToArray();
+
+            return selector(data);
+        }
     }
 }
