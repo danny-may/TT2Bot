@@ -33,7 +33,7 @@ namespace TT2Bot.Helpers
                 + 1.5 * (stage - 110)
                 + Math.Pow(1.002, Math.Pow(stage, 1.005 * (Math.Pow(stage, 1.1) * 5e-7 + 1)))
             ));
-            var bosEffect = 1.0 + 0.05 * Math.Pow(bosLevel, 1 + 1.5 * Math.Min(2.5e-5 * bosLevel, 0.015));
+            var bosEffect = 1.0 + 0.05 * Math.Pow(bosLevel, Math.Sqrt(1 + 1.5 * Math.Min(1e-4 * bosLevel, 0.120)));
             return (int) (baseRelics * bosEffect);
         }
 
