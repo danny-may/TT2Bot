@@ -15,8 +15,10 @@ namespace TT2Bot.GameEntity.Entities
 {
     internal class Artifact : GameEntity<int>
     {
+        public static string TierSourceUrl { get; } = "https://www.reddit.com/r/TapTitans2/comments/732nk1/artifact_tier_list_for_patch_20_will_update_with/";
+
         public static IReadOnlyDictionary<ArtifactTier, ImmutableArray<int>> Tiers { get; }
-            = GetTiersFromReddit("https://www.reddit.com/r/TapTitans2/comments/732nk1/artifact_tier_list_for_patch_20_will_update_with/.json");
+            = GetTiersFromReddit(TierSourceUrl + ".json");
 
         private static IReadOnlyDictionary<ArtifactTier, ImmutableArray<int>> GetTiersFromReddit(string address)
         {

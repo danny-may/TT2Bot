@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Collections.Immutable;
+using TT2Bot.GameEntity.Entities;
 
 namespace TT2Bot
 {
@@ -41,7 +42,7 @@ namespace TT2Bot
                         { SHOW_FOOTER, "{0} Artifact tool | TT2 v{1}" },
                         { SHOW_IDTITLE, "Artifact id" },
                         { SHOW_TIERTITLE, "Tier" },
-                        { SHOW_TEIRVALUE, "[{0}](https://redd.it/732nk1)" },
+                        { SHOW_TEIRVALUE, "[{0}]" + $"({Artifact.TierSourceUrl})" },
                         { SHOW_MAXLEVELTITLE, "Max level" },
                         { SHOW_BONUSTYPE, "Effect type"},
                         { SHOW_BONUSPERLVL, "Effect per Level" },
