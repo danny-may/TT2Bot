@@ -1,8 +1,10 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Drawing;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using TitanBot.Formatting;
 using TT2Bot.GameEntity.Base;
@@ -14,14 +16,41 @@ namespace TT2Bot.GameEntity.Entities
     internal class Artifact : GameEntity<int>
     {
         public static IReadOnlyDictionary<ArtifactTier, ImmutableArray<int>> Tiers { get; }
-            = new Dictionary<ArtifactTier, int[]>
+            = GetTiersFromReddit("https://www.reddit.com/r/TapTitans2/comments/732nk1/artifact_tier_list_for_patch_20_will_update_with/.json");
+
+        private static IReadOnlyDictionary<ArtifactTier, ImmutableArray<int>> GetTiersFromReddit(string address)
+        {
+            var rawData = new WebClient().DownloadString(address);
+            var data = JArray.Parse(rawData).SelectToken("[0].data.children[0].data.selftext").Value<string>();
+
+            var lines = data.Split('\n');
+
+            var textDict = new Dictionary<char, List<string>>();
+            var current = new List<string>();
+
+            for (int i = 0; i < lines.Length; i++)
             {
-                { ArtifactTier.S, new [] { 22 } },
-                { ArtifactTier.A, new [] { 1, 7, 9, 29, 32, 33, 34, 35, } },
-                { ArtifactTier.B, new [] { 4, 6, 17, 20, 23, 25, 26, 28, 30, 31, 38, } },
-                { ArtifactTier.C, new [] { 3, 8, 12, 14, 15, 21, 24, 36, 39, 41} },
-                { ArtifactTier.D, new [] { 2, 5, 10, 11, 13, 16, 18, 19, 27, 37, } }
-            }.ToImmutableDictionary(k => k.Key, v => v.Value.ToImmutableArray());
+                var line = lines[i];
+                if (line.StartsWith("##"))
+                {
+                    current = new List<string>();
+                    textDict.Add(line[3], current);
+                }
+                else if (line.StartsWith("* **"))
+                    current.Add(line.Split('(').Last().Split(')').First());
+            }
+
+            return textDict.ToDictionary(
+                x => Enum.TryParse<ArtifactTier>(x.Key.ToString(), out var tier)
+                        ? tier
+                        : ArtifactTier.None,
+                x => x.Value.Select(v => int.TryParse(v, out var id) ? id : -1)
+                            .Where(i => i != -1)
+                            .ToImmutableArray()
+
+                ).Where(e => e.Key != ArtifactTier.None && e.Value.Count() > 0)
+                 .ToImmutableDictionary();
+        }
 
         //Forgive me, this is a quick and VERY DIRTY way to do the image urls
         //I wont do it like this in the rewrite
