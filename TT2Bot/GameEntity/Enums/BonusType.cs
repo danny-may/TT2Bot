@@ -114,6 +114,7 @@ namespace TT2Bot.GameEntity.Enums
                 case BonusType.ShadowCloneSkillDuration:
                 case BonusType.TapBoostSkillDuration:
                 case BonusType.AllActiveSkillDuration:
+                case BonusType.BossTimerDuration:
                     return new LocalisedString(FORMATSECONDS, Math.Round(value));
                 case BonusType.BurstDamageSkillMana:
                 case BonusType.CritBoostSkillMana:
@@ -162,6 +163,12 @@ namespace TT2Bot.GameEntity.Enums
                 case BonusType.InactiveGold:
                 case BonusType.FairyGold:
                 case BonusType.SplashGold:
+                case BonusType.SwordAttackDamage:
+                case BonusType.AllPetDamageEffect:
+                case BonusType.BossDamage:
+                case BonusType.TitanDamage:
+                case BonusType.AllPetGoldEffect:
+                case BonusType.AllEquipmentEffect:
                     return new LocalisedString(FORMATMULTIPLY, value + 1);
                 case BonusType.ManaRegen:
                 case BonusType.ManaPoolCap:
