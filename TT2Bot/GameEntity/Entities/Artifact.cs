@@ -34,10 +34,14 @@ namespace TT2Bot.GameEntity.Entities
                 if (line.StartsWith("##"))
                 {
                     current = new List<string>();
-                    textDict.Add(line[3], current);
+                    textDict.Add(line[2], current);
                 }
                 else if (line.StartsWith("* **"))
-                    current.Add(line.Split('(').Last().Split(')').First());
+                    current.Add(line.Split('(')
+                                    .Skip(1)
+                                    .First()
+                                    .Split(')')
+                                    .First());
             }
 
             return textDict.ToDictionary(
