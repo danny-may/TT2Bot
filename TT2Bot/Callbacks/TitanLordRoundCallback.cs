@@ -1,5 +1,4 @@
 ﻿using Discord;
-using Newtonsoft.Json;
 using TitanBot.Contexts;
 using TitanBot.Formatting;
 using TitanBot.Scheduling;
@@ -8,7 +7,7 @@ using TT2Bot.Models;
 
 namespace TT2Bot.Callbacks
 {
-    class TitanLordRoundCallback : ISchedulerCallback
+    internal class TitanLordRoundCallback : ISchedulerCallback
     {
         public void Complete(ISchedulerContext context, bool wasCancelled)
         {
@@ -16,10 +15,10 @@ namespace TT2Bot.Callbacks
                 Handle(context);
         }
 
-        public void Handle(ISchedulerContext context)
+        public bool Handle(ISchedulerContext context)
         {
             if (context.Guild == null)
-                return;
+                return false;
 
             var data = TitanLordTimerData.FromJson(context.Record.Data);
             var settings = context.GuildSettings.Get<TitanLordSettings>(data.GroupId);
@@ -31,6 +30,8 @@ namespace TT2Bot.Callbacks
                                                                                                                    context.Record,
                                                                                                                    context.CycleTime,
                                                                                                                    context.GeneralGuildSetting.DateTimeFormat)).Send();
+
+            return true;
         }
     }
 }

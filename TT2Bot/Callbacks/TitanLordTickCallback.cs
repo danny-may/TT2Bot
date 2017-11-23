@@ -1,5 +1,6 @@
 ﻿using Discord;
 using System;
+using System.Collections.Concurrent;
 using TitanBot.Contexts;
 using TitanBot.Formatting;
 using TitanBot.Scheduling;
@@ -8,12 +9,19 @@ using TT2Bot.Models;
 
 namespace TT2Bot.Callbacks
 {
-    class TitanLordTickCallback : ISchedulerCallback
+    internal class TitanLordTickCallback : ISchedulerCallback
     {
-        public void Handle(ISchedulerContext context)
+        private static ConcurrentDictionary<ulong, DateTime> _lastCall = new ConcurrentDictionary<ulong, DateTime>();
+
+        public bool Handle(ISchedulerContext context)
         {
+            if (_lastCall.TryGetValue(context.Record.Id, out var lastTime) && lastTime > DateTime.Now.AddSeconds(-5))
+                return true;
+
+            _lastCall.AddOrUpdate(context.Record.Id, DateTime.Now, (u, d) => DateTime.Now > d ? DateTime.Now : d);
+
             if (context.Guild == null)
-                return;
+                return false;
 
             var data = TitanLordTimerData.FromJson(context.Record.Data);
             var settings = context.GuildSettings.Get<TitanLordSettings>(data.GroupId);
@@ -23,7 +31,7 @@ namespace TT2Bot.Callbacks
             var messageChannel = context.Client.GetChannel(data.MessageChannelId) as IMessageChannel;
 
             if (messageChannel == null || context.Author == null)
-                return;
+                return false;
 
             if (data.MessageId != 0)
             {
@@ -45,6 +53,8 @@ namespace TT2Bot.Callbacks
                                                                                                                      context.GeneralGuildSetting.DateTimeFormat)).Send();
                 }
             }
+
+            return true;
         }
 
         public void Complete(ISchedulerContext context, bool wasCancelled)

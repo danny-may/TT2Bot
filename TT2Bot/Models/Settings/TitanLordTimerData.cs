@@ -1,9 +1,8 @@
 ﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 
 namespace TT2Bot.Models
 {
-    class TitanLordTimerData
+    internal class TitanLordTimerData
     {
         public ulong MessageId { get; set; }
         public ulong MessageChannelId { get; set; }
@@ -13,11 +12,11 @@ namespace TT2Bot.Models
         {
             try
             {
-                return JsonConvert.DeserializeObject<TitanLordTimerData>(text);
+                return JsonConvert.DeserializeObject<TitanLordTimerData>(JsonConvert.DeserializeObject<string>(text));
             }
             catch
             {
-                return JsonConvert.DeserializeObject<TitanLordTimerData>(JsonConvert.DeserializeObject<string>(text));
+                return JsonConvert.DeserializeObject<TitanLordTimerData>(text);
             }
         }
     }
