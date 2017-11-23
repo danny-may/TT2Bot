@@ -22,7 +22,7 @@ namespace TT2Bot.Commands.Data
             [CallFlag('i', "ip", Flag.PRESTIGE_I)] int ipLevel = -1)
         {
 
-            ipLevel = Math.Min(20, ipLevel);
+            ipLevel = Math.Min(62, ipLevel);
             var startingStage = Math.Max(1, stage * Calculator.AdvanceStart(clanLevel.Clamp(0, int.MaxValue)) - 1);
             var totalRelics = Calculator.RelicsEarned(stage, bosLevel.Clamp(0, int.MaxValue));
             var baseRelics = Calculator.RelicsEarned(stage, 0);
