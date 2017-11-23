@@ -4,12 +4,14 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Threading.Tasks;
 using TitanBot;
+using TitanBot.Commands;
 using TitanBot.Dependencies;
 using TitanBot.Formatting;
 using TitanBot.Formatting.Interfaces;
 using TitanBot.Logging;
 using TitanBot.Replying;
 using TitanBot.Settings;
+using TitanBot.Storage;
 using TitanBot.TypeReaders;
 using TT2Bot.GameEntity.Base;
 using TT2Bot.Models;
@@ -20,7 +22,7 @@ namespace TT2Bot
 {
     public class TT2BotClient
     {
-        BotClient _client { get; }
+        private BotClient _client { get; }
 
         public Task UntilOffline => _client.UntilOffline;
 
@@ -35,12 +37,14 @@ namespace TT2Bot
             RegisterSettings(_client.SettingsManager);
             RegisterTypeReaders(_client.TypeReaders, _client.DependencyFactory);
 
+            _client.Database.Delete<Error>(e => true);
+            _client.Database.Delete<CommandRecord>(c => true);
+
             _client.SettingsManager.Migrate(new Dictionary<string, Type>
             {
                 { "TitanBot.Settings.GeneralSettings", typeof(GeneralGuildSetting) },
                 { typeof(TitanLordSettings).ToString(), typeof(TitanLordSettings) },
                 { typeof(RegistrationSettings).ToString(), typeof(RegistrationSettings) }
-
             });
         }
 
