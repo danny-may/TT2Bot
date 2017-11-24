@@ -4,14 +4,17 @@ using System.Collections.Concurrent;
 using TitanBot.Contexts;
 using TitanBot.Formatting;
 using TitanBot.Scheduling;
+using TitanBot.Storage;
 using TT2Bot.Helpers;
 using TT2Bot.Models;
+using TT2Bot.Models.Database;
 
 namespace TT2Bot.Callbacks
 {
     internal class TitanLordTickCallback : ISchedulerCallback
     {
         private static ConcurrentDictionary<ulong, DateTime> _lastCall = new ConcurrentDictionary<ulong, DateTime>();
+        public static IDatabase Database { get; set; }
 
         public bool Handle(ISchedulerContext context)
         {
@@ -76,10 +79,15 @@ namespace TT2Bot.Callbacks
             }
 
             if (!wasCancelled)
+            {
                 context.Replier.Reply(messageChannel, context.Author).WithMessage((RawString)settings.NowText.Contextualise(settings.CQ,
                                                                                                                  context.Record,
                                                                                                                  context.Record.EndTime,
                                                                                                                  context.GeneralGuildSetting.DateTimeFormat)).Send();
+                var history = Database?.AddOrGet(context.Guild.Id, () => new TitanLordHistory()).Result;
+                history?.SpawnTimes.Add(context.CycleTime);
+                Database?.Upsert(history);
+            }
         }
     }
 }

@@ -216,6 +216,7 @@
     <Compile Include="Helpers\Extensions.cs" />
     <Compile Include="Helpers\TitanLordExtensions.cs" />
     <Compile Include="GameEntity\Enums\EntityId\EquipmentId.cs" />
+    <Compile Include="Models\Database\TitanLordHistory.cs" />
     <Compile Include="Models\General\Iterable.cs" />
     <Compile Include="Models\General\Percentage.cs" />
     <Compile Include="GameEntity\Base\GameEntity.cs" />

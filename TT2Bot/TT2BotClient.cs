@@ -13,6 +13,7 @@ using TitanBot.Replying;
 using TitanBot.Settings;
 using TitanBot.Storage;
 using TitanBot.TypeReaders;
+using TT2Bot.Callbacks;
 using TT2Bot.GameEntity.Base;
 using TT2Bot.Models;
 using TT2Bot.Overrides;
@@ -39,6 +40,8 @@ namespace TT2Bot
 
             _client.Database.Delete<Error>(e => true);
             _client.Database.Delete<CommandRecord>(c => true);
+
+            TitanLordTickCallback.Database = _client.Database;
 
             _client.SettingsManager.Migrate(new Dictionary<string, Type>
             {

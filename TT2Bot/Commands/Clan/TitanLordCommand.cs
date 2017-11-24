@@ -5,7 +5,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using TitanBot.Commands;
 using TitanBot.Formatting;
-using TitanBot.Formatting.Interfaces;
 using TitanBot.Replying;
 using TitanBot.Scheduling;
 using TT2Bot.Callbacks;
@@ -13,6 +12,7 @@ using TT2Bot.Commands.Data;
 using TT2Bot.GameEntity.Enums;
 using TT2Bot.Helpers;
 using TT2Bot.Models;
+using TT2Bot.Models.Database;
 using static TT2Bot.TT2Localisation.CommandText;
 using static TT2Bot.TT2Localisation.Help;
 
@@ -69,8 +69,8 @@ namespace TT2Bot.Commands.Clan
             catch (Exception)
             {
                 // Send error msg to user
-                const string errorStr = "Unfortunately a critical, and thankfully very rare, bug has occured with regards to the use of the titanlord command in this discord server. " + 
-                    "Unfortunately the only known fix for now is to wait it out. It can take around 24 hours for the bug to go away on its own. " + 
+                const string errorStr = "Unfortunately a critical, and thankfully very rare, bug has occured with regards to the use of the titanlord command in this discord server. " +
+                    "Unfortunately the only known fix for now is to wait it out. It can take around 24 hours for the bug to go away on its own. " +
                     "If you have any questions feel free to join our developer server. If you find a way to reproduce the bug, we'd very much like to hear from you!";
                 var builderUser = new EmbedBuilder
                 {
@@ -93,7 +93,7 @@ namespace TT2Bot.Commands.Clan
                 }
                 .AddField("Message", $"Failed to cancel current titanlord for **unknown** group with groupId {groupId}")
                 .AddField("Guild", $"Failed in guild id {Guild?.Id} with name: {Guild?.Name}");
-                
+
                 await Reply(channel).WithEmbedable((Embedable)builder).SendAsync();
                 return;
             }
@@ -104,9 +104,9 @@ namespace TT2Bot.Commands.Clan
 
             if (ticks.Length == 1)
             {
-                var mostRecent = Scheduler.GetMostRecent<TitanLordTickCallback>(Guild.Id, null, GroupCheck(groupId));
-                if (mostRecent != null && mostRecent.CompleteTime >= mostRecent.EndTime)
-                    await Reply(tlChannel).WithEmbedable(NewBoss(mostRecent, time, TitanLordSettings(groupId))).SendAsync();
+                var history = await Database.AddOrGet(Guild.Id, () => new TitanLordHistory());
+                if (history.SpawnTimes.Count != 0)
+                    await Reply(tlChannel).WithEmbedable(NewBoss(history.SpawnTimes.Max(), time, TitanLordSettings(groupId))).SendAsync();
             }
 
             var timer = await Reply(tlChannel).WithMessage((LocalisedString)TitanLordText.TIMER_LOADING)
@@ -182,7 +182,7 @@ namespace TT2Bot.Commands.Clan
                 await ReplyAsync(TitanLordText.STOP_SUCCESS_GROUP, ReplyType.Success, group);
         }
 
-        private Embedable NewBoss(ISchedulerRecord latestTimer, TimeSpan time, TitanLordSettings settings)
+        private Embedable NewBoss(DateTime? lastTime, TimeSpan untilNext, TitanLordSettings settings)
         {
             GuildSettings.Edit<TitanLordSettings>(s => s.CQ++);
 
@@ -200,7 +200,7 @@ namespace TT2Bot.Commands.Clan
              .AddField(f => f.WithName(TitanLordText.NEWBOSS_EMBED_ADVANCEDSTART).WithValue(BonusType.ClanDamage.ToLocalisable(advStart)))
              .AddField(f => f.WithName(TitanLordText.NEWBOSS_EMBED_BONUS).WithValue(BonusType.ClanDamage.ToLocalisable(clanBonus)))
              .AddField(f => f.WithName(TitanLordText.NEWBOSS_EMBED_HP).WithValue(bossHp))
-             .AddField(f => f.WithName(TitanLordText.NEWBOSS_EMBED_TTK).WithValue(DateTime.Now.Add(time).Add(-BossDelay) - latestTimer.EndTime));
+             .AddField(f => f.WithName(TitanLordText.NEWBOSS_EMBED_TTK).WithValue(DateTime.Now.Add(untilNext).Add(-BossDelay) - lastTime));
 
             return builder;
         }
