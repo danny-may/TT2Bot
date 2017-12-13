@@ -216,7 +216,12 @@ namespace TT2Bot.GameEntity.Entities
                         { GetName(57).Key, "Aram Spear" },                    { GetAbbreviation(57).Key, "AS" },
                         { GetName(58).Key, "Mystic Staff" },                  { GetAbbreviation(58).Key, "MS" },
                         { GetName(59).Key, "The Retaliator" },                { GetAbbreviation(59).Key, "tRe,Re" },
-                        { GetName(60).Key, "Ward of the Darkness" },          { GetAbbreviation(60).Key, "WotD,WoD,WD" }
+                        { GetName(60).Key, "Ward of the Darkness" },          { GetAbbreviation(60).Key, "WotD,WoD,WD" },
+                        { GetName(61).Key, "Tiny Titan Tree" },               { GetAbbreviation(61).Key, "TTT" },
+                        { GetName(62).Key, "Helm of Hermes" },                { GetAbbreviation(62).Key, "HoH" },
+                        { GetName(63).Key, "Lost King's Mask" },              { GetAbbreviation(63).Key, "LKM" },
+                        { GetName(64).Key, "O'Ryan‘s Charm" },                { GetAbbreviation(64).Key, "ORC" },
+                        { GetName(65).Key, "Hourglass of the Impatient" },    { GetAbbreviation(65).Key, "HoI,HotI" }
                 }.ToImmutableDictionary();
         }
     }
